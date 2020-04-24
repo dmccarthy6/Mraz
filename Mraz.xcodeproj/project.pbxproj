@@ -1,0 +1,495 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		61518CFF245330D300011BB4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518CFE245330D300011BB4 /* AppDelegate.swift */; };
+		61518D01245330D300011BB4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D00245330D300011BB4 /* SceneDelegate.swift */; };
+		61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 61518D02245330D300011BB4 /* Mraz.xcdatamodeld */; };
+		61518D06245330D300011BB4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D05245330D300011BB4 /* ContentView.swift */; };
+		61518D08245330D900011BB4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61518D07245330D900011BB4 /* Assets.xcassets */; };
+		61518D0B245330D900011BB4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61518D0A245330D900011BB4 /* Preview Assets.xcassets */; };
+		61518D0E245330D900011BB4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61518D0C245330D900011BB4 /* LaunchScreen.storyboard */; };
+		61518D19245330D900011BB4 /* MrazTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D18245330D900011BB4 /* MrazTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		61518D15245330D900011BB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61518CF3245330D300011BB4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61518CFA245330D300011BB4;
+			remoteInfo = Mraz;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		61518CFB245330D300011BB4 /* Mraz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mraz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		61518CFE245330D300011BB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		61518D00245330D300011BB4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		61518D03245330D300011BB4 /* Mraz.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mraz.xcdatamodel; sourceTree = "<group>"; };
+		61518D05245330D300011BB4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		61518D07245330D900011BB4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		61518D0A245330D900011BB4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		61518D0D245330D900011BB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		61518D0F245330D900011BB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61518D14245330D900011BB4 /* MrazTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MrazTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		61518D18245330D900011BB4 /* MrazTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrazTests.swift; sourceTree = "<group>"; };
+		61518D1A245330D900011BB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		61518CF8245330D300011BB4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61518D11245330D900011BB4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		61518CF2245330D300011BB4 = {
+			isa = PBXGroup;
+			children = (
+				61518CFD245330D300011BB4 /* Mraz */,
+				61518D17245330D900011BB4 /* MrazTests */,
+				61518CFC245330D300011BB4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		61518CFC245330D300011BB4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61518CFB245330D300011BB4 /* Mraz.app */,
+				61518D14245330D900011BB4 /* MrazTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		61518CFD245330D300011BB4 /* Mraz */ = {
+			isa = PBXGroup;
+			children = (
+				61518CFE245330D300011BB4 /* AppDelegate.swift */,
+				61518D00245330D300011BB4 /* SceneDelegate.swift */,
+				61518D05245330D300011BB4 /* ContentView.swift */,
+				61518D07245330D900011BB4 /* Assets.xcassets */,
+				61518D0C245330D900011BB4 /* LaunchScreen.storyboard */,
+				61518D0F245330D900011BB4 /* Info.plist */,
+				61518D02245330D300011BB4 /* Mraz.xcdatamodeld */,
+				61518D09245330D900011BB4 /* Preview Content */,
+			);
+			path = Mraz;
+			sourceTree = "<group>";
+		};
+		61518D09245330D900011BB4 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				61518D0A245330D900011BB4 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		61518D17245330D900011BB4 /* MrazTests */ = {
+			isa = PBXGroup;
+			children = (
+				61518D18245330D900011BB4 /* MrazTests.swift */,
+				61518D1A245330D900011BB4 /* Info.plist */,
+			);
+			path = MrazTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		61518CFA245330D300011BB4 /* Mraz */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61518D1D245330D900011BB4 /* Build configuration list for PBXNativeTarget "Mraz" */;
+			buildPhases = (
+				61518CF7245330D300011BB4 /* Sources */,
+				61518CF8245330D300011BB4 /* Frameworks */,
+				61518CF9245330D300011BB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mraz;
+			productName = Mraz;
+			productReference = 61518CFB245330D300011BB4 /* Mraz.app */;
+			productType = "com.apple.product-type.application";
+		};
+		61518D13245330D900011BB4 /* MrazTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61518D20245330D900011BB4 /* Build configuration list for PBXNativeTarget "MrazTests" */;
+			buildPhases = (
+				61518D10245330D900011BB4 /* Sources */,
+				61518D11245330D900011BB4 /* Frameworks */,
+				61518D12245330D900011BB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61518D16245330D900011BB4 /* PBXTargetDependency */,
+			);
+			name = MrazTests;
+			productName = MrazTests;
+			productReference = 61518D14245330D900011BB4 /* MrazTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		61518CF3245330D300011BB4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1140;
+				LastUpgradeCheck = 1140;
+				ORGANIZATIONNAME = DylanMcCarthy;
+				TargetAttributes = {
+					61518CFA245330D300011BB4 = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+					61518D13245330D900011BB4 = {
+						CreatedOnToolsVersion = 11.4.1;
+						TestTargetID = 61518CFA245330D300011BB4;
+					};
+				};
+			};
+			buildConfigurationList = 61518CF6245330D300011BB4 /* Build configuration list for PBXProject "Mraz" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 61518CF2245330D300011BB4;
+			productRefGroup = 61518CFC245330D300011BB4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				61518CFA245330D300011BB4 /* Mraz */,
+				61518D13245330D900011BB4 /* MrazTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		61518CF9245330D300011BB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61518D0E245330D900011BB4 /* LaunchScreen.storyboard in Resources */,
+				61518D0B245330D900011BB4 /* Preview Assets.xcassets in Resources */,
+				61518D08245330D900011BB4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61518D12245330D900011BB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		61518CF7245330D300011BB4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
+				61518CFF245330D300011BB4 /* AppDelegate.swift in Sources */,
+				61518D06245330D300011BB4 /* ContentView.swift in Sources */,
+				61518D01245330D300011BB4 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61518D10245330D900011BB4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61518D19245330D900011BB4 /* MrazTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		61518D16245330D900011BB4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61518CFA245330D300011BB4 /* Mraz */;
+			targetProxy = 61518D15245330D900011BB4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		61518D0C245330D900011BB4 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61518D0D245330D900011BB4 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		61518D1B245330D900011BB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		61518D1C245330D900011BB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		61518D1E245330D900011BB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Mraz/Preview Content\"";
+				DEVELOPMENT_TEAM = 3K8HM9CR5K;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Mraz/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthyios.Mraz;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		61518D1F245330D900011BB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Mraz/Preview Content\"";
+				DEVELOPMENT_TEAM = 3K8HM9CR5K;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Mraz/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthyios.Mraz;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		61518D21245330D900011BB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3K8HM9CR5K;
+				INFOPLIST_FILE = MrazTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthyios.MrazTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mraz.app/Mraz";
+			};
+			name = Debug;
+		};
+		61518D22245330D900011BB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3K8HM9CR5K;
+				INFOPLIST_FILE = MrazTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthyios.MrazTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mraz.app/Mraz";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		61518CF6245330D300011BB4 /* Build configuration list for PBXProject "Mraz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61518D1B245330D900011BB4 /* Debug */,
+				61518D1C245330D900011BB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61518D1D245330D900011BB4 /* Build configuration list for PBXNativeTarget "Mraz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61518D1E245330D900011BB4 /* Debug */,
+				61518D1F245330D900011BB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61518D20245330D900011BB4 /* Build configuration list for PBXNativeTarget "MrazTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61518D21245330D900011BB4 /* Debug */,
+				61518D22245330D900011BB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		61518D02245330D300011BB4 /* Mraz.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				61518D03245330D300011BB4 /* Mraz.xcdatamodel */,
+			);
+			currentVersion = 61518D03245330D300011BB4 /* Mraz.xcdatamodel */;
+			path = Mraz.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 61518CF3245330D300011BB4 /* Project object */;
+}
