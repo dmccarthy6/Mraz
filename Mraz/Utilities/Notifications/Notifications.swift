@@ -6,13 +6,13 @@ import CoreLocation
 import UserNotifications
 
 final class Notifications: NSObject {
-    //MARK: - Properties
+    // MARK: - Properties
     private let notificationCenter = UNUserNotificationCenter.current()
     private let gcmMessageIDKey = "gcm.message_id" // ?? No idea What This is??
     private let title = "Mraz Brewing Company"
     private let messageBody = "You are right by the brewery. Stop in for a Beer!"
     
-    //MARK: - Authorization Status Methods
+    // MARK: - Authorization Status Methods
     /// Request authorization from users to allow notifications.
     func requestAuthFromUserToAllowNotifications(completion: @escaping (Result<Bool, Error>) -> Void) {
         notificationCenter.delegate = self
@@ -27,8 +27,7 @@ final class Notifications: NSObject {
             if !granted {
                 completion(.success(granted))
                 //User did not grant authorization, Ok, maybe alert here?
-            }
-            else {
+            } else {
                 completion(.success(granted))
                 print("Notifications -- Authorization Granted by User")
             }
@@ -48,8 +47,7 @@ final class Notifications: NSObject {
         }
     }
     
-    
-    //MARK: - Geofencing Methods
+    // MARK: - Geofencing Methods
     /// This method is fired when the user enters the specified region that is passed in. This method will send
     ///  local notification to the user when they pass into the region.
     /// - Parameters:
@@ -60,8 +58,7 @@ final class Notifications: NSObject {
             case .success(let granted):
                 if granted {
                     self.setLocationTriggerFor(region: region)
-                }
-                else {
+                } else {
                     self.requestAuthFromUserToAllowNotifications { (result) in
                         switch result {
                         case .success(_):
@@ -96,27 +93,32 @@ final class Notifications: NSObject {
             }
         }
     }
-   
 }
 
 extension Notifications: UNUserNotificationCenterDelegate {
     
     /// This method allows notifications to be shown if the App is in the foreground
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound])
     }
     
     /// Respond to user's tapping notifications
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
         //Get the notification identifier to respond accordingly.
         let identifier = response.notification.request.identifier
         print("Notifications -- ID: \(identifier)")
     }
     
     ///Remote Notifications Here???
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        //MARK:
+        // MARK: -
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Notifications -- messageID: \(messageID)")
         }
@@ -125,8 +127,6 @@ extension Notifications: UNUserNotificationCenterDelegate {
         print(userInfo)
         completionHandler(UIBackgroundFetchResult.newData)
         
-        //MARK: - CloudKit Push Notifications
+        // MARK: - CloudKit Push Notifications
     }
-    
-    
 }

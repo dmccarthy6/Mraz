@@ -6,43 +6,44 @@ import os.log
 
 protocol ReadFromCloudKit {
     func getUserAccountStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void)
-    func fetchBeerListFromCloud(_ completion: @escaping (Result<[Beers], Error>) -> Void)
 }
 
 extension ReadFromCloudKit {
-    var database: CKDatabase {
+    var publicDatabase: CKDatabase {
         let container = CKContainer(identifier: ContainerID.beers.rawValue)
-        let db = container.publicCloudDatabase
-        return db
+        let database = container.publicCloudDatabase
+        return database
     }
     
     var ckContainer: CKContainer {
         return CKContainer.default()
     }
     
+    var cloudKitChangeToken: String {
+        return "Mraz + \(UUID().uuidString)"
+    }
     
-    //MARK: - Check Account Status
+    // MARK: - Check Account Status
     
     /// Check the users iCloud Account Status
     /// - Returns: Result type with a CloudKit Status enum value and a CloudKitError enum value.
     func getUserAccountStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void) {
         ckContainer.accountStatus { (status, error) in
-            if let error = error {
+            if error != nil {
                 completion(.failure(.failedConnection))
-                //TO-DO: Handle Error
+                return
             }
-            else {
-                switch status {
-                case .available://Logged in -- good to go
-                    completion(.success(.available))
-                case .noAccount: //User Not Logged In
-                    completion(.success(.noAccount))
-                case .couldNotDetermine://For some reason status couldn't be determined, try again
-                    completion(.success(.couldNotDetermine))
-                case .restricted://iCloud settings restricted by parental controls or configuration profile
-                    completion(.success(.restricted))
-                default: ()
-                }
+            
+            switch status {
+            case .available://Logged in -- good to go
+                completion(.success(.available))
+            case .noAccount: //User Not Logged In
+                completion(.success(.noAccount))
+            case .couldNotDetermine://For some reason status couldn't be determined, try again
+                completion(.success(.couldNotDetermine))
+            case .restricted://iCloud settings restricted by parental controls or configuration profile
+                completion(.success(.restricted))
+            default: ()
             }
         }
     }
@@ -98,33 +99,59 @@ extension ReadFromCloudKit {
         return userRecord!
     }
     
-    //MARK: - Subscription Methods
-    
+    // MARK: - Subscriptions
     /// Create the CloudKit Subscription on Beers values
-    func createSubscriptionForAllBeers() {
-//        let isOnTapPredicate = NSPredicate(format: "isOnTap == %@", 1)
+    func subscribeToCKIfNotAlreadySubscribed() {
+        publicDatabase.fetchAllSubscriptions { (subscriptions, error) in
+            if error != nil {
+                print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
+                return
+            }
+            guard let validSubscriptions = subscriptions else { return }
+            for subscription in validSubscriptions {
+                let subscriptionExists = UserDefaults.standard.value(forKey: Key.cloudSubscription.rawValue)
+                if subscription.subscriptionID ==  subscriptionExists as? String {
+                    print("ReadFromCK -- We Already Have That Subscription!")
+                } else {
+                    print("ReadFromCK -- Creating Beers Subscription")
+                    self.createSubscriptionForAllBeers()
+                }
+            }
+        }
+    }
+    
+    /// Create the subscription to 'Beers' to follow any changes
+    /// or additions to these values.
+    private func createSubscriptionForAllBeers() {
         let predicate = NSPredicate(value: true)
         
         ///Flush out existing subscrptions
         deleteAllSubscriptionsFromCloudKit()
         
         //Create the New subscription
-        var options = CKQuerySubscription.Options()
-        options.insert(.firesOnRecordUpdate)
-        options.insert(.firesOnRecordCreation)
-        let subscription = CKQuerySubscription(recordType: CKRecordType.beers.name, predicate: predicate, options: options)
+        let subscription = CKQuerySubscription(recordType: CKRecordType.beers,
+                                               predicate: predicate,
+                                               options: [.firesOnRecordUpdate, .firesOnRecordCreation])
+        
+        let info = CKSubscription.NotificationInfo()
+        info.shouldSendContentAvailable = true
+        subscription.notificationInfo = info
+        
+        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: nil)
+        //operation.modifySubscriptionsCompletionBlock
         
         //Save subscription to database
         createCKSubscription(subscription)
     }
     
-    /// Delete all  subscriptions from CloudKit
+    /// Delete all  current subscriptions from CloudKit to reduce
+    /// the possibilty of adding a subscription mroe than once.
     private func deleteAllSubscriptionsFromCloudKit() {
-        database.fetchAllSubscriptions { (subscription, error) in
+        publicDatabase.fetchAllSubscriptions { (subscription, error) in
             if error == nil {
                 if let subscription = subscription {
                     for subscription in subscription {
-                        self.database.delete(withSubscriptionID: subscription.subscriptionID) { (str, error) in
+                        self.publicDatabase.delete(withSubscriptionID: subscription.subscriptionID) { (str, error) in
                             if error != nil {
                                 //TO-DO: Error Handling
                                 print("ReadFromCK -- Error deleting subscription: \(String(describing: error?.localizedDescription))")
@@ -132,8 +159,8 @@ extension ReadFromCloudKit {
                         }
                     }
                 }
-            }
-            else {
+            } else {
+                print(error)
                 //TO-DO: Error Handling
             }
         }
@@ -144,12 +171,10 @@ extension ReadFromCloudKit {
         let notificationInfo = CKSubscription.NotificationInfo()
         subscription.notificationInfo = notificationInfo
         
-        database.save(subscription) { (ckSubscription, error) in
+        publicDatabase.save(subscription) { (ckSubscription, error) in
             if let error = error {
                 print("ReadFromCloudKit -- Error saving subscription: \(error.localizedDescription)")
-            }
-            else {
-                //TO-DO: Save Subscription ID to UserDefaults?
+            } else {
                 let userDef = UserDefaults.standard
                 let subscriptionID = ckSubscription?.subscriptionID
                 userDef.set(subscriptionID, forKey: Key.cloudSubscription.rawValue)
@@ -158,14 +183,83 @@ extension ReadFromCloudKit {
         }
     }
     
-    //MARK: Fetching
+    // MARK: - Fetching
     func fetchRecord(_ recordID: CKRecord.ID) {
         if UserDefaults.standard.value(forKey: Key.cloudSubscription.rawValue) != nil {
             
         }
     }
     
-    //MARK: - Errors
+    /// Take in CKRecord values from CloudKit and convert the CKRecord objects to
+    /// BeerModel objects to be saved into Core Data.
+    func convertCKRecordsToBeerModelObjects(_ records: [CKRecord], completion: @escaping (Result<[BeerModel], Error>) -> Void) {
+        var beerModelObjects = [BeerModel]()
+        
+        for record in records {
+            let isFav = record[.isFavorite] as? Int64 ?? 0
+            let isTap = record[.isOnTap] as? Int64 ?? 0
+            let recordID =          record.recordID
+            let changeTag =         record.recordChangeTag ?? ""
+            let section =           record[.sectionType] as? String ?? ""
+            let name =              record[.name] as? String ?? ""
+            let description =       record[.description] as? String ?? ""
+            let beerABV =           record[.abv] as? String ?? ""
+            let type =              record[.type] as? String ?? ""
+            let createdDate =       record.creationDate ?? Date()
+            let modifiedDate =      record.modificationDate ?? Date()
+            let isFavorite =        isFav.boolValue
+            let isOnTap =           isTap.boolValue
+            
+            let beerObj = BeerModel(id: recordID,
+                      section: section,
+                      changeTag: changeTag,
+                      name: name,
+                      beerDescription: description,
+                      abv: beerABV,
+                      type: type,
+                      createdDate: createdDate,
+                      modifiedDate: modifiedDate,
+                      isOnTap: isOnTap,
+                      isFavorite: isFavorite)
+            beerModelObjects.append(beerObj)
+        }
+        completion(.success(beerModelObjects))
+    }
+    
+    // MARK: - Sync Methods
+    func syncAllChanges() {
+        CloudKitSync()
+    }
+    
+    func fetchChanges(in databaseScope: CKDatabase.Scope, completion: @escaping () -> Void) {
+
+        switch databaseScope {
+        case .public:
+            fetchDatabaseChanges(database: ckContainer.publicCloudDatabase,
+                                 databaseTokenKey: "public",
+                                 completion: completion)
+        case .private:
+            return
+        //Not using these here, can use FetchDatabaseChanges method below to implement if needed down the road.
+        case .shared:
+            return
+        //Not using these here, can use FetchDatabaseChanges method below to implement if needed down the road.
+        }
+    }
+    
+    func fetchDatabaseChanges(database: CKDatabase, databaseTokenKey: String, completion: @escaping () -> Void) {
+//        let fetchChangesOperation = CKFetchDatabaseChangesOperation(previousServerChangeToken: <#T##CKServerChangeToken?#>)
+    }
+    
+//    func getInitialChangeToken() {
+//        let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: <#T##[CKRecordZone.ID]?#>,
+//    configurationsByRecordZoneID: <#T##[CKRecordZone.ID : CKFetchRecordZoneChangesOperation.ZoneConfiguration]?#>)
+//        op.fetchRecordZoneChangesCompletionBlock { (error) in
+//
+//        }
+//    }
+    
+    // MARK: - Errors
     
     /// Retries a CloudKit operation if the error suggests
     ///

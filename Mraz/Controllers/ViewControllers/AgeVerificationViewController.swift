@@ -4,7 +4,7 @@
 import UIKit
 
 class AgeVerificationViewController: UIViewController {
-    //MARK: - Properties
+    // MARK: - Properties
     private lazy var ageVerificationView: AgeVerificationView = {
         let view = AgeVerificationView(frame: CGRect(x: self.view.center.x, y: self.view.center.y, width: 0, height: 0))
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -13,8 +13,7 @@ class AgeVerificationViewController: UIViewController {
         return view
     }()
     
-    
-    //MARK: - View Life Cycle
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,7 +21,7 @@ class AgeVerificationViewController: UIViewController {
         presentView()
     }
     
-    //MARK: - Layout
+    // MARK: - Layout
 //    func setupView() {
 //        view.addSubview(ageVerificationView)
 //
@@ -36,7 +35,10 @@ class AgeVerificationViewController: UIViewController {
     func presentView() {
         
         UIView.animate(withDuration: 0.5) {
-            self.ageVerificationView.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: AgeVerificationConstants.viewWidthAnchor, height: AgeVerificationConstants.viewHeightAnchor)
+            self.ageVerificationView.frame = CGRect(x: self.view.center.x,
+                                                    y: self.view.center.y,
+                                                    width: AgeVerificationConstants.viewWidthAnchor,
+                                                    height: AgeVerificationConstants.viewHeightAnchor)
             self.ageVerificationView.center = self.view.center
             self.ageVerificationView.alpha = 1
             self.view.addSubview(self.ageVerificationView)
@@ -53,7 +55,7 @@ class AgeVerificationViewController: UIViewController {
         UIView.animate(withDuration: 0.5, animations: {
             self.ageVerificationView.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 0, height: 0)
             self.ageVerificationView.isHidden = true
-        }) { (true) in
+        }) { (_) in
             self.ageVerificationView.removeFromSuperview()
         }
     }

@@ -18,23 +18,26 @@ extension UICollectionReusableView {
 
 extension UICollectionView {
     
-    //MARK: - Regestering
+    // MARK: - Regestering
     
     func registerCell<T: UICollectionViewCell>(cellClass: T.Type) {
-        register(T.self, forCellWithReuseIdentifier: T.cellReuseIdentifier)
+        register(T.self,
+                 forCellWithReuseIdentifier: T.cellReuseIdentifier)
     }
     
     func registerSupplementaryView<T: UICollectionReusableView>(viewClass: T.Type) {
-        register(T.self, forSupplementaryViewOfKind: T.viewReuseIdentifier, withReuseIdentifier: T.viewReuseIdentifier)
+        register(T.self,
+                 forSupplementaryViewOfKind: T.viewReuseIdentifier,
+                 withReuseIdentifier: T.viewReuseIdentifier)
     }
     
-    
-    //MARK: Dequeueing
+    // MARK: Dequeueing
     
     func dequeueReusableCell<T: UICollectionViewCell>(for indexPath: IndexPath) -> T {
         let reuseIdentifier = T.cellReuseIdentifier
         
-        guard let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? T
+        guard let cell = dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                             for: indexPath) as? T
             else {
                 assertionFailure("Uable to dequeue cell for \(reuseIdentifier)")
                 return T()
@@ -45,7 +48,9 @@ extension UICollectionView {
     func dequeueReusableView<T: UICollectionReusableView>(indexPath: IndexPath) -> T {
         let reuseIdentifier = T.viewReuseIdentifier
         
-        guard let cell = dequeueReusableSupplementaryView(ofKind: reuseIdentifier, withReuseIdentifier: reuseIdentifier, for: indexPath) as? T
+        guard let cell = dequeueReusableSupplementaryView(ofKind: reuseIdentifier,
+                                                          withReuseIdentifier: reuseIdentifier,
+                                                          for: indexPath) as? T
             else {
                 assertionFailure("Unable to dequeue Supplementary View for \(reuseIdentifier)")
                 return T()

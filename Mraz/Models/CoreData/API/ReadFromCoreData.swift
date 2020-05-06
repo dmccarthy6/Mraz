@@ -2,15 +2,14 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import CoreData
-import UIKit
+import CloudKit
 
 protocol ReadFromCoreData {
-    
-    
+    func configureFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool) -> NSFetchedResultsController<NSFetchRequestResult>
 }
 
 extension ReadFromCoreData {
-    var mainThreadContext: NSManagedObjectContext {
+    var mainThreadManagedObjectContext: NSManagedObjectContext {
         return CoreDataManager.sharedDatabase.managedObjectContext
     }
     
@@ -19,40 +18,38 @@ extension ReadFromCoreData {
     }
     
     var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> {
-        return configureFetchedResultsController()
+        return configureFetchedResultsController(for: .beers, key: "name", searchText: "")
     }
     
-    
-    //MARK: - Configure Fetched Results Controller
-    func configureFetchedResultsController() -> NSFetchedResultsController<NSFetchRequestResult> {
-        let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
-        let sortDescriptor = [NSSortDescriptor(key: "name", ascending: true)]
+    // MARK: - Configure Fetched Results Controller
+    /// Default implementation of the FRC. Will implement this in the ViewController in order to update my snapshot.
+    func configureFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool = true) -> NSFetchedResultsController<NSFetchRequestResult> {
+        let fetchRequest = CoreDataFetchRequestFor(entityName: entity.rawValue)
+        let sortDescriptor = [NSSortDescriptor(key: key, ascending: ascending)]
         fetchRequest.sortDescriptors = sortDescriptor
-        fetchRequest.predicate = NSPredicate(value: true)
-        
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: mainThreadContext, sectionNameKeyPath: nil, cacheName: nil)
-        
+        if !searchText.isEmpty {
+            fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c]", searchText)
+        }
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: mainThreadManagedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         do {
             try fetchedResultsController.performFetch()
-            //TO-DO: Update snapshot here
-        }
-        catch {
-            let error = error as NSError
-            print("Error fetching Core Data: \(error.userInfo)")
+        } catch {
+            print("Error fetching Core Data: \(error.localizedDescription)")
         }
         return fetchedResultsController
     }
     
-    //MARK: - Fetch Functions
+    // MARK: - Fetch Functions
     /// Uses configured FetchedResultsController to return specified objects.
     /// - Returns: Array of 'Beers' objects.
     func fetchAllBeerObjects() -> [Beers] {
-        let beers = fetchedResultsController.fetchedObjects as! [Beers]
+        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else {
+            return []
+        }
         return beers
     }
-    
-    
-    //MARK: - Background Fetch
+
+    // MARK: - Background Fetch
     func backgroundFetch() {
         let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
         let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) { (asyncFetchResult) in
@@ -65,14 +62,14 @@ extension ReadFromCoreData {
                     /// Get all the object ID's.
                     .compactMap({ $0.objectID})
                     ///Create a new Beer entity queue-safe for each objectID.
-                    .compactMap({ self.mainThreadContext.object(with: $0) as? Beers })
+                    .compactMap({ self.mainThreadManagedObjectContext.object(with: $0) as? Beers })
                 //Do Something with that queue safe array - beers
             }
         }
         do {
             try privateContext.execute(asyncFetchRequest)
-        }
-        catch {
+            
+        } catch {
             print("READ FROM COREDATA --  error: \(error)")
         }
     }

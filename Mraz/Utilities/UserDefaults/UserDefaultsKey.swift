@@ -4,8 +4,6 @@
 import Foundation
 
 /// User Defaults Key Value
-
-
 struct Key: RawRepresentable {
     let rawValue: String
 }

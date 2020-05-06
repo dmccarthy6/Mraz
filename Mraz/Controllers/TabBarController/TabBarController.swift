@@ -5,18 +5,17 @@ import Foundation
 import UIKit
 
 class MrazTabBarController: UITabBarController {
-    //MARK: - Properties
+    // MARK: - Properties
     private var mrazTabBar = UITabBarController()
     
-    //MARK: - Life Cycle
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUpTabBarController()
     }
     
-    
-    //MARK: -
+    // MARK: -
     /// Age has been verified, show the Tab Bar
     private func setUpTabBarController() {
         //
@@ -24,7 +23,9 @@ class MrazTabBarController: UITabBarController {
         
         //Set Up Tabs
         // -> This is the home controller
-//        let homeTabBarImage = UIImage(systemName: "house")
+        let homeController = HomeViewController()
+        let homeTabBarImage = UIImage(systemName: "house")
+        homeController.tabBarItem = UITabBarItem(title: "Home", image: homeTabBarImage, tag: 0)
         
         //Beer List Controller
         let beerListViewController = BeerListViewController()
@@ -36,13 +37,11 @@ class MrazTabBarController: UITabBarController {
         //Ritual Controller?
         
         ///Add View Controllers to the tab bar
-        let controllers = [beerListViewController]
+        let controllers = [homeController, beerListViewController]
        
         viewControllers = controllers.map({
             UINavigationController(rootViewController: $0)
         })
         
     }
-    
-    
 }

@@ -8,22 +8,21 @@ import Foundation
  */
 
 enum Section: CaseIterable {
-    case Ale, Amber, Belgian, Blonde, IPA, Lager, Mosaic, Porter, Saison, Sour, Stout
+    case ale, amber, belgian, blonde, ipa, lager, mosaic, porter, saison, sour, stout
     
     var title: String {
         switch self {
-        case .Ale:      return "Ale"
-        case .Amber:    return "Amber"
-        case .Belgian:  return "Belgian"
-        case .Blonde:   return "Blonde"
-        case .IPA:      return "IPA"
-        case .Lager:    return "Lager"
-        case .Mosaic:   return "Mosaic"
-        case .Porter:   return "Porter"
-        case .Saison:   return "Saison"
-        case .Sour:     return "Sour"
-        case .Stout:    return "Stout"
+        case .ale:      return "Ale"
+        case .amber:    return "Amber"
+        case .belgian:  return "Belgian"
+        case .blonde:   return "Blonde"
+        case .ipa:      return "IPA"
+        case .lager:    return "Lager"
+        case .mosaic:   return "Mosaic"
+        case .porter:   return "Porter"
+        case .saison:   return "Saison"
+        case .sour:     return "Sour"
+        case .stout:    return "Stout"
         }
     }
 }
-

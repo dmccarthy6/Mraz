@@ -4,132 +4,118 @@
 import UIKit
 import CoreData
 
-class BeerListViewController: UIViewController, CoreDataAPI {
-    //MARK: - Properties
+class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
+    // MARK: - Properties
     typealias Element = Beers
     typealias BeersSnapshot = NSDiffableDataSourceSnapshot<Section, Element>
     typealias BeersDiffableDatasource = UICollectionViewDiffableDataSource<Section, Element>
     private let defaults = UserDefaults.standard
 
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .systemBackground
-        collectionView.registerCell(cellClass: BeerListCell.self)
-        collectionView.registerSupplementaryView(viewClass: BeerListHeader.self)
-        collectionView.alwaysBounceVertical = true
-        return collectionView
-    }()
     private lazy var layout: UICollectionViewLayout = {
-        let layout = UICollectionViewCompositionalLayout {
-            section, environment -> NSCollectionLayoutSection in
+        let layout = UICollectionViewCompositionalLayout { section, environment -> NSCollectionLayoutSection in
             
             let inset = CGFloat(16)
             let isCompact = environment.container.effectiveContentSize.width < 450
             let columns = isCompact ? 2 : 4
             
             let section = NSCollectionLayoutSection
-                .list(estimatedHeight: 200)
+                .list(estimatedHeight: 150)
                 .withSectionHeader(estimatedHeight: 65, kind: BeerListHeader.viewReuseIdentifier)
-                .withContentInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+                .withContentInsets(leading: inset, bottom: inset, trailing: inset)
             return section
         }
         return layout
+    }()
+    private lazy var collectionView: UICollectionView = { [unowned self] in
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = .systemBackground
+        collectionView.registerCell(cellClass: BeerListCell.self)
+        collectionView.registerSupplementaryView(viewClass: BeerListHeader.self)
+        return collectionView
     }()
     private lazy var beersDiffableDatasource: BeersDiffableDatasource = {
         /// Set Up CollectionView Cells
         let diffableDatasource = BeersDiffableDatasource(collectionView: collectionView) { (collectionView, indexPath, element) -> UICollectionViewCell? in
             let cell: BeerListCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.configureBeerCell(beerName: element.name ?? "NIL", type: element.beerType, abv: element.abv ?? "0.0", isFavorite: element.isFavorite, isOnTap: element.isOnTap)
+            cell.setFavoriteStatus { cell.setFavorite(element) }
+            
+            // TO-DO: Properly set Cell color based on 'isOnTap' boolean val
+            cell.setOnTapCellColor(element: element)
             return cell
+        }
+        /// Configure section headers
+        diffableDatasource.supplementaryViewProvider = { [weak self]
+            collectionView, kind, indexPath -> UICollectionReusableView? in
+            let section = diffableDatasource.snapshot().sectionIdentifiers[indexPath.section]
+            let header: BeerListHeader = collectionView.dequeueReusableView(indexPath: indexPath)
+            header.configureHeader(with: "title" )//section?.title
+            return header
         }
         return diffableDatasource
     }()
+    private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
+        let controller = configureFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
+        controller.delegate = self
+        return controller
+    }()
+    private var currentSearchText = ""
     private var dataSource = [Beers]()
     private var activityIndicator: UIActivityIndicatorView?
     private let refreshControl = UIRefreshControl()
     
-    //MARK: - View Life Cycle
-    
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .systemBackground
-//        deleteAllItemsFromSnapshot()
-        
+
         setupView()
-        setDel()
-        PresentAgeVerificationView(viewController: self)
-        setupDatasource()
+        setDatasource()
         pullToRefresh()
+        setupSearchController()
+        syncAllChanges()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startActivityIndicator()
+    }
+    
+    // MARK: - Snapshot
     func deleteAllItemsFromSnapshot() {
         var snapshot = BeersSnapshot()
         snapshot.deleteAllItems()
     }
     
-    //MARK: - Build Snapshot
-    
-    /// Set the snapshot
-    private func setupDatasource() {
-        startActivityIndicator()
-        CloudKitManager.shared.fetchBeerListFromCloud { [unowned self] (result) in
-            switch result {
-            case .success(let beersArray):
-                DispatchQueue.main.async {
-                    self.dataSource = beersArray
-                    let snapShot = self.buildSnapshot(with: self.dataSource)
-                    self.beersDiffableDatasource.apply(snapShot)
-                    self.stopActivityIndicator()
-                    self.refreshControl.endRefreshing()
-                }
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.stopActivityIndicator()
-                }
-                print("There was an error with CK: \(error)")
-            }
-        }
-    }
-    
     /// Create the snapshot
     private func buildSnapshot(with dataSource: [Beers]) -> BeersSnapshot {
         var snapShot = BeersSnapshot()
-        snapShot.appendSections([.Ale, .Amber, .Belgian, .Blonde, .IPA, .Lager, .Mosaic, .Porter, .Saison, .Sour])
+        snapShot.appendSections([.ale, .amber, .belgian, .blonde, .ipa, .lager, .mosaic, .porter, .saison, .sour])
         
         for section in snapShot.sectionIdentifiers {
             let items = dataSource.filter({ $0.section == section.title })
             snapShot.appendItems(items, toSection: section)
-            
-            /// Configure section headers
-            beersDiffableDatasource.supplementaryViewProvider = { [weak self]
-                collectionView, kind, indexPath -> UICollectionReusableView? in
-                let section = self?.beersDiffableDatasource.snapshot().sectionIdentifiers[indexPath.section]
-                let header: BeerListHeader = collectionView.dequeueReusableView(indexPath: indexPath)
-                print("BeersListVC - This is title: \(section?.title)")
-                header.configureHeader(with: section?.title)
-                return header
-            }
         }
         return snapShot
     }
     
+    /// Update Snapshot
     private func updateSnapshot() {
         var updatedSnapshot = BeersSnapshot()
-        updatedSnapshot.appendSections([.Ale, .Amber, .Belgian, .Blonde, .IPA, .Lager, .Mosaic, .Porter, .Saison, .Sour])
-        
+        updatedSnapshot.appendSections([.ale, .amber, .belgian, .blonde, .ipa, .lager, .mosaic, .porter, .saison, .sour])
+
         for section in updatedSnapshot.sectionIdentifiers {
-            let objects = fetchedResultsController.fetchedObjects as! [Beers]
+            guard let objects = fetchedResultsController.fetchedObjects as? [Beers] else { return }
             let items = objects.filter({ $0.section == section.title })
             updatedSnapshot.appendItems(items, toSection: section)
-//        updatedSnapshot.appendItems(fetchedResultsController.fetchedObjects as? [Beers] ?? [])
-        beersDiffableDatasource.apply(updatedSnapshot)
+            beersDiffableDatasource.apply(updatedSnapshot)
             refreshControl.endRefreshing()
         }
     }
-    
+
+    // MARK: - Helpers
     private func setupView() {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(collectionView)
@@ -142,8 +128,18 @@ class BeerListViewController: UIViewController, CoreDataAPI {
         ])
     }
     
-    
-    //MARK: - Activity indicator methods
+    /// Use the fetchedResultsController to set the diffable data source.
+    func setDatasource() {
+        let fetchedObjects = fetchedResultsController.fetchedObjects as? [Beers]
+        guard let beers = fetchedObjects else {
+            return
+        }
+        let snapshot = buildSnapshot(with: beers)
+        beersDiffableDatasource.apply(snapshot)
+        stopActivityIndicator()
+    }
+ 
+    // MARK: - Activity indicator methods
     /// Initializer the activity indicator view
     private func startActivityIndicator() {
         self.activityIndicator = UIActivityIndicatorView(style: .large)
@@ -164,8 +160,8 @@ class BeerListViewController: UIViewController, CoreDataAPI {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         refreshControl.tintColor = .systemGray
         
-        let attributes: [NSAttributedString.Key : Any] = [
-            .foregroundColor : UIColor.systemGray
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.systemGray
         ]
         refreshControl.attributedTitle = NSAttributedString(string: "Updating Beers", attributes: attributes)
     }
@@ -174,19 +170,54 @@ class BeerListViewController: UIViewController, CoreDataAPI {
         updateSnapshot()
     }
     
-    private func setDel() {
-        let controller = fetchedResultsController
-        controller.delegate = self
+    // MARK: - Search
+    private func setupSearchController() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Beers"
+        navigationItem.searchController = searchController
     }
-    
-    //Check CK STATUS
-    
 }
 
 extension BeerListViewController: NSFetchedResultsControllerDelegate {
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith diff: CollectionDifference<NSManagedObjectID>) {
-        updateSnapshot()
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChangeContentWith diff: CollectionDifference<NSManagedObjectID>) {
+        
+        for change in diff {
+            switch change {
+            case .insert(offset: let newPosition, element: let element, associatedWith: let oldPosition):
+                if let oldPosition = oldPosition {
+                    if oldPosition == newPosition {
+                        // Object Updated
+                        return
+                    }
+                    // Objct Moved
+                    let beer = dataSource.remove(at: oldPosition)
+                    dataSource.insert(beer, at: newPosition)
+                } else {
+                    // Object Added
+                    guard let beerObj = fetchedResultsController.object(at: IndexPath(item: newPosition, section: 0)) as? Beers else {
+                        return
+                    }
+                    dataSource.insert(beerObj, at: newPosition)
+                }
+                
+            case .remove(offset: let offset, element: let element, associatedWith: let associatedWith):
+                if associatedWith == nil {
+                    _ = dataSource.remove(at: offset)
+                }
+            }
+        }
     }
 }
 
-
+extension BeerListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text else { return }
+        //Do something with text
+        currentSearchText = searchText
+        //Call FRC with current search text in it?
+        print(searchText)
+    }
+}

@@ -5,12 +5,11 @@ import Foundation
 import UIKit
 
 struct PresentAgeVerificationView {
-    //MARK: - Properties
+    // MARK: - Properties
     private let userDefaults = UserDefaults.standard
     let viewController: UIViewController
-    
-    
-    //MARK: - Life Cycle Methods
+     
+    // MARK: - Life Cycle Methods
     @discardableResult
     init(viewController: UIViewController) {
         self.viewController = viewController

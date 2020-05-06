@@ -8,17 +8,18 @@ import NotificationCenter
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
+    let cloudKitManager = CloudKitManager.shared
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        //DEBUG:
-        batchDelete()
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         requestNotifications(application: application)
-        checkCloudStatus()
+//        checkCloudStatus()
+        cloudKitManager.subscribeToCKIfNotAlreadySubscribed()
+        cloudKitManager.performInitialCloudKitFetch()
         return true
     }
 
-    //MARK: - Helpers
+    // MARK: - Helpers
     func requestNotifications(application: UIApplication) {
         Notifications().requestAuthFromUserToAllowNotifications { (result) in
             switch result {
@@ -27,10 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
                     DispatchQueue.main.async {
                         application.registerForRemoteNotifications()
                     }
-                }
-                else {
-                    return
-                }
+                } else { return }
                 
             case .failure(let error):
                 print("App Delegate -- Error Requesting Auth: \(error)")
@@ -55,10 +53,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
         }
     }
     
-    
-    // MARK: UISceneSession Lifecycle
+    // MARK: - UISceneSession Lifecycle
 
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    func application(_ application: UIApplication,
+                     configurationForConnecting connectingSceneSession: UISceneSession,
+                     options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -66,21 +65,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
+        // If any sessions were discarded while the application was not running,
+        // this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        // Handling CloudKit Notifications
-//        let viewController: UIViewController = self.window?.rootViewController as! ViewController
-//        let notification: CKNotification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String : NSObject])!
-//        if (notification.notificationType == CKNotification.NotificationType.query) {
-//            let queryNotiication = notification as! CKQueryNotification
-//            let recordID = queryNotiication.recordID
-//            CloudKitManager.shared.fetchRecord(recordID)
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+//        guard let viewController = SceneDelegate().window?.rootViewController as? MrazTabBarController else { return }
+//        let dict = userInfo as! [String:NSObject]
+//        guard let notification: CKDatabaseNotification = CKNotification(fromRemoteNotificationDictionary: dict) as? CKDatabaseNotification else {
+//            return
 //        }
+        //Here call VC.fetchChanges(in: notification.database)
     }
-
 }
-

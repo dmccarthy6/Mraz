@@ -1,11 +1,10 @@
 //  Created by Dylan  on 5/1/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
-
 import CloudKit
 
 extension CKRecord {
-    subscript(key: BeerRecordKey) -> Any? {
+    subscript(key: CloudKitKey) -> Any? {
         get {
             return self[key.rawValue]
         }

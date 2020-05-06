@@ -4,7 +4,7 @@
 import UIKit
 
 class AgeVerificationView: UIView {
-    //MARK: - Properties
+    // MARK: - Properties
     private var ageVerificationLabel: UILabel = {
         let ageLabel = UILabel()
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -37,8 +37,7 @@ class AgeVerificationView: UIView {
     private let defaults = UserDefaults.standard
     private let authVerificationCode = "verifiedAge"
     
-    
-    //MARK: - View Life Cycle
+    // MARK: - View Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.alpha = 0
@@ -57,15 +56,15 @@ class AgeVerificationView: UIView {
         layer.shadowOpacity = traitCollection.userInterfaceStyle == .some(.dark) ? 0.1 : 0.5
     }
     
-    //MARK: - Layout
+    // MARK: - Layout
     private func setupView() {
         addSubview(ageVerificationLabel)
         addSubview(yesButton)
         addSubview(noButton)
         
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: AgeVerificationConstants.viewWidthAnchor),//370
-            heightAnchor.constraint(equalToConstant: AgeVerificationConstants.viewHeightAnchor),//350
+            widthAnchor.constraint(equalToConstant: AgeVerificationConstants.viewWidthAnchor), //370
+            heightAnchor.constraint(equalToConstant: AgeVerificationConstants.viewHeightAnchor), //350
             
             ageVerificationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
             ageVerificationLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 2),
@@ -79,7 +78,7 @@ class AgeVerificationView: UIView {
             noButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors) //300
         ])
         
-        ///Button Targets
+        //Button Targets
         yesButton.addTarget(self, action: #selector(yesButtonTapped), for: .touchUpInside)
         noButton.addTarget(self, action: #selector(noButtonTapped), for: .touchUpInside)
     }
@@ -96,7 +95,7 @@ class AgeVerificationView: UIView {
     }
     
     //TO-DO: Implement these buttons
-    //MARK: - Button Functions
+    // MARK: - Button Functions
     @objc func yesButtonTapped() {
         print("YES BUTTON TAPPED!")
         var userDefaults = Storage()
@@ -111,13 +110,16 @@ class AgeVerificationView: UIView {
         print("NO BUTTON TAPPED!")
     }
     
-    //MARK: - Interface
+    // MARK: - Interface
     func present(_ onView: UIViewController) {
         UIView.animate(withDuration: 0.5) {
             let viewX = onView.view.center.x
             let viewY = onView.view.center.y
             
-            self.frame = CGRect(x: viewX, y: viewY, width: AgeVerificationConstants.viewWidthAnchor, height: AgeVerificationConstants.viewHeightAnchor)
+            self.frame = CGRect(x: viewX,
+                                y: viewY,
+                                width: AgeVerificationConstants.viewWidthAnchor,
+                                height: AgeVerificationConstants.viewHeightAnchor)
             self.center = onView.view.center
             self.alpha = 1
         }

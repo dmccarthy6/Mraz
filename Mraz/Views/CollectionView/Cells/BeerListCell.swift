@@ -4,7 +4,7 @@
 import UIKit
 
 class BeerListCell: UICollectionViewCell, WriteToCoreData {
-    //MARK: - Properties
+    // MARK: - Properties
     private let beerNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -15,21 +15,21 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         return label
     }()
     private let typeLabel: UILabel = {
-           let label = UILabel()
-           label.translatesAutoresizingMaskIntoConstraints = false
-           label.numberOfLines = 0
-           label.adjustsFontForContentSizeCategory = true
-           label.font = .preferredFont(for: .title2, weight: .regular)
-           label.textColor = .systemGray
-           return label
-       }()
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .preferredFont(for: .title2, weight: .regular)
+        label.textColor = .systemGray2
+        return label
+    }()
     private let abvLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .largeTitle, weight: .bold)
-        label.textColor = .systemGray3
+        label.font = .preferredFont(for: .title3, weight: .bold)
+        label.textColor = .label
         return label
     }()
     private var favoriteButton: UIButton = {
@@ -41,8 +41,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
     }()
     var setAsFavorite: (() -> Void)!
     
-    
-    //MARK: View Life Cycle
+    // MARK: - View Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         layoutCell()
@@ -57,7 +56,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         super.layoutSubviews()
     }
     
-    //MARK: - Layout
+    // MARK: - Layout
     private func layoutCell() {
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(beerNameLabel)
@@ -96,17 +95,22 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         layer.masksToBounds = false
     }
     
-    //MARK: - Interface
+    // MARK: - Interface
     func configureBeerCell(beerName: String?, type: String?, abv: String?, isFavorite: Bool, isOnTap: Bool) {
         self.beerNameLabel.text = beerName
         self.abvLabel.text = abv
         self.typeLabel.text = type
-        favoriteButton.tintColor = isFavorite ? .systemYellow : .systemGray3
+        favoriteButton.tintColor = isFavorite ? .systemYellow : .systemBlue
         favoriteButton.setImage(isFavorite ? UIImage(systemName: "star.fill") : UIImage(systemName: "star"), for: .normal)
+        
     }
     
     /// Save new favorite status to Core Data
     func setFavorite(_ objectAtIndex: Beers) {
+        let newStatus = !objectAtIndex.isFavorite
+        objectAtIndex.isFavorite = newStatus
+        favoriteButton.tintColor = newStatus ? .systemYellow : .systemBlue
+        favoriteButton.setImage(newStatus ? UIImage(systemName: "star.fill") : UIImage(systemName: "star"), for: .normal)
         updateFavoriteStatusOn(objectAtIndex)
     }
     
@@ -115,9 +119,24 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         self.setAsFavorite = function
     }
     
-    //MARK: - Button Functions
+    // MARK: - Button Functions
     @objc private func favoriteButtonTapped() {
         setAsFavorite()
     }
     
+    // MARK: - Try to set Cell Color
+    func setIsOnTapColor(_ isOnTap: Bool) {
+        if isOnTap == true {
+            
+            contentView.backgroundColor = .systemRed
+        }
+    }
+    // ???
+    func setOnTapCellColor(element: Beers) {
+        if element.isOnTap {
+            print("ELEMENT: \(element)")
+            contentView.backgroundColor = .systemRed
+            
+        }
+    }
 }

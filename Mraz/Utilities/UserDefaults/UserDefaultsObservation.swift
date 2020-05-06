@@ -4,9 +4,6 @@
 import Foundation
 
 //PROPERTY LIST VALUE PROTOCOL
-
-
-
 //1
 @propertyWrapper
 struct UserDefault<T: PropertyListValue> {
@@ -29,7 +26,6 @@ class DefaultsObservation: NSObject {
     let key: Key
     private var onChange: (Any, Any) -> Void
     
-    
     //1
     init(key: Key, onChange: @escaping (Any, Any) -> Void) {
         self.onChange = onChange
@@ -38,8 +34,6 @@ class DefaultsObservation: NSObject {
         UserDefaults.standard.addObserver(self, forKeyPath: key.rawValue, options: [.old, .new], context: nil)
     }
 }
-
-
 /*
  Extend Key to add Keys
  */

@@ -2,14 +2,15 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import CoreData
+import CloudKit
 /// Core Data Stack - This class holds the Persistent Container and the Managed Object Context for the Core Data Model.
 /// The save context functionality is also in this class.
 
 typealias CoreDataAPI = ReadFromCoreData & WriteToCoreData
 typealias CoreDataFetchRequestFor = NSFetchRequest<NSFetchRequestResult>
 
-final class CoreDataManager: CoreDataAPI {
-    //MARK: - Core Data Stack
+final class CoreDataManager: CoreDataAPI, CloudKitRecordsChangedDelegate {
+    // MARK: - Core Data Stack
     static let sharedDatabase = CoreDataManager()
     
     private lazy var persistentContainer: NSPersistentContainer = {
@@ -34,22 +35,31 @@ final class CoreDataManager: CoreDataAPI {
         return context
     }()
     
-    
+    /// Delegate method called when there are changes to the CKRecords.
+    /// Passing in array of CKRecords that have changed. Save to Core Data.
+    func processChanged(_ records: [CKRecord]) {
+        //TO-DO: These are the changed CK Records.
+        // Update Core Data with these values.
+        print("CoreDataManager -- Records Updated: \(records)")
+        guard records.count > 0 else { return }
+        for record in records {
+            
+        }
+    }
 }
 
 extension CoreDataManager {
     /// Accessable Main Thread Context
     var managedObjectContext: NSManagedObjectContext {
-        get { return mainThreadContext }
+        return mainThreadContext
     }
     
     /// Accessible Private Context
     var privateContext: NSManagedObjectContext {
-        get { return privateManagedObjectContext }
+        return privateManagedObjectContext
     }
     
     var beersContainer: NSPersistentContainer {
-        get { return persistentContainer }
+        return persistentContainer
     }
 }
-

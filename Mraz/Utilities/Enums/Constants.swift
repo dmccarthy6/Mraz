@@ -4,14 +4,11 @@
 import Foundation
 import UIKit
 
-
-
 //enum UserDefaultsKeys {
 //    static let ageVerification = "ageVerification"
 //}
 
-
-//MARK: - View Constants
+// MARK: - View Constants
 enum AgeVerificationConstants {
     static let viewWidthAnchor = CGFloat(370)
     static let viewHeightAnchor = CGFloat(350)
@@ -20,10 +17,4 @@ enum AgeVerificationConstants {
 
 enum BeerCellConstants {
     static let favIcon = CGFloat(35)
-}
-
-//MARK: - Images
-enum SystemImages {
-    static let favoriteButton = UIImage(systemName: "star")
-    static let favoriteButtonFilled = UIImage(systemName: "star.fill")
 }

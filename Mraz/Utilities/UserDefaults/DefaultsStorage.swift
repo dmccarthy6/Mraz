@@ -6,6 +6,7 @@ import Foundation
 /// The keys for User Defaults
 extension Key {
     ///CloudKit
+    static let serverChangeToken: Key = "cloudKitServerChangeToken"
     static let isUserLoggedIntoCK: Key = "loggedIntoCloud"
     static let suppressCloudError: Key = "suppress"
     static let cloudSubscription: Key = "beersSubscription"
@@ -14,14 +15,12 @@ extension Key {
     static let initialFetchSuccessful: Key = "initialFetchSuccessful"
 }
 
-
-
 struct Storage {
     // Age Verification
     @UserDefault(key: .userIsOfAge)
     var userIsOfAge: Bool?
     
-    //MARK: -  CloudKit
+    // MARK: - CloudKit
     @UserDefault(key: .suppressCloudError)
     var suppressError: Bool?
     
@@ -35,7 +34,6 @@ struct Storage {
     @UserDefault(key: .cloudSubscription)
     var cloudSubscription: Bool?
 }
-
 
 /*
  Usage ---

@@ -5,7 +5,7 @@ import Foundation
 import UIKit
 
 final class BeerListHeader: UICollectionReusableView {
-    //MARK: - Properties
+    // MARK: - Properties
     private let sectionHeaderLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -16,8 +16,7 @@ final class BeerListHeader: UICollectionReusableView {
         return label
     }()
     
-    
-    //MARK: - View Life Cycle
+    // MARK: - View Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -27,7 +26,7 @@ final class BeerListHeader: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Layout
+    // MARK: - Layout
     private func setupLayout() {
         addSubview(sectionHeaderLabel)
         
@@ -39,7 +38,7 @@ final class BeerListHeader: UICollectionReusableView {
         ])
     }
     
-    //MARK: - Interface
+    // MARK: - Interface
     func configureHeader(with title: String?) {
         sectionHeaderLabel.text = title
     }

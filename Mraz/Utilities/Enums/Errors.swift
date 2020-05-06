@@ -12,7 +12,8 @@ enum AuthorizationError: Error {
     
     var localizedDescription: String {
         switch self {
-        case .authDenied:   return "To receive notiications from Mraz it is recommended that you have notifications approved. You will not receive any notifications from this application which includes Alerts & Badges."
+        case .authDenied:
+            return "To receive notiications from Mraz it is recommended that you have notifications approved. You will not receive any notifications from this application which includes Alerts & Badges."
         case .authApproved: return "User approved"
         }
     }

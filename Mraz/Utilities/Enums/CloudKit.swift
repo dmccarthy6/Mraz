@@ -3,22 +3,26 @@
 
 import Foundation
 
-
 enum ContainerID: String {
     case beers = "iCloud.com.dylanmccarthyios.Mraz"
 }
 
 enum CKRecordType {
-    case beers
-    
-    var name: String {
-        switch self {
-        case .beers: return "Beers"
-        }
-    }
+    static let beers = "Beers"
+    static let onTap = "OnTap"
+//    case beers
+//    case onTap
+//    
+//    var name: String {
+//        switch self {
+//        case .beers: return "Beers"
+//        case .onTap: return "OnTap"
+//        }
+//    }
 }
 
-enum BeerRecordKey: String {
+enum CloudKitKey: String {
+    //Beers
     case abv
     case description
     case type
@@ -26,9 +30,14 @@ enum BeerRecordKey: String {
     case isOnTap
     case isFavorite
     case sectionType
+    
+    //OnTap
+    case beerABV
+    case beerDescription
+    case beerName
 }
 
-//MARK: - CloudKit Status Enums
+// MARK: - CloudKit Status Enums
 enum CloudKitStatus: String {
     case available
     case noAccount
