@@ -50,8 +50,7 @@ final class Notifications: NSObject {
     // MARK: - Geofencing Methods
     /// This method is fired when the user enters the specified region that is passed in. This method will send
     ///  local notification to the user when they pass into the region.
-    /// - Parameters:
-    ///     - region: The CLRegion that specifies the geofencing region we are using.
+    /// - Parameter region: The CLRegion that specifies the geofencing region we are using.
     func scheduleEnteredRegionNotification(region: CLRegion!) {
         checkAuthStatus { [unowned self] (result) in
             switch result {
