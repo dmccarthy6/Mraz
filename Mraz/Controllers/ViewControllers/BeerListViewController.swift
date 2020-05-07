@@ -4,7 +4,7 @@
 import UIKit
 import CoreData
 
-class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit, CloudKitRecordsChangedDelegate {
+class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
     // MARK: - Properties
     typealias Element = Beers
     typealias BeersSnapshot = NSDiffableDataSourceSnapshot<Section, Element>
@@ -179,9 +179,9 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit, C
     }
     
     // MARK: - Delegate
-    func notificationReceived(_ notification: CKDatabaseNotification) {
-        CloudKitManager.shared.performCloudKitFetch(date: <#T##Date?#>, <#T##completion: (Result<Bool, Error>) -> Void##(Result<Bool, Error>) -> Void#>)
-    }
+//    func notificationReceived(_ notification: CKDatabaseNotification) {
+//        CloudKitManager.shared.performCloudKitFetch(date: <#T##Date?#>, <#T##completion: (Result<Bool, Error>) -> Void##(Result<Bool, Error>) -> Void#>)
+//    }
 }
 
 extension BeerListViewController: NSFetchedResultsControllerDelegate {

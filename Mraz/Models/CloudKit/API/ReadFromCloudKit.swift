@@ -23,9 +23,9 @@ extension ReadFromCloudKit {
         return "Mraz + \(UUID().uuidString)"
     }
     
-    // MARK: - Check Account Status
-    
-    /// Check the users iCloud Account Status
+    // MARK: - Account Status
+    /// Check the users iCloud Account Status returning a result type with the status or an error if one occurs. Utilize this method to
+    /// Handle any iCloud status changes the user may perform.
     /// - Returns: Result type with a CloudKit Status enum value and a CloudKitError enum value.
     func getUserAccountStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void) {
         ckContainer.accountStatus { (status, error) in
@@ -49,7 +49,8 @@ extension ReadFromCloudKit {
     }
     
     // MARK: - User Information Methods
-    /// Request the user's permission to access their record from CK
+    /// Send a request to the user for authoirzation to access their record from CloudKit.
+    /// The data returned includes the user's ID, and the user's CKRecord.
     func requestPermission() {
         ckContainer.requestApplicationPermission(.userDiscoverability) { (status, error) in
             guard status == .granted, error == nil else {
@@ -71,7 +72,8 @@ extension ReadFromCloudKit {
         }
     }
     
-    /// Get the user's CKRecord ID
+    /// If the user gives authorization to access their CKRecord, this method is used
+    /// to obtain the current user's CKRecord.ID.
     private func getUserID() -> CKRecord.ID {
         var fetchedUserRecordID = CKRecord.ID()
         ckContainer.fetchUserRecordID { (userRecordID, error) in
@@ -120,7 +122,7 @@ extension ReadFromCloudKit {
     }
     
     /// Create the CKQuerySubscription and save to the public CloudKit database. Subscription fires on
-    /// record creation or record update. 
+    /// record creation or record update.
     private func createBeersSubscription() {
         let predicate = NSPredicate(value: true)
         
@@ -181,17 +183,20 @@ extension ReadFromCloudKit {
     }
     
     // MARK: - Fetching
-    /// Perform the initial CloudKit fetch for the ''Beers' entity.
-    /// - Parameter withPredicate: NSPredicate value used on the CKQuery.
-    /// - Parameter completion:
-    func performInitialCloudKitFetch(_ withPredicate: NSPredicate, _ completion: @escaping (Result<[CKRecord], Error>) -> Void) {
+    /// Perform a CKQuery fetch operation on the CloudKit database and return the fetched records. This method uses A CKQuery Operation and
+    /// The 'recordFetchedBlock' and 'queryCompletionBlock' to handle fetched records. Results limit set to 250.
+    /// - Parameter withPredicate: The NSPredicate value to use in the CKQuery. Use this to narrow down the query search.
+    /// - Parameter qualityOfService: The quality of service to use for the CloudKit fetch.
+    /// - Parameter completion: Completion handler that returns an array of CKRecords on success and an Error value on failure.
+    func fetchFromCloudKit(_ withPredicate: NSPredicate, qualityOfService: QualityOfService, _ completion: @escaping (Result<[CKRecord], Error>) -> Void) {
         let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         let query = CKQuery(recordType: CKRecordType.beers, predicate: withPredicate)
         query.sortDescriptors = sortDescriptors
         var fetchedRecords = [CKRecord]()
         
-        //Oper
+        // Create Operation
         let fetchAllOperation = CKQueryOperation(query: query)
+        // Completion Blocks on Operation
         fetchAllOperation.recordFetchedBlock = { record in
             fetchedRecords.append(record)
         }
@@ -203,36 +208,12 @@ extension ReadFromCloudKit {
                 completion(.success(fetchedRecords))
             }
         }
+        // Set properties on operation and add to public DB.
         fetchAllOperation.resultsLimit = 250
-        fetchAllOperation.qualityOfService = .utility
+        fetchAllOperation.qualityOfService = qualityOfService
         publicDatabase.add(fetchAllOperation)
     }
     
-    /// Fetch Updated CK Records. This will be called when remote notification is received
-    /// - Parameter modifiedDate: Date value representing the last modified date.
-    /// - Parameter completion: Completion handler returning a Result type of [CKRecord] and Error.
-    func getChangedRecordsSince(_ modifiedDate: Date, _ completion: @escaping (Result<[CKRecord], Error>) -> Void) {
-        let predicate = NSPredicate(format: "modifiedAt == %@", modifiedDate as CVarArg)
-        let query = CKQuery(recordType: CKRecordType.beers, predicate: predicate)
-        let fetchUpdatesOperation = CKQueryOperation(query: query)
-        var updatedRecords = [CKRecord]()
-        
-        //
-        fetchUpdatesOperation.recordFetchedBlock = { record in
-            updatedRecords.append(record)
-        }
-        fetchUpdatesOperation.queryCompletionBlock = { (cursor, error) in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                // TO-DO: Set UserDefaults Last Fetch Date
-                completion(.success(updatedRecords))
-            }
-        }
-        fetchUpdatesOperation.qualityOfService = .userInitiated
-        publicDatabase.add(fetchUpdatesOperation)
-    }
-   
     // MARK: - Errors
     
     /// Retries a CloudKit operation if the error suggests
@@ -293,5 +274,10 @@ extension ReadFromCloudKit {
             beerModelObjects.append(beerObj)
         }
         completion(.success(beerModelObjects))
+    }
+    
+    //
+    func sync() {
+        
     }
 }

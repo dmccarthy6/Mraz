@@ -23,8 +23,10 @@ extension WriteToCoreData {
     }
     
     // MARK: - Saving Methods
+    /// Core Data Save. This method checks if the Main Thread Context Or Private Context has changes
+    /// If yes, it performs the 'save()' method on the context.
     func saveContext() {
-        if mainThreadContext.hasChanges || privateContext.hasChanges { //
+        if mainThreadContext.hasChanges || privateContext.hasChanges {
             mainThreadContext.performAndWait {
                 do {
                     try self.mainThreadContext.save()
@@ -36,7 +38,7 @@ extension WriteToCoreData {
         }
     }
     
-    /// Saving background context
+    /// Perform 'save()' on the background context.
     func savePrivateBackgroundContext() {
         privateContext.performAndWait {
             do {

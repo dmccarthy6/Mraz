@@ -6,7 +6,7 @@ import CloudKit
 
 typealias CloudKitAPI = ReadFromCloudKit & WriteToCloudKit
 
-final class CloudKitManager: CloudKitAPI, CoreDataAPI {
+final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDelegate {
     // MARK: - Properties
     static let shared = CloudKitManager()
     var storage: Storage = Storage()
@@ -16,7 +16,7 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// Check if initial CloudKit Fetch was successful, if so do not fetch again.
     func performInitialCloudKitFetch() {
         if !hasInitialFetchBeenPerformed() {
-            performCloudKitFetch(date: nil) { (result) in
+            fetchAllBeersFromCloud { (result) in
                 switch result {
                 case .success(true), .success(false):
                     self.convertRecordsToBeerModelObjects()
@@ -25,109 +25,80 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                     print("CloudKitManager: -- \(error.localizedDescription)")
                 }
             }
-//            fetchAllRecordsFromCloudKit(NSPredicate(value: true)) { (result) in
-//                switch result {
-//                case .success(true):
-//                    self.convertRecordsToBeerModelObjects()
-//                case .failure(let error):
-//                    print("CloudKitManager - Error: \(error)")
-//                case .success(false):()
-//                }
-//            }
         }
     }
     
-    /// This method checks if the initial fetch has already performed, if not performs it. If fetch initial fetch happend it checks for any
-    /// updated records.
-    /// - Parameter date: Date that represents the 'modifiedDate' value to check against.
-    /// - Parameter completion: Completion handler
-    func performCloudKitFetch(date: Date?, _ completion: @escaping (Result<Bool, Error>) -> Void) {
-        if !hasInitialFetchBeenPerformed() {
-            performInitialCloudKitFetch(NSPredicate(value: true)) { (result) in
-                switch result {
-                case .success(let ckRecords):
-                    self.records = ckRecords
-                    guard self.records.count > 0 else { return }
-                    self.setFetchedValue(true)
-                    completion(.success(true))
-                    
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-        } else {
-            guard let modifiedDate = date else { return }
-            getChangedRecordsSince(modifiedDate) { (result) in
-                switch result {
-                case .success(let ckRecords):
-                    self.records.removeAll()
-                    self.records = ckRecords
-                    self.convertRecordsToBeerModelObjects()
-                    completion(.success(true))
-                    
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+    /// Perform the intial fetch from the CloudKit database. If successful, this method sets a UserDefaults flag
+    ///
+    /// - Parameter completion: Completion handler with a result type of Boolean. Returns true if successful fetch.
+    func fetchAllBeersFromCloud(_ completion: @escaping (Result<Bool, Error>) -> Void) {
+        fetchFromCloudKit(NSPredicate(value: true), qualityOfService: .utility) { [unowned self] (result) in
+            switch result {
+            case .success(let ckRecords):
+                self.records = ckRecords
+                guard self.records.count > 0 else { return }
+                self.setFetchedValue(true)
+                completion(.success(true))
+                
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
     
-//    /// Create a CloudKit Query operation to fetch all beer objects from the database. This method
-//    /// is intented to be called 1 time by the user to get the initial fetch then cache to Core Data.
-//    /// - Parameter predicate: NSPredicate value
-//    /// - Returns: Result Type with Array of fetched CKRecords or Error.
-//    func fetchAllRecordsFromCloudKit(_ predicate: NSPredicate, _ completion: @escaping (Result<Bool, Error>) -> Void) {
-//        let allRecordsPred = NSPredicate(value: true)
-//        performInitialCloudKitFetch(allRecordsPred) { (result) in
-//            switch result {
-//            case .success(let fetchedRecords):
-//                self.records = fetchedRecords
-//                guard self.records.count > 0 else { return }
-//                self.setFetchedValue(true)
-//                completion(.success(true))
-//
-//            case .failure(let ckError):
-//                completion(.failure(ckError))
-//            }
-//        }
-//    }
-//
-//    /// Perform the fetch for changed records -- query by Modified Date
-//    func fetchUpdatedRecordsSince(date: Date) {
-//        getChangedRecordsSince(date) { (result) in
-//            switch result {
-//            case .success(let updatedRecords):
-//                self.records.removeAll()
-//                self.records = updatedRecords
-//                self.convertRecordsToBeerModelObjects()
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
-    
-    // Will Plan To Use This for Fetching Only On Tap Items for Home VC
+    ///
+    func fetchUpdatedRecordsFromCloud() {
+        let date = NSDate(timeInterval: <#T##TimeInterval#>, since: <#T##Date#>) // Date used minus 120 Minutes?
+        let predicate = NSPredicate(format: <#T##String#>, <#T##args: CVarArg...##CVarArg#>)
+        fetchFromCloudKit(<#T##withPredicate: NSPredicate##NSPredicate#>, qualityOfService: <#QualityOfService#>) { (result) in
+            switch result {
+            case .success(let fetchedRecords):
+                //Remove current records values (if any) set the records to the fetchedRecords then convert
+                // to BeerModel objects and save to Core Data.
+                self.records.removeAll()
+                self.records = fetchedRecords
+                self.convertChangedRecordsToBeerObjects()
+            case .failure(let error):
+                //
+                print(error)
+            }
+        }
+    }
+ 
+    // TO-DO: Should this return 'Beers' or should I create a new Core Data Entity that I'll use for the Home VC?
+    /// Fetches list of beers that have the 'isOnTap' value set to true.
+    /// - Parameter completion: Completion handler that returns a
     func fetchOnTapList(_ completion: @escaping (Result<[Beers], Error>) -> Void) {
         let onTapPredicate = NSPredicate(format: "isOnTap == %@", 1)
-        let sortDescriptor = [NSSortDescriptor(key: "beerName", ascending: true)]
-        let query = CKQuery(recordType: CKRecordType.beers, predicate: onTapPredicate)
-        query.sortDescriptors = sortDescriptor
-        
-        //Create operation
-        let onTapOp = CKQueryOperation(query: query)
-        
-        onTapOp.recordFetchedBlock = { record in
-            
-        }
-        onTapOp.queryCompletionBlock = { (cursor, error) in
-            if let error = error {
+        fetchFromCloudKit(onTapPredicate, qualityOfService: .utility) { (result) in
+            switch result {
+            case .success(let ckRecords):
+                // TO-DO: Convert these to Beer Model -> Core Data Objects
+                print("Success")
+            case .failure(let error):
                 completion(.failure(error))
-            } else {
-                //Fetch On Tap Beers
-                //Call Success on Completion Handler here
             }
         }
-        publicDatabase.add(onTapOp)
+    }
+    
+    // MARK: - Syncing
+    /// This method
+    /// - Parameter date: The Date to use to fetch the CK Database.
+    func seeIfThisWorks(date: Date) {
+        func notificationReceived(_ notification: CKDatabaseNotification) {
+            let type = notification.notificationType
+            switch type {
+            case .query:
+                fetchFromCloudKit(<#T##withPredicate: NSPredicate##NSPredicate#>, qualityOfService: <#QualityOfService#>, <#T##completion: (Result<[CKRecord], Error>) -> Void##(Result<[CKRecord], Error>) -> Void#>)
+                
+            case .database, .readNotification, .recordZone: break
+            @unknown default: ()
+            }
+        }
+    }
+    
+    func notificationReceived(_ notification: CKDatabaseNotification) {
+        <#code#>
     }
     
     // MARK: - Helper Methods
@@ -161,6 +132,28 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                 }
             case .failure(let error):
                 print(error)
+            }
+        }
+    }
+ 
+    func convertCloudRecordsToLocalModelObjects() {
+        guard records.count > 0 else { return }
+        self.convertCKRecordsToBeerModelObjects(records) { [unowned self] (result) in
+            switch result {
+            case .success(let beerObjects):
+                for beer in beerObjects {
+                    if !self.hasInitialFetchBeenPerformed() {
+                        self.createManagedObjectFrom(beer, in: self.mainThreadManagedObjectContext)
+                    } else {
+                        //Updating
+                        guard let objectID = self.getManagedObjectIDFrom(beer.id) else { return }
+                        let beerToUpdate = self.getBeerObjectFrom(objectID: objectID)
+                        self.updateCurrentBeersObject(beer: beerToUpdate, from: beer, in: self.mainThreadManagedObjectContext)
+                    }
+                }
+            case .failure(let error):
+                // TO-DO: HANDLE THIS ERROR APPROPRIATELY
+                print("CloudKitManager -- Encountered an error converting objects: \(error)")
             }
         }
     }
