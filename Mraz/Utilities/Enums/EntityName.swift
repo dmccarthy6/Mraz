@@ -5,4 +5,5 @@ import Foundation
 
 enum EntityName: String {
     case beers = "Beers"
+    case modifiedDate = "ModifiedRecords"
 }
