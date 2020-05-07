@@ -111,7 +111,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         objectAtIndex.isFavorite = newStatus
         favoriteButton.tintColor = newStatus ? .systemYellow : .systemBlue
         favoriteButton.setImage(newStatus ? UIImage(systemName: "star.fill") : UIImage(systemName: "star"), for: .normal)
-        updateFavoriteStatusOn(objectAtIndex)
+        updateLocalFavoriteStatus(objectAtIndex)
     }
     
     /// Set button function to the closure passed in by the VC

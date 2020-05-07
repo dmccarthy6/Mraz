@@ -4,7 +4,7 @@
 import UIKit
 import CoreData
 
-class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
+class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit, CloudKitRecordsChangedDelegate {
     // MARK: - Properties
     typealias Element = Beers
     typealias BeersSnapshot = NSDiffableDataSourceSnapshot<Section, Element>
@@ -75,7 +75,6 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         setDatasource()
         pullToRefresh()
         setupSearchController()
-        syncAllChanges()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -177,6 +176,11 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Beers"
         navigationItem.searchController = searchController
+    }
+    
+    // MARK: - Delegate
+    func notificationReceived(_ notification: CKDatabaseNotification) {
+        CloudKitManager.shared.performCloudKitFetch(date: <#T##Date?#>, <#T##completion: (Result<Bool, Error>) -> Void##(Result<Bool, Error>) -> Void#>)
     }
 }
 
