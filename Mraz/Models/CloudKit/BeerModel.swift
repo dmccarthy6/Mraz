@@ -5,7 +5,7 @@ import Foundation
 import CloudKit
 
 struct BeerModel {
-    let id: CKRecord.ID
+    let id: String
     let section: String
     let changeTag: String
     let name: String

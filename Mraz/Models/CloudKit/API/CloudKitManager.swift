@@ -6,7 +6,7 @@ import CloudKit
 
 typealias CloudKitAPI = ReadFromCloudKit & WriteToCloudKit
 
-final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDelegate {
+final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     // MARK: - Properties
     static let shared = CloudKitManager()
     var storage: Storage = Storage()
@@ -46,11 +46,14 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDel
         }
     }
     
-    ///
+    /// Fetch any records that have been updated in the Public Database. This method uses
+    /// the
     func fetchUpdatedRecordsFromCloud() {
-        let date = NSDate(timeInterval: <#T##TimeInterval#>, since: <#T##Date#>) // Date used minus 120 Minutes?
-        let predicate = NSPredicate(format: <#T##String#>, <#T##args: CVarArg...##CVarArg#>)
-        fetchFromCloudKit(<#T##withPredicate: NSPredicate##NSPredicate#>, qualityOfService: <#QualityOfService#>) { (result) in
+        let fromDate = fetchModifiedDate()?.modifiedDate
+        let toDate = Date()
+        
+        let predicate = NSPredicate(format: "modificationDate >= %@ && modificationDate <= %@", fromDate! as NSDate, toDate as NSDate)
+        fetchFromCloudKit(predicate, qualityOfService: .utility) { (result) in
             switch result {
             case .success(let fetchedRecords):
                 //Remove current records values (if any) set the records to the fetchedRecords then convert
@@ -81,26 +84,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDel
         }
     }
     
-    // MARK: - Syncing
-    /// This method
-    /// - Parameter date: The Date to use to fetch the CK Database.
-    func seeIfThisWorks(date: Date) {
-        func notificationReceived(_ notification: CKDatabaseNotification) {
-            let type = notification.notificationType
-            switch type {
-            case .query:
-                fetchFromCloudKit(<#T##withPredicate: NSPredicate##NSPredicate#>, qualityOfService: <#QualityOfService#>, <#T##completion: (Result<[CKRecord], Error>) -> Void##(Result<[CKRecord], Error>) -> Void#>)
-                
-            case .database, .readNotification, .recordZone: break
-            @unknown default: ()
-            }
-        }
-    }
-    
-    func notificationReceived(_ notification: CKDatabaseNotification) {
-        <#code#>
-    }
-    
     // MARK: - Helper Methods
     /// Take the CK Record values received from CloudKit and convert
     /// them into locak BeerModel' objects to be saved into Core Data.
@@ -118,7 +101,8 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDel
         }
     }
     
-    /// Updated records
+    /// Use this method when CloudKit records are updated. This method searches for the ManagedObject with the 'recordName'
+    /// matching the CKRecord's recordName.
     func convertChangedRecordsToBeerObjects() {
         guard records.count > 0 else { return }
         
@@ -126,7 +110,11 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDel
             switch result {
             case .success(let beerModelObjects):
                 for object in beerModelObjects {
-                    guard let objectID = self.getManagedObjectIDFrom(object.id) else { return }
+                    guard let objectID = self.getManagedObjectIDFrom(object.id) else {
+                        //Create New Model Object -- it's not an update.
+                        print("CloudKitManager -- This is a new object, not an update. Added: \(object.name)")
+                        return
+                    }
                     let beerToUpdate = self.getBeerObjectFrom(objectID: objectID)
                     self.updateCurrentBeersObject(beer: beerToUpdate, from: object, in: self.mainThreadManagedObjectContext)
                 }
@@ -135,29 +123,7 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI, CloudKitRecordsChangedDel
             }
         }
     }
- 
-    func convertCloudRecordsToLocalModelObjects() {
-        guard records.count > 0 else { return }
-        self.convertCKRecordsToBeerModelObjects(records) { [unowned self] (result) in
-            switch result {
-            case .success(let beerObjects):
-                for beer in beerObjects {
-                    if !self.hasInitialFetchBeenPerformed() {
-                        self.createManagedObjectFrom(beer, in: self.mainThreadManagedObjectContext)
-                    } else {
-                        //Updating
-                        guard let objectID = self.getManagedObjectIDFrom(beer.id) else { return }
-                        let beerToUpdate = self.getBeerObjectFrom(objectID: objectID)
-                        self.updateCurrentBeersObject(beer: beerToUpdate, from: beer, in: self.mainThreadManagedObjectContext)
-                    }
-                }
-            case .failure(let error):
-                // TO-DO: HANDLE THIS ERROR APPROPRIATELY
-                print("CloudKitManager -- Encountered an error converting objects: \(error)")
-            }
-        }
-    }
-   
+
     /// Flag to check if the initial CK fetch has been performed.
     /// If this is true, no need to call CloudKit again. This data
     /// should hae been saved to local database.

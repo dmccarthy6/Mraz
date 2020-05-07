@@ -4,7 +4,7 @@
 import Foundation
 import CoreData
 
-@objc(Beers)
-public class Beers: NSManagedObject {
+@objc(ModifiedRecords)
+public class ModifiedRecords: NSManagedObject {
 
 }

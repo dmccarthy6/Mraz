@@ -35,9 +35,11 @@
 		617DDA202461B1B100BA86B9 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */; };
 		617DDA222461B25B00BA86B9 /* CKError+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA212461B25B00BA86B9 /* CKError+additions.swift */; };
 		617DDA252461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA242461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift */; };
+		617DDA2C24648A5000BA86B9 /* Beers+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2824648A5000BA86B9 /* Beers+CoreDataClass.swift */; };
+		617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */; };
+		617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */; };
+		617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */; };
 		61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D922457B6F0003EC9FE /* Integer+additions.swift */; };
-		61805D962457BA6F003EC9FE /* Beers+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D942457BA6F003EC9FE /* Beers+CoreDataClass.swift */; };
-		61805D972457BA6F003EC9FE /* Beers+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D952457BA6F003EC9FE /* Beers+CoreDataProperties.swift */; };
 		61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D98245875EE003EC9FE /* CloudKitManager.swift */; };
 		61805D9B24587940003EC9FE /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D9A24587940003EC9FE /* Section.swift */; };
 		61805D9E24587BC0003EC9FE /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D9D24587BC0003EC9FE /* Notifications.swift */; };
@@ -106,9 +108,11 @@
 		617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		617DDA212461B25B00BA86B9 /* CKError+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKError+additions.swift"; sourceTree = "<group>"; };
 		617DDA242461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataUnitTestHelpers.swift; sourceTree = "<group>"; };
+		617DDA2824648A5000BA86B9 /* Beers+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataClass.swift"; sourceTree = "<group>"; };
+		617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModifiedRecords+CoreDataClass.swift"; sourceTree = "<group>"; };
+		617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModifiedRecords+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		61805D922457B6F0003EC9FE /* Integer+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Integer+additions.swift"; sourceTree = "<group>"; };
-		61805D942457BA6F003EC9FE /* Beers+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataClass.swift"; sourceTree = "<group>"; };
-		61805D952457BA6F003EC9FE /* Beers+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		61805D98245875EE003EC9FE /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		61805D9A24587940003EC9FE /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		61805D9D24587BC0003EC9FE /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
@@ -271,8 +275,10 @@
 		61518D292453347600011BB4 /* NSManagedObjectSubclasses */ = {
 			isa = PBXGroup;
 			children = (
-				61805D942457BA6F003EC9FE /* Beers+CoreDataClass.swift */,
-				61805D952457BA6F003EC9FE /* Beers+CoreDataProperties.swift */,
+				617DDA2824648A5000BA86B9 /* Beers+CoreDataClass.swift */,
+				617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */,
+				617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */,
+				617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */,
 			);
 			path = NSManagedObjectSubclasses;
 			sourceTree = "<group>";
@@ -557,6 +563,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				617DDA2C24648A5000BA86B9 /* Beers+CoreDataClass.swift in Sources */,
 				61518D34245338D600011BB4 /* UIFont+additions.swift in Sources */,
 				6186F4DC245B1CB7007BAB37 /* BeerListHeaderView.swift in Sources */,
 				61518D49245365B100011BB4 /* TabBarController.swift in Sources */,
@@ -566,7 +573,6 @@
 				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
 				6186F4FB245DF623007BAB37 /* HomeViewController.swift in Sources */,
 				61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */,
-				61805D962457BA6F003EC9FE /* Beers+CoreDataClass.swift in Sources */,
 				6186F4F1245CE76E007BAB37 /* RegionManager.swift in Sources */,
 				61518D4324533BED00011BB4 /* AgeVerificationViewController.swift in Sources */,
 				61805D9B24587940003EC9FE /* Section.swift in Sources */,
@@ -590,19 +596,21 @@
 				61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */,
 				61518D36245338EA00011BB4 /* UICollectionView+additions.swift in Sources */,
 				6186F4EF245CE43C007BAB37 /* LocationAuthorization.swift in Sources */,
+				617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */,
 				6186F5032460E4BB007BAB37 /* RecordsChangedProtocol.swift in Sources */,
 				6186F4A42458D6E1007BAB37 /* PresentAgeVerificationView.swift in Sources */,
+				617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */,
 				6186F4EA245CAA51007BAB37 /* DefaultsStorage.swift in Sources */,
 				61518D2D245334EE00011BB4 /* WriteToCoreData.swift in Sources */,
 				6186F4EC245CC09F007BAB37 /* Alerts.swift in Sources */,
 				61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */,
 				6186F4FE2460BAE7007BAB37 /* BeerModel.swift in Sources */,
 				6186F4E6245CA8FD007BAB37 /* PropertyListValueProtocol.swift in Sources */,
-				61805D972457BA6F003EC9FE /* Beers+CoreDataProperties.swift in Sources */,
 				6186F4F5245CF44B007BAB37 /* Location.swift in Sources */,
 				61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */,
 				6186F4F3245CED2F007BAB37 /* Locations.swift in Sources */,
 				61518D5C24577AA000011BB4 /* WriteToCloudKit.swift in Sources */,
+				617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

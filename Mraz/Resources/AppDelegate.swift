@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
         requestNotifications(application: application)
 //        checkCloudStatus()
         cloudKitManager.performInitialCloudKitFetch()
+        cloudKitManager.subscribeToBeerChanges()
         return true
     }
 
@@ -77,11 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
         guard let notification: CKDatabaseNotification = CKNotification(fromRemoteNotificationDictionary: dict) as? CKDatabaseNotification else {
             return
         }
-        recordsChangedDelegate?.notificationReceived(notification)
-    }
-    
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        // TO-DO: Create Subscription(s) Here
-        cloudKitManager.subscribeToBeerChanges()
+//        recordsChangedDelegate?.notificationReceived(notification)
+        cloudKitManager.fetchUpdatedRecordsFromCloud()
     }
 }

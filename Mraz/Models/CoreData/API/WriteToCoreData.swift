@@ -2,9 +2,8 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import CoreData
-import CloudKit
 
-protocol WriteToCoreData {
+protocol WriteToCoreData: ReadFromCoreData {
     
 }
 
@@ -70,6 +69,19 @@ extension WriteToCoreData {
         saveContext()
     }
     
+    func genericTry<T: NSManagedObject>(object: T,  inContext: NSManagedObjectContext) {
+        guard let beerObject = object as? Beers else {return}
+    }
+    
+    /// Create the ModifiedRecords object that will be used to persist the 'modifiedDate' property
+    /// for keeping track of fetches performed on updated CloudKit records. Initially set to nil.
+    /// - Returns: NSManagedObjectID for the created entity.
+    func createModifiedDateObject() {
+        let modifiedBeer = ModifiedRecords(context: mainThreadContext)
+        modifiedBeer.modifiedDate = nil
+        saveContext()
+    }
+    
     // MARK: - Update Objects
     /// Update the 'isFavorite' value on the NSManagedObject. This is only a local change not updating CloudKit with this change.
     /// - Parameter beer: The NSManagedObject value to update the 'isFavorite' property on.
@@ -98,28 +110,11 @@ extension WriteToCoreData {
         saveContext()
     }
     
-    /// Batch  Update Method.
-    func batchUpdate(predicate: NSPredicate) {
-        persistentContainer.performBackgroundTask { (privateContext) in
-            let updateRequest = NSBatchUpdateRequest(entityName: EntityName.beers.rawValue)
-            let predicate = predicate
-            updateRequest.predicate = predicate
-            updateRequest.propertiesToUpdate = ["isFavorite": false]
-            updateRequest.resultType = .updatedObjectIDsResultType
-            
-            do {
-                //Execute batch
-                let result = try privateContext.execute(updateRequest) as? NSBatchUpdateResult
-                //Get the updated ID's
-                guard let objectIDs = result?.result as? [NSManagedObjectID] else { return }
-                //Update the main context
-                let changes = [NSUpdatedObjectsKey: objectIDs]
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.mainThreadContext])
-                
-            } catch {
-                fatalError("WriteToCD -- Failed to execute request: \(error)")
-            }
-        }
+    /// Set the 'ModifiedRecords' modified date to today's date.
+    func setModifiedDate() {
+        guard let modifiedDateEntity = fetchModifiedDate() else { return }
+        modifiedDateEntity.modifiedDate = Date()
+        saveContext()
     }
     
     // MARK: - Search Methods
@@ -130,10 +125,10 @@ extension WriteToCoreData {
         return mainThreadContext.object(with: objectID) as! Beers
     }
     
-    /// Use the updated CKRecordID to fetch the database and return the NSManagedObjectID for that record.
+    /// Use the updated CKRecordID to fetch the database and return the 'Beers' NSManagedObjectID for that record.
     /// - Parameter ckRecordID: CKRecordID of the updated value.
     /// - Returns: the NSManagedObjectID for the managedObject value located.
-    func getManagedObjectIDFrom(_ ckRecordID: CKRecord.ID) -> NSManagedObjectID? {
+    func getManagedObjectIDFrom(_ ckRecordID: String) -> NSManagedObjectID? {
         let filterPredicate = NSPredicate(format: "id == %@", ckRecordID)
         let request = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
         request.predicate = filterPredicate
@@ -176,10 +171,7 @@ extension WriteToCoreData {
             fetchRequest.predicate = predicate
             
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-            
-            //
             deleteRequest.resultType = .resultTypeObjectIDs
-            
             do {
                 let result = try privateMOC.execute(deleteRequest) as? NSBatchDeleteResult
                 guard let deletedIDs = result?.result as? [NSManagedObjectID] else { return }
@@ -191,3 +183,29 @@ extension WriteToCoreData {
         }
     }
 }
+
+/* BATCH UPDATE METHOD -- NOT CURRENTLY USING, MAY USE LATER.
+ /// Batch  Update Method.
+ func batchUpdate(predicate: NSPredicate) {
+     persistentContainer.performBackgroundTask { (privateContext) in
+         let updateRequest = NSBatchUpdateRequest(entityName: EntityName.beers.rawValue)
+         let predicate = predicate
+         updateRequest.predicate = predicate
+         updateRequest.propertiesToUpdate = ["isFavorite": false]
+         updateRequest.resultType = .updatedObjectIDsResultType
+         
+         do {
+             //Execute batch
+             let result = try privateContext.execute(updateRequest) as? NSBatchUpdateResult
+             //Get the updated ID's
+             guard let objectIDs = result?.result as? [NSManagedObjectID] else { return }
+             //Update the main context
+             let changes = [NSUpdatedObjectsKey: objectIDs]
+             NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.mainThreadContext])
+             
+         } catch {
+             fatalError("WriteToCD -- Failed to execute request: \(error)")
+         }
+     }
+ }
+ */

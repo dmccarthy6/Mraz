@@ -248,7 +248,7 @@ extension ReadFromCloudKit {
         for record in records {
             let isFav = record[.isFavorite] as? Int64 ?? 0
             let isTap = record[.isOnTap] as? Int64 ?? 0
-            let recordID =          record.recordID
+            let recordID =          record.recordID.recordName
             let changeTag =         record.recordChangeTag ?? ""
             let section =           record[.sectionType] as? String ?? ""
             let name =              record[.name] as? String ?? ""

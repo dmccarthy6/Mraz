@@ -9,6 +9,7 @@ protocol ReadFromCoreData {
 }
 
 extension ReadFromCoreData {
+    /// Context value from 'ReadFromCoreData'
     var mainThreadManagedObjectContext: NSManagedObjectContext {
         return CoreDataManager.sharedDatabase.managedObjectContext
     }
@@ -40,16 +41,33 @@ extension ReadFromCoreData {
     }
     
     // MARK: - Fetch Functions
-    /// Uses configured FetchedResultsController to return specified objects.
-    /// - Returns: Array of 'Beers' objects.
-    func fetchAllBeerObjects() -> [Beers] {
-        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else {
-            return []
+    /// This method takes in an NSManagedObjectID value and returns the last modified date set.
+    /// - Parameter objectID: NSManagedObjectID of the ModifiedRecords date value that was created.
+    /// - Returns: Optional Date value containing the last fetched date
+    func getLastModifiedFetchDate() -> Date? {
+        guard let lastModifiedEntity = fetchModifiedDate() else {
+            return nil
         }
-        return beers
+        return lastModifiedEntity.modifiedDate
+    }
+    
+    /// Fetch the Main Context for 'ModifiedRecords' Entity
+    /// - Returns: NSManagedObject of type 'ModifiedRecords'
+    func fetchModifiedDate() -> ModifiedRecords? {
+        let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.modifiedDate.rawValue)
+        let sortDescriptor = [NSSortDescriptor(key: "modifiedDate", ascending: true)]
+        fetchRequest.sortDescriptors = sortDescriptor
+        do {
+            let modEntity = try mainThreadManagedObjectContext.fetch(fetchRequest) as? [ModifiedRecords]
+            return modEntity?[0]
+        } catch {
+            fatalError("ReadFromCoreData -- Error fetching ModifiedDate: \(error.localizedDescription)")
+        }
+        return nil
     }
 
     // MARK: - Background Fetch
+    /// Background fetch method to perform fetch on the background context, if needed.
     func backgroundFetch() {
         let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
         let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) { (asyncFetchResult) in

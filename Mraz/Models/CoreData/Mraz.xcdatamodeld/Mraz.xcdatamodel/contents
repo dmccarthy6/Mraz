@@ -7,13 +7,17 @@
         <attribute name="changeTag" optional="YES" attributeType="String"/>
         <attribute name="ckCreatedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="ckModifiedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="Transformable"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isOnTap" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="section" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="ModifiedRecords" representedClassName="ModifiedRecords" syncable="YES">
+        <attribute name="modifiedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <elements>
         <element name="Beers" positionX="-63" positionY="-18" width="128" height="208"/>
+        <element name="ModifiedRecords" positionX="-63" positionY="63" width="128" height="58"/>
     </elements>
 </model>
