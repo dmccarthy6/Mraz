@@ -48,7 +48,9 @@ extension WriteToCoreData {
     }
     
     // MARK: - Insert Objects
-    ///
+    /// Takes a model object passed in and creates a new NSManagedObject then saves it to the context.
+    /// - Parameter beerModelObject: A local model object containing the values to save to Core Data.
+    /// - Parameter context: NSManagedObjectContext used to save the object in.
     func createManagedObjectFrom(_ beerModelObject: BeerModel, in context: NSManagedObjectContext) {
         let beers = Beers(context: mainThreadContext)
         
@@ -63,13 +65,13 @@ extension WriteToCoreData {
         beers.isFavorite =          beerModelObject.isFavorite
         beers.isOnTap =             beerModelObject.isOnTap
         beers.section =             beerModelObject.section
-        
         saveContext()
     }
     
     // MARK: - Update Objects
-    /// Update 'Favorite' status
-    func updateFavoriteStatusOn(_ beer: Beers) {
+    /// Update the 'isFavorite' value on the NSManagedObject. This is only a local change not updating CloudKit with this change.
+    /// - Parameter beer: The NSManagedObject value to update the 'isFavorite' property on.
+    func updateLocalFavoriteStatus(_ beer: Beers) {
         persistentContainer.performBackgroundTask { (privateContext) in
             guard let queueSafeBeer = privateContext.object(with: beer.objectID) as? Beers else { return }
             queueSafeBeer.isFavorite = !queueSafeBeer.isFavorite
@@ -78,23 +80,23 @@ extension WriteToCoreData {
         }
     }
     
-    /// Update the 'On Tap' status of beer object passed in.
-    /// This method uses the background context to save this. This is thread safe.
-    func updateOnTapStatusOn(_ beer: Beers) {
-        persistentContainer.performBackgroundTask { (privateContext) in
-            guard let queueSafeBeer = privateContext.object(with: beer.objectID) as? Beers else { return }
-            queueSafeBeer.isOnTap = !queueSafeBeer.isOnTap
-            queueSafeBeer.ckModifiedDate = Date()
-            
-            do {
-                try privateContext.save()
-            } catch {
-                fatalError("WriteToCD -- Failure to save context: \(error.localizedDescription)")
-            }
-        }
+    /// Method that takes in the 'BeerModel' object created from the updated CKRecord. Use that object to update the ManagedObject.
+    /// - Parameter beer: 'Beers' object corresponding to the updated CKRecord. This is the object being updated.
+    /// - Parameter from: 'BeerModel' object created from updated CKRecord. Use these values to update ManagedObject.
+    /// - Parameter context: NSManagedObjectContext
+    func updateCurrentBeersObject(beer: Beers, from: BeerModel, in context: NSManagedObjectContext) {
+        // Values that won't change: id / isFavorite / createdDate
+        // Values that shouldn't change:
+        beer.changeTag = from.changeTag
+        beer.ckModifiedDate = from.modifiedDate
+        beer.name = from.name
+        beer.abv = from.abv
+        beer.beerDescription = from.beerDescription
+        beer.isOnTap = from.isOnTap
+        saveContext()
     }
     
-    ///
+    /// Batch  Update Method.
     func batchUpdate(predicate: NSPredicate) {
         persistentContainer.performBackgroundTask { (privateContext) in
             let updateRequest = NSBatchUpdateRequest(entityName: EntityName.beers.rawValue)
@@ -118,31 +120,34 @@ extension WriteToCoreData {
         }
     }
     
-    // MARK: - Search
-    ///
-    func filterCoreDataObjectsBy(_ name: String) -> NSManagedObjectID {
-        let predicate = NSPredicate(format: "name == %@", name)
-        let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+    // MARK: - Search Methods
+    /// Use a NSManagedObjectID value to search the managed object context for the 'Beers' object.
+    /// - Parameter objectID: The NSManagedObjectID value used to search for
+    /// - Returns: A 'Beers' NSManagedObject object. This is the value that needs to be updated.
+    func getBeerObjectFrom(objectID: NSManagedObjectID) -> Beers {
+        return mainThreadContext.object(with: objectID) as! Beers
+    }
+    
+    /// Use the updated CKRecordID to fetch the database and return the NSManagedObjectID for that record.
+    /// - Parameter ckRecordID: CKRecordID of the updated value.
+    /// - Returns: the NSManagedObjectID for the managedObject value located.
+    func getManagedObjectIDFrom(_ ckRecordID: CKRecord.ID) -> NSManagedObjectID? {
+        let filterPredicate = NSPredicate(format: "id == %@", ckRecordID)
         let request = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
-        request.predicate = predicate
-        request.sortDescriptors = sortDescriptors
-        let objects = [Beers]()
+        request.predicate = filterPredicate
         
         do {
             let filteredObjects = try mainThreadContext.fetch(request) as! [Beers]
             return filteredObjects[0].objectID
         } catch {
-            print("Error finding Object: \(error.localizedDescription)")
+            print("WriteToCoreData -- Error filtering Core Data: \(error.localizedDescription)")
         }
-        return objects[0].objectID
-    }
-    
-    func findObjectToUpdateFrom(id: NSManagedObjectID) -> Beers {
-        return mainThreadContext.object(with: id) as! Beers
+        return nil
     }
     
     // MARK: - Deleting Methods
-    /// Deletes the NSManagedObject passed in.
+    /// Uses the background context to perform the delete method on that context.
+    /// - Parameter beer: The 'Beers' NSManagedObject to be deleted
     func delete(_ beer: Beers) {
         persistentContainer.performBackgroundTask { (privateManagedContext) in
             do {
@@ -156,8 +161,12 @@ extension WriteToCoreData {
         }
     }
     
-    /// Batch Delete. This removes ALL NSManagedObjects.
-    /// This is being used for Debug purposess. Not currently used within the code.
+    /**
+        This method batch deletes all objects from the managedObject context.
+     
+        This method uses the background context to fetch all managedObjects and delete
+        all of the objects.
+     */
     func batchDelete() {
         persistentContainer.performBackgroundTask { (privateMOC) in
             let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)

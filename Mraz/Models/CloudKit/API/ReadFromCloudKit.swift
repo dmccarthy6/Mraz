@@ -48,8 +48,7 @@ extension ReadFromCloudKit {
         }
     }
     
-    /// These methods are to obtain the User's info from the CK database.
-    
+    // MARK: - User Information Methods
     /// Request the user's permission to access their record from CK
     func requestPermission() {
         ckContainer.requestApplicationPermission(.userDiscoverability) { (status, error) in
@@ -101,7 +100,7 @@ extension ReadFromCloudKit {
     
     // MARK: - Subscriptions
     /// Create the CloudKit Subscription on Beers values
-    func subscribeToCKIfNotAlreadySubscribed() {
+    func subscribeToBeerChanges() {
         publicDatabase.fetchAllSubscriptions { (subscriptions, error) in
             if error != nil {
                 print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
@@ -114,15 +113,15 @@ extension ReadFromCloudKit {
                     print("ReadFromCK -- We Already Have That Subscription!")
                 } else {
                     print("ReadFromCK -- Creating Beers Subscription")
-                    self.createSubscriptionForAllBeers()
+                    self.createBeersSubscription()
                 }
             }
         }
     }
     
-    /// Create the subscription to 'Beers' to follow any changes
-    /// or additions to these values.
-    private func createSubscriptionForAllBeers() {
+    /// Create the CKQuerySubscription and save to the public CloudKit database. Subscription fires on
+    /// record creation or record update. 
+    private func createBeersSubscription() {
         let predicate = NSPredicate(value: true)
         
         ///Flush out existing subscrptions
@@ -136,10 +135,6 @@ extension ReadFromCloudKit {
         let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
-        
-        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: nil)
-        //operation.modifySubscriptionsCompletionBlock
-        
         //Save subscription to database
         createCKSubscription(subscription)
     }
@@ -152,6 +147,7 @@ extension ReadFromCloudKit {
                 if let subscription = subscription {
                     for subscription in subscription {
                         self.publicDatabase.delete(withSubscriptionID: subscription.subscriptionID) { (str, error) in
+                            
                             if error != nil {
                                 //TO-DO: Error Handling
                                 print("ReadFromCK -- Error deleting subscription: \(String(describing: error?.localizedDescription))")
@@ -166,7 +162,8 @@ extension ReadFromCloudKit {
         }
     }
     
-    /// Create a subscription
+    /// Private helper method that takes in the CKSubscription and adds that subscription to the database.
+    /// - Parameter subscription: CKSubscription value.
     private func createCKSubscription(_ subscription: CKSubscription) {
         let notificationInfo = CKSubscription.NotificationInfo()
         subscription.notificationInfo = notificationInfo
@@ -184,14 +181,86 @@ extension ReadFromCloudKit {
     }
     
     // MARK: - Fetching
-    func fetchRecord(_ recordID: CKRecord.ID) {
-        if UserDefaults.standard.value(forKey: Key.cloudSubscription.rawValue) != nil {
-            
+    /// Perform the initial CloudKit fetch for the ''Beers' entity.
+    /// - Parameter withPredicate: NSPredicate value used on the CKQuery.
+    /// - Parameter completion:
+    func performInitialCloudKitFetch(_ withPredicate: NSPredicate, _ completion: @escaping (Result<[CKRecord], Error>) -> Void) {
+        let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        let query = CKQuery(recordType: CKRecordType.beers, predicate: withPredicate)
+        query.sortDescriptors = sortDescriptors
+        var fetchedRecords = [CKRecord]()
+        
+        //Oper
+        let fetchAllOperation = CKQueryOperation(query: query)
+        fetchAllOperation.recordFetchedBlock = { record in
+            fetchedRecords.append(record)
         }
+        fetchAllOperation.queryCompletionBlock = { (cursor, error) in
+            if let error = error as? CKError {
+                completion(.failure(error))
+            } else {
+                guard fetchedRecords.count > 0 else { return }
+                completion(.success(fetchedRecords))
+            }
+        }
+        fetchAllOperation.resultsLimit = 250
+        fetchAllOperation.qualityOfService = .utility
+        publicDatabase.add(fetchAllOperation)
     }
     
+    /// Fetch Updated CK Records. This will be called when remote notification is received
+    /// - Parameter modifiedDate: Date value representing the last modified date.
+    /// - Parameter completion: Completion handler returning a Result type of [CKRecord] and Error.
+    func getChangedRecordsSince(_ modifiedDate: Date, _ completion: @escaping (Result<[CKRecord], Error>) -> Void) {
+        let predicate = NSPredicate(format: "modifiedAt == %@", modifiedDate as CVarArg)
+        let query = CKQuery(recordType: CKRecordType.beers, predicate: predicate)
+        let fetchUpdatesOperation = CKQueryOperation(query: query)
+        var updatedRecords = [CKRecord]()
+        
+        //
+        fetchUpdatesOperation.recordFetchedBlock = { record in
+            updatedRecords.append(record)
+        }
+        fetchUpdatesOperation.queryCompletionBlock = { (cursor, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                // TO-DO: Set UserDefaults Last Fetch Date
+                completion(.success(updatedRecords))
+            }
+        }
+        fetchUpdatesOperation.qualityOfService = .userInitiated
+        publicDatabase.add(fetchUpdatesOperation)
+    }
+   
+    // MARK: - Errors
+    
+    /// Retries a CloudKit operation if the error suggests
+    /// - Parameters:
+    ///     - log: The logger to use for logging information about error handling, uses the default
+    ///     - block: The block that will execute the operation later if it can be retried
+    /// - Returns: Boolean indicating if the operation can be retried or not
+    @discardableResult
+    func retryCloudKitOperationIfPossible(_ log: OSLog? = nil, with block: @escaping () -> Void) -> Bool {
+        let effectiveLog: OSLog = log ?? .default
+        guard let effectiveError = self as? CKError else { return false }
+        
+        guard let retryDelay: Double = effectiveError.retryAfterSeconds else {
+            os_log("Error is not recoverable", log: effectiveLog, type: .error)
+            return false
+        }
+        
+        os_log("Error is recoverable. Will try after %{public}f seconds", log: effectiveLog, type: .error, retryDelay)
+        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+            block()
+        }
+        return true
+    }
+    
+    // MARK: - Helpers
     /// Take in CKRecord values from CloudKit and convert the CKRecord objects to
-    /// BeerModel objects to be saved into Core Data.
+    /// - Parameter records: Array of CKRecord values
+    /// - Parameter completion:
     func convertCKRecordsToBeerModelObjects(_ records: [CKRecord], completion: @escaping (Result<[BeerModel], Error>) -> Void) {
         var beerModelObjects = [BeerModel]()
         
@@ -225,63 +294,4 @@ extension ReadFromCloudKit {
         }
         completion(.success(beerModelObjects))
     }
-    
-    // MARK: - Sync Methods
-    func syncAllChanges() {
-        CloudKitSync()
-    }
-    
-    func fetchChanges(in databaseScope: CKDatabase.Scope, completion: @escaping () -> Void) {
-
-        switch databaseScope {
-        case .public:
-            fetchDatabaseChanges(database: ckContainer.publicCloudDatabase,
-                                 databaseTokenKey: "public",
-                                 completion: completion)
-        case .private:
-            return
-        //Not using these here, can use FetchDatabaseChanges method below to implement if needed down the road.
-        case .shared:
-            return
-        //Not using these here, can use FetchDatabaseChanges method below to implement if needed down the road.
-        }
-    }
-    
-    func fetchDatabaseChanges(database: CKDatabase, databaseTokenKey: String, completion: @escaping () -> Void) {
-//        let fetchChangesOperation = CKFetchDatabaseChangesOperation(previousServerChangeToken: <#T##CKServerChangeToken?#>)
-    }
-    
-//    func getInitialChangeToken() {
-//        let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: <#T##[CKRecordZone.ID]?#>,
-//    configurationsByRecordZoneID: <#T##[CKRecordZone.ID : CKFetchRecordZoneChangesOperation.ZoneConfiguration]?#>)
-//        op.fetchRecordZoneChangesCompletionBlock { (error) in
-//
-//        }
-//    }
-    
-    // MARK: - Errors
-    
-    /// Retries a CloudKit operation if the error suggests
-    ///
-    /// - Parameters:
-    ///     - log: The logger to use for logging information about error handling, uses the default
-    ///     - block: The block that will execute the operation later if it can be retried
-    /// - Returns: Boolean indicating if the operation can be retried or not
-    @discardableResult
-    func retryCloudKitOperationIfPossible(_ log: OSLog? = nil, with block: @escaping () -> Void) -> Bool {
-        let effectiveLog: OSLog = log ?? .default
-        guard let effectiveError = self as? CKError else { return false }
-        
-        guard let retryDelay: Double = effectiveError.retryAfterSeconds else {
-            os_log("Error is not recoverable", log: effectiveLog, type: .error)
-            return false
-        }
-        
-        os_log("Error is recoverable. Will try after %{public}f seconds", log: effectiveLog, type: .error, retryDelay)
-        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
-            block()
-        }
-        return true
-    }
-    
 }

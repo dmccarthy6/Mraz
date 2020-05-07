@@ -9,12 +9,12 @@ import NotificationCenter
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
     let cloudKitManager = CloudKitManager.shared
+    weak var recordsChangedDelegate: CloudKitRecordsChangedDelegate?
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         requestNotifications(application: application)
 //        checkCloudStatus()
-        cloudKitManager.subscribeToCKIfNotAlreadySubscribed()
         cloudKitManager.performInitialCloudKitFetch()
         return true
     }
@@ -70,12 +70,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    // MARK: - Remote Notifications
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-//        guard let viewController = SceneDelegate().window?.rootViewController as? MrazTabBarController else { return }
-//        let dict = userInfo as! [String:NSObject]
-//        guard let notification: CKDatabaseNotification = CKNotification(fromRemoteNotificationDictionary: dict) as? CKDatabaseNotification else {
-//            return
-//        }
-        //Here call VC.fetchChanges(in: notification.database)
+        print("AppDelegate -- CloudKit Remote Notification Received!")
+        let dict = userInfo as! [String: NSObject]
+        guard let notification: CKDatabaseNotification = CKNotification(fromRemoteNotificationDictionary: dict) as? CKDatabaseNotification else {
+            return
+        }
+        recordsChangedDelegate?.notificationReceived(notification)
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // TO-DO: Create Subscription(s) Here
+        cloudKitManager.subscribeToBeerChanges()
     }
 }

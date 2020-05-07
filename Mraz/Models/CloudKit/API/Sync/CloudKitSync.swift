@@ -22,9 +22,6 @@ final class CloudKitSync: CloudKitAPI, CoreDataAPI {
     
     // MARK: - Set Operation Blocks
     func setRecordChangeBlocks() {
-//        let zone = CKRecordZone.default()
-//        let zoneID = zone.zoneID
-//        recordZoneChangesOP = CKFetchRecordZoneChangesOperation(recordZoneIDs: zoneID, configurationsByRecordZoneID: <#T##[CKRecordZone.ID : CKFetchRecordZoneChangesOperation.ZoneConfiguration]?#>)
         recordZoneChangesOP.recordChangedBlock = { [unowned self] (record: CKRecord) in
             print("CKSync - This record was changed: \(record[.name] as? String ?? "NIL CHD RECORD")")
             self.changedRecords.append(record)
@@ -40,7 +37,7 @@ final class CloudKitSync: CloudKitAPI, CoreDataAPI {
                 print("cKSync -- Error -> FetchedrecordzonechangesCompletionBlock : \(error.localizedDescription)")
                 //Do Something with the error
             } else {
-                self.handleChanges(in: self.changedRecords)
+//                self.handleChanges(in: self.changedRecords)
                 // To-DO: Pass these records to CD
             }
         }
@@ -54,9 +51,7 @@ final class CloudKitSync: CloudKitAPI, CoreDataAPI {
         publicDatabase.add(recordZoneChangesOP)
     }
     
-    
     // MARK: - Change Token Methods
-    
     /// Set the initial CKChangeToken before anything is received from
     /// the server.
     func setInitialServerChangeToken() {
@@ -82,9 +77,9 @@ final class CloudKitSync: CloudKitAPI, CoreDataAPI {
     
     // MARK: - Helpers
     /// Delegate method called when records are changed.
-    private func handleChanges(in records: [CKRecord]) {
-        recordsChangedDelegate?.processChanged(records)
-    }
+//    private func handleChanges(in records: [CKRecord]) {
+//        recordsChangedDelegate?.processChanged(records)
+//    }
 }
 
 /*

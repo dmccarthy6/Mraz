@@ -9,7 +9,7 @@ import CloudKit
 typealias CoreDataAPI = ReadFromCoreData & WriteToCoreData
 typealias CoreDataFetchRequestFor = NSFetchRequest<NSFetchRequestResult>
 
-final class CoreDataManager: CoreDataAPI, CloudKitRecordsChangedDelegate {
+final class CoreDataManager: CoreDataAPI {
     // MARK: - Core Data Stack
     static let sharedDatabase = CoreDataManager()
     
@@ -35,17 +35,6 @@ final class CoreDataManager: CoreDataAPI, CloudKitRecordsChangedDelegate {
         return context
     }()
     
-    /// Delegate method called when there are changes to the CKRecords.
-    /// Passing in array of CKRecords that have changed. Save to Core Data.
-    func processChanged(_ records: [CKRecord]) {
-        //TO-DO: These are the changed CK Records.
-        // Update Core Data with these values.
-        print("CoreDataManager -- Records Updated: \(records)")
-        guard records.count > 0 else { return }
-        for record in records {
-            
-        }
-    }
 }
 
 extension CoreDataManager {

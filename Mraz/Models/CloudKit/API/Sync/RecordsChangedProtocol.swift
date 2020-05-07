@@ -4,6 +4,10 @@
 import Foundation
 import CloudKit
 
-protocol CloudKitRecordsChangedDelegate: class {
-    func processChanged(_ records: [CKRecord])
+protocol CloudKitRecordsChangedDelegate: class, CoreDataAPI {
+    func notificationReceived(_ notification: CKDatabaseNotification)
+}
+
+extension CloudKitRecordsChangedDelegate {
+    
 }
