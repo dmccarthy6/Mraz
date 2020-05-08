@@ -9,7 +9,8 @@ extension Key {
     static let serverChangeToken: Key = "cloudKitServerChangeToken"
     static let isUserLoggedIntoCK: Key = "loggedIntoCloud"
     static let suppressCloudError: Key = "suppress"
-    static let cloudSubscription: Key = "beersSubscription"
+    static let cloudSubscriptionExists: Key = "beersSubscription"
+    static let cksubscriptionID: Key = "beersSubscriptionID"
     ///
     static let userIsOfAge: Key = "userAgeVerified"
     static let initialFetchSuccessful: Key = "initialFetchSuccessful"
@@ -31,8 +32,8 @@ struct Storage {
     @UserDefault(key: .initialFetchSuccessful)
     var initialFetchSuccessful: Bool?
     
-    @UserDefault(key: .cloudSubscription)
-    var cloudSubscription: Bool?
+    @UserDefault(key: .cloudSubscriptionExists)
+    var cloudSubscriptionExists: Bool?
 }
 
 /*

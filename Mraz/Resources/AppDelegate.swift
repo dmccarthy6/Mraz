@@ -15,11 +15,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         requestNotifications(application: application)
 //        checkCloudStatus()
+//        debug()
         cloudKitManager.performInitialCloudKitFetch()
         cloudKitManager.subscribeToBeerChanges()
         return true
     }
-
+    
+    /// Using this method while debugging. Setting the User Defaults values back to original.
+    func debug() {
+        UserDefaults.standard.setValue(nil, forKey: Key.cloudSubscriptionExists.rawValue)
+        //UserDefaults.standard.setValue(false, forKey: Key.initialFetchSuccessful.rawValue)
+    }
+    
     // MARK: - Helpers
     func requestNotifications(application: UIApplication) {
         Notifications().requestAuthFromUserToAllowNotifications { (result) in
@@ -78,7 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
         guard let notification: CKDatabaseNotification = CKNotification(fromRemoteNotificationDictionary: dict) as? CKDatabaseNotification else {
             return
         }
-//        recordsChangedDelegate?.notificationReceived(notification)
         cloudKitManager.fetchUpdatedRecordsFromCloud()
     }
 }

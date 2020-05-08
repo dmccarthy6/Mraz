@@ -25,11 +25,10 @@ extension WriteToCoreData {
     /// Core Data Save. This method checks if the Main Thread Context Or Private Context has changes
     /// If yes, it performs the 'save()' method on the context.
     func saveContext() {
-        if mainThreadContext.hasChanges || privateContext.hasChanges {
+        if mainThreadContext.hasChanges {
             mainThreadContext.performAndWait {
                 do {
                     try self.mainThreadContext.save()
-                    self.savePrivateBackgroundContext()
                 } catch {
                     fatalError("WriteToCD - Error saving CD: \(error.localizedDescription)")
                 }
@@ -49,39 +48,55 @@ extension WriteToCoreData {
     }
     
     // MARK: - Insert Objects
-    /// Takes a model object passed in and creates a new NSManagedObject then saves it to the context.
-    /// - Parameter beerModelObject: A local model object containing the values to save to Core Data.
-    /// - Parameter context: NSManagedObjectContext used to save the object in.
-    func createManagedObjectFrom(_ beerModelObject: BeerModel, in context: NSManagedObjectContext) {
-        let beers = Beers(context: mainThreadContext)
-        
-        beers.id =                 beerModelObject.id
-        beers.changeTag =           beerModelObject.changeTag
-        beers.name =               beerModelObject.name
-        beers.beerDescription =     beerModelObject.beerDescription
-        beers.abv =                 beerModelObject.abv
-        beers.beerType =            beerModelObject.type
-        beers.ckCreatedDate =       beerModelObject.createdDate
-        beers.ckModifiedDate =      beerModelObject.modifiedDate
-        beers.isFavorite =          beerModelObject.isFavorite
-        beers.isOnTap =             beerModelObject.isOnTap
-        beers.section =             beerModelObject.section
-        saveContext()
-    }
-    
-    func genericTry<T: NSManagedObject>(object: T,  inContext: NSManagedObjectContext) {
-        guard let beerObject = object as? Beers else {return}
+    /// Takes in a 'BeerModel'
+    /// - Parameter beerModel: The model object used to save 
+    func saveBeerObjectToCoreData(from beerModel: BeerModel) {
+        let beer = Beers(context: mainThreadContext)
+        saveObject(object: beer, beerModel: beerModel, inContext: mainThreadContext)
     }
     
     /// Create the ModifiedRecords object that will be used to persist the 'modifiedDate' property
     /// for keeping track of fetches performed on updated CloudKit records. Initially set to nil.
-    /// - Returns: NSManagedObjectID for the created entity.
-    func createModifiedDateObject() {
-        let modifiedBeer = ModifiedRecords(context: mainThreadContext)
-        modifiedBeer.modifiedDate = nil
-        saveContext()
+    func setModifiedDate(_ date: Date?) {
+        let modifiedDateObject = ModifiedRecords(context: mainThreadContext)
+        saveObject(object: modifiedDateObject, modifiedDate: date, inContext: mainThreadContext)
     }
     
+    /// Generic save function to save the specified ManagedObject to the context.
+    /// - Parameter object: NSManagedObject value 
+    /// - Parameter beerModel: 'BeerModel' object used to save a beer NSManagedObject.
+    /// - Parameter modifiedDate: ModifiedDate property to set the modified date on the NSManagedObject.
+    /// - Parameter inContext: ManagedObjectContext used to save the Core Data object.
+    func saveObject<T: NSManagedObject>(object: T, beerModel: BeerModel? = nil, modifiedDate: Date? = nil,
+                                    inContext: NSManagedObjectContext) {
+        if let beerObject = object as? Beers, let model = beerModel {
+            saveBeer(from: model, beer: beerObject)
+        }
+        if let modDateObject = object as? ModifiedRecords {
+            /// Set the modified date parameter to today's date.
+            modDateObject.modifiedDate = Date()
+            saveContext()
+        }
+    }
+    
+    /// Create and save a beer object from a local 'BeerModel'
+    /// - Parameter model: 'BeerModel' object that contains the data needd to save the 'Beers' object.
+    /// - Parameter beer: The 'Beers' managed object being created.
+    func saveBeer(from model: BeerModel, beer: Beers, context: NSManagedObjectContext? = nil) {
+        beer.id =                 model.id
+        beer.changeTag =           model.changeTag
+        beer.name =               model.name
+        beer.beerDescription =     model.beerDescription
+        beer.abv =                 model.abv
+        beer.beerType =            model.type
+        beer.ckCreatedDate =       model.createdDate
+        beer.ckModifiedDate =      model.modifiedDate
+        beer.isFavorite =          model.isFavorite
+        beer.isOnTap =             model.isOnTap
+        beer.section =             model.section
+        saveContext()
+    }
+
     // MARK: - Update Objects
     /// Update the 'isFavorite' value on the NSManagedObject. This is only a local change not updating CloudKit with this change.
     /// - Parameter beer: The NSManagedObject value to update the 'isFavorite' property on.
@@ -107,6 +122,7 @@ extension WriteToCoreData {
         beer.abv = from.abv
         beer.beerDescription = from.beerDescription
         beer.isOnTap = from.isOnTap
+        print("WriteToCoreData -- UpdatedBeer: \(beer)")
         saveContext()
     }
     

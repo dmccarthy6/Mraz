@@ -29,7 +29,7 @@ extension ReadFromCoreData {
         let sortDescriptor = [NSSortDescriptor(key: key, ascending: ascending)]
         fetchRequest.sortDescriptors = sortDescriptor
         if !searchText.isEmpty {
-            fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c]", searchText)
+            fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c] %@", searchText)
         }
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: mainThreadManagedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
         do {

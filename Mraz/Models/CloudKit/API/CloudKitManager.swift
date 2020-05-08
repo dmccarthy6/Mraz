@@ -50,6 +50,7 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// the
     func fetchUpdatedRecordsFromCloud() {
         let fromDate = fetchModifiedDate()?.modifiedDate
+        print("CloudKitManager -- FROM DATE: \(fromDate!)")
         let toDate = Date()
         
         let predicate = NSPredicate(format: "modificationDate >= %@ && modificationDate <= %@", fromDate! as NSDate, toDate as NSDate)
@@ -93,7 +94,9 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
             switch result {
             case .success(let beerModelObjects):
                 for beer in beerModelObjects {
-                    self.createManagedObjectFrom(beer, in: self.mainThreadManagedObjectContext)
+                    self.saveBeerObjectToCoreData(from: beer)
+//                    self.saveObject(object: <#T##T#>, beerModel: beer, inContext: self.mainThreadManagedObjectContext)
+//                    self.createManagedObjectFrom(beer, in: self.mainThreadManagedObjectContext)
                 }
             case .failure(let error):
                 print(error)

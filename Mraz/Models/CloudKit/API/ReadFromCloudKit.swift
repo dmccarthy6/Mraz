@@ -4,7 +4,7 @@
 import CloudKit
 import os.log
 
-protocol ReadFromCloudKit {
+protocol ReadFromCloudKit: CoreDataAPI {
     func getUserAccountStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void)
 }
 
@@ -108,14 +108,19 @@ extension ReadFromCloudKit {
                 print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
                 return
             }
-            guard let validSubscriptions = subscriptions else { return }
-            for subscription in validSubscriptions {
-                let subscriptionExists = UserDefaults.standard.value(forKey: Key.cloudSubscription.rawValue)
-                if subscription.subscriptionID ==  subscriptionExists as? String {
-                    print("ReadFromCK -- We Already Have That Subscription!")
-                } else {
-                    print("ReadFromCK -- Creating Beers Subscription")
-                    self.createBeersSubscription()
+            let subscriptionExists = UserDefaults.standard.bool(forKey: Key.cloudSubscriptionExists.rawValue)
+            if !subscriptionExists {
+                print("Adding Beers Subscription")
+                self.createBeersSubscription()
+                self.setModifiedDate(Date())
+            } else {
+                if let subscriptions = subscriptions {
+                    for subscription in subscriptions {
+                        if subscription.subscriptionID == UserDefaults.standard.value(forKey: Key.cksubscriptionID.rawValue) as? String {
+                            print("Subscription Already Exists")
+                            return
+                        }
+                    }
                 }
             }
         }
@@ -139,6 +144,8 @@ extension ReadFromCloudKit {
         subscription.notificationInfo = info
         //Save subscription to database
         createCKSubscription(subscription)
+        var storage = Storage()
+        storage.cloudSubscriptionExists = true
     }
     
     /// Delete all  current subscriptions from CloudKit to reduce
@@ -176,7 +183,7 @@ extension ReadFromCloudKit {
             } else {
                 let userDef = UserDefaults.standard
                 let subscriptionID = ckSubscription?.subscriptionID
-                userDef.set(subscriptionID, forKey: Key.cloudSubscription.rawValue)
+                userDef.set(subscriptionID, forKey: Key.cksubscriptionID.rawValue)
                 print("ReadFromCloudKit -- CK Subscription Saved Successfully!")
             }
         }
@@ -276,8 +283,4 @@ extension ReadFromCloudKit {
         completion(.success(beerModelObjects))
     }
     
-    //
-    func sync() {
-        
-    }
 }
