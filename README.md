@@ -31,6 +31,9 @@ Mraz Brewery is located in El Dorado Hills, CA and brews delicious beer. I devel
 
 ***
 ## Screenshots:
+
+# OLD Screenshots. 
+* This is how the MVP looked. We're in the process of updating this app completely. Updates coming soon!
 ![Mraz Home](images/HomeGithub.png) ![Beer List](images/BeersGithub.png) ![Food Map](images/MapGithub.png)
 
 ![Ritual LogIn Screen](images/RitualGithub.png)
