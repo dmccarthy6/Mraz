@@ -15,6 +15,54 @@
 		61518D0B245330D900011BB4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61518D0A245330D900011BB4 /* Preview Assets.xcassets */; };
 		61518D0E245330D900011BB4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61518D0C245330D900011BB4 /* LaunchScreen.storyboard */; };
 		61518D19245330D900011BB4 /* MrazTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D18245330D900011BB4 /* MrazTests.swift */; };
+		61518D2B245334E500011BB4 /* ReadFromCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D2A245334E500011BB4 /* ReadFromCoreData.swift */; };
+		61518D2D245334EE00011BB4 /* WriteToCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D2C245334EE00011BB4 /* WriteToCoreData.swift */; };
+		61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D2E2453351200011BB4 /* CoreDataManager.swift */; };
+		61518D34245338D600011BB4 /* UIFont+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D33245338D600011BB4 /* UIFont+additions.swift */; };
+		61518D36245338EA00011BB4 /* UICollectionView+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D35245338EA00011BB4 /* UICollectionView+additions.swift */; };
+		61518D382453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D372453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift */; };
+		61518D3A24533A1200011BB4 /* EntityName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D3924533A1200011BB4 /* EntityName.swift */; };
+		61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D3E24533B1C00011BB4 /* BeerListCell.swift */; };
+		61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4024533BA600011BB4 /* AgeVerificationView.swift */; };
+		61518D4324533BED00011BB4 /* AgeVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */; };
+		61518D4524533FEB00011BB4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4424533FEB00011BB4 /* Constants.swift */; };
+		61518D49245365B100011BB4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D48245365B100011BB4 /* TabBarController.swift */; };
+		61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4B24536F9000011BB4 /* BeerListViewController.swift */; };
+		61518D5A24577A9100011BB4 /* ReadFromCloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */; };
+		61518D5C24577AA000011BB4 /* WriteToCloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5B24577AA000011BB4 /* WriteToCloudKit.swift */; };
+		61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5D24577BCE00011BB4 /* CloudKit.swift */; };
+		617DDA1E2461B1A500BA86B9 /* CloudKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */; };
+		617DDA202461B1B100BA86B9 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */; };
+		617DDA222461B25B00BA86B9 /* CKError+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA212461B25B00BA86B9 /* CKError+additions.swift */; };
+		617DDA252461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA242461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift */; };
+		617DDA2C24648A5000BA86B9 /* Beers+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2824648A5000BA86B9 /* Beers+CoreDataClass.swift */; };
+		617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */; };
+		617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */; };
+		617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */; };
+		61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D922457B6F0003EC9FE /* Integer+additions.swift */; };
+		61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D98245875EE003EC9FE /* CloudKitManager.swift */; };
+		61805D9B24587940003EC9FE /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D9A24587940003EC9FE /* Section.swift */; };
+		61805D9E24587BC0003EC9FE /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D9D24587BC0003EC9FE /* Notifications.swift */; };
+		61805DA024587F37003EC9FE /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D9F24587F37003EC9FE /* Errors.swift */; };
+		61805DA42458A8B5003EC9FE /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61805DA32458A8B5003EC9FE /* CloudKit.framework */; };
+		6186F4A42458D6E1007BAB37 /* PresentAgeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4A32458D6E1007BAB37 /* PresentAgeVerificationView.swift */; };
+		6186F4DC245B1CB7007BAB37 /* BeerListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4DB245B1CB7007BAB37 /* BeerListHeaderView.swift */; };
+		6186F4DE245B24A3007BAB37 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4DD245B24A3007BAB37 /* MapView.swift */; };
+		6186F4E1245C6990007BAB37 /* CKRecord+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4E0245C6990007BAB37 /* CKRecord+additions.swift */; };
+		6186F4E3245CA568007BAB37 /* UserDefaultsObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4E2245CA568007BAB37 /* UserDefaultsObservation.swift */; };
+		6186F4E6245CA8FD007BAB37 /* PropertyListValueProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4E5245CA8FD007BAB37 /* PropertyListValueProtocol.swift */; };
+		6186F4E8245CA9A0007BAB37 /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4E7245CA9A0007BAB37 /* UserDefaultsKey.swift */; };
+		6186F4EA245CAA51007BAB37 /* DefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4E9245CAA51007BAB37 /* DefaultsStorage.swift */; };
+		6186F4EC245CC09F007BAB37 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4EB245CC09F007BAB37 /* Alerts.swift */; };
+		6186F4EF245CE43C007BAB37 /* LocationAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4EE245CE43C007BAB37 /* LocationAuthorization.swift */; };
+		6186F4F1245CE76E007BAB37 /* RegionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4F0245CE76E007BAB37 /* RegionManager.swift */; };
+		6186F4F3245CED2F007BAB37 /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4F2245CED2F007BAB37 /* Locations.swift */; };
+		6186F4F5245CF44B007BAB37 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4F4245CF44B007BAB37 /* Location.swift */; };
+		6186F4F7245CF867007BAB37 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4F6245CF867007BAB37 /* MapViewController.swift */; };
+		6186F4F9245D0156007BAB37 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4F8245D0156007BAB37 /* Images.swift */; };
+		6186F4FB245DF623007BAB37 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4FA245DF623007BAB37 /* HomeViewController.swift */; };
+		6186F4FE2460BAE7007BAB37 /* BeerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4FD2460BAE7007BAB37 /* BeerModel.swift */; };
+		6186F5032460E4BB007BAB37 /* RecordsChangedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F5022460E4BB007BAB37 /* RecordsChangedProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +88,55 @@
 		61518D14245330D900011BB4 /* MrazTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MrazTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		61518D18245330D900011BB4 /* MrazTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrazTests.swift; sourceTree = "<group>"; };
 		61518D1A245330D900011BB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61518D2A245334E500011BB4 /* ReadFromCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFromCoreData.swift; sourceTree = "<group>"; };
+		61518D2C245334EE00011BB4 /* WriteToCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteToCoreData.swift; sourceTree = "<group>"; };
+		61518D2E2453351200011BB4 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		61518D33245338D600011BB4 /* UIFont+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+additions.swift"; sourceTree = "<group>"; };
+		61518D35245338EA00011BB4 /* UICollectionView+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+additions.swift"; sourceTree = "<group>"; };
+		61518D372453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCollectionLayoutSection+ComposedLayouts.swift"; sourceTree = "<group>"; };
+		61518D3924533A1200011BB4 /* EntityName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityName.swift; sourceTree = "<group>"; };
+		61518D3E24533B1C00011BB4 /* BeerListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListCell.swift; sourceTree = "<group>"; };
+		61518D4024533BA600011BB4 /* AgeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeVerificationView.swift; sourceTree = "<group>"; };
+		61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeVerificationViewController.swift; sourceTree = "<group>"; };
+		61518D4424533FEB00011BB4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		61518D48245365B100011BB4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		61518D4B24536F9000011BB4 /* BeerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListViewController.swift; sourceTree = "<group>"; };
+		61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFromCloudKit.swift; sourceTree = "<group>"; };
+		61518D5B24577AA000011BB4 /* WriteToCloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteToCloudKit.swift; sourceTree = "<group>"; };
+		61518D5D24577BCE00011BB4 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
+		617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTests.swift; sourceTree = "<group>"; };
+		617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
+		617DDA212461B25B00BA86B9 /* CKError+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKError+additions.swift"; sourceTree = "<group>"; };
+		617DDA242461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataUnitTestHelpers.swift; sourceTree = "<group>"; };
+		617DDA2824648A5000BA86B9 /* Beers+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataClass.swift"; sourceTree = "<group>"; };
+		617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModifiedRecords+CoreDataClass.swift"; sourceTree = "<group>"; };
+		617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModifiedRecords+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		61805D922457B6F0003EC9FE /* Integer+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Integer+additions.swift"; sourceTree = "<group>"; };
+		61805D98245875EE003EC9FE /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		61805D9A24587940003EC9FE /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		61805D9D24587BC0003EC9FE /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		61805D9F24587F37003EC9FE /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		61805DA12458A8B0003EC9FE /* Mraz.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mraz.entitlements; sourceTree = "<group>"; };
+		61805DA32458A8B5003EC9FE /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		6186F4A32458D6E1007BAB37 /* PresentAgeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentAgeVerificationView.swift; sourceTree = "<group>"; };
+		6186F4DB245B1CB7007BAB37 /* BeerListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListHeaderView.swift; sourceTree = "<group>"; };
+		6186F4DD245B24A3007BAB37 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		6186F4E0245C6990007BAB37 /* CKRecord+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+additions.swift"; sourceTree = "<group>"; };
+		6186F4E2245CA568007BAB37 /* UserDefaultsObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsObservation.swift; sourceTree = "<group>"; };
+		6186F4E5245CA8FD007BAB37 /* PropertyListValueProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyListValueProtocol.swift; sourceTree = "<group>"; };
+		6186F4E7245CA9A0007BAB37 /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
+		6186F4E9245CAA51007BAB37 /* DefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsStorage.swift; sourceTree = "<group>"; };
+		6186F4EB245CC09F007BAB37 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
+		6186F4EE245CE43C007BAB37 /* LocationAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAuthorization.swift; sourceTree = "<group>"; };
+		6186F4F0245CE76E007BAB37 /* RegionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionManager.swift; sourceTree = "<group>"; };
+		6186F4F2245CED2F007BAB37 /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
+		6186F4F4245CF44B007BAB37 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		6186F4F6245CF867007BAB37 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		6186F4F8245D0156007BAB37 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		6186F4FA245DF623007BAB37 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		6186F4FD2460BAE7007BAB37 /* BeerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerModel.swift; sourceTree = "<group>"; };
+		6186F5022460E4BB007BAB37 /* RecordsChangedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsChangedProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61805DA42458A8B5003EC9FE /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +164,7 @@
 				61518CFD245330D300011BB4 /* Mraz */,
 				61518D17245330D900011BB4 /* MrazTests */,
 				61518CFC245330D300011BB4 /* Products */,
+				61805DA22458A8B5003EC9FE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,13 +180,14 @@
 		61518CFD245330D300011BB4 /* Mraz */ = {
 			isa = PBXGroup;
 			children = (
-				61518CFE245330D300011BB4 /* AppDelegate.swift */,
-				61518D00245330D300011BB4 /* SceneDelegate.swift */,
-				61518D05245330D300011BB4 /* ContentView.swift */,
-				61518D07245330D900011BB4 /* Assets.xcassets */,
-				61518D0C245330D900011BB4 /* LaunchScreen.storyboard */,
+				61805DA12458A8B0003EC9FE /* Mraz.entitlements */,
 				61518D0F245330D900011BB4 /* Info.plist */,
-				61518D02245330D300011BB4 /* Mraz.xcdatamodeld */,
+				61518D252453343000011BB4 /* Resources */,
+				61518D232453341E00011BB4 /* Models */,
+				61518D05245330D300011BB4 /* ContentView.swift */,
+				61518D262453344A00011BB4 /* Views */,
+				61518D272453345400011BB4 /* Controllers */,
+				61518D30245338AA00011BB4 /* Utilities */,
 				61518D09245330D900011BB4 /* Preview Content */,
 			);
 			path = Mraz;
@@ -104,10 +204,241 @@
 		61518D17245330D900011BB4 /* MrazTests */ = {
 			isa = PBXGroup;
 			children = (
+				617DDA232461BADE00BA86B9 /* CoreDataTests */,
 				61518D18245330D900011BB4 /* MrazTests.swift */,
 				61518D1A245330D900011BB4 /* Info.plist */,
+				617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */,
 			);
 			path = MrazTests;
+			sourceTree = "<group>";
+		};
+		61518D232453341E00011BB4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				61518D3B24533A9200011BB4 /* CloudKit */,
+				61518D242453342500011BB4 /* CoreData */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		61518D242453342500011BB4 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				61518D282453346D00011BB4 /* API */,
+				61518D292453347600011BB4 /* NSManagedObjectSubclasses */,
+				61518D02245330D300011BB4 /* Mraz.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		61518D252453343000011BB4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				61518D07245330D900011BB4 /* Assets.xcassets */,
+				61518CFE245330D300011BB4 /* AppDelegate.swift */,
+				61518D00245330D300011BB4 /* SceneDelegate.swift */,
+				61518D0C245330D900011BB4 /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		61518D262453344A00011BB4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6186F4DF245B24AB007BAB37 /* Map */,
+				6186F4DA245B1CA8007BAB37 /* CollectionView */,
+				61518D4024533BA600011BB4 /* AgeVerificationView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		61518D272453345400011BB4 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				61518D4A24536CE900011BB4 /* TabBarController */,
+				61518D4D24536FD200011BB4 /* ViewControllers */,
+				6186F4A32458D6E1007BAB37 /* PresentAgeVerificationView.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		61518D282453346D00011BB4 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				61518D2E2453351200011BB4 /* CoreDataManager.swift */,
+				61518D2A245334E500011BB4 /* ReadFromCoreData.swift */,
+				61518D2C245334EE00011BB4 /* WriteToCoreData.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		61518D292453347600011BB4 /* NSManagedObjectSubclasses */ = {
+			isa = PBXGroup;
+			children = (
+				617DDA2824648A5000BA86B9 /* Beers+CoreDataClass.swift */,
+				617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */,
+				617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */,
+				617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */,
+			);
+			path = NSManagedObjectSubclasses;
+			sourceTree = "<group>";
+		};
+		61518D30245338AA00011BB4 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				6186F4ED245CE06E007BAB37 /* Authorizations */,
+				6186F4E4245CA8EC007BAB37 /* UserDefaults */,
+				61805D9C24587BB5003EC9FE /* Notifications */,
+				61518D32245338BF00011BB4 /* Extensions */,
+				61518D31245338BA00011BB4 /* Enums */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		61518D31245338BA00011BB4 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				6186F4EB245CC09F007BAB37 /* Alerts.swift */,
+				61518D3924533A1200011BB4 /* EntityName.swift */,
+				61518D4424533FEB00011BB4 /* Constants.swift */,
+				61518D5D24577BCE00011BB4 /* CloudKit.swift */,
+				61805D9A24587940003EC9FE /* Section.swift */,
+				61805D9F24587F37003EC9FE /* Errors.swift */,
+				6186F4F4245CF44B007BAB37 /* Location.swift */,
+				6186F4F8245D0156007BAB37 /* Images.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		61518D32245338BF00011BB4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				61518D33245338D600011BB4 /* UIFont+additions.swift */,
+				61518D35245338EA00011BB4 /* UICollectionView+additions.swift */,
+				61518D372453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift */,
+				61805D922457B6F0003EC9FE /* Integer+additions.swift */,
+				6186F4E0245C6990007BAB37 /* CKRecord+additions.swift */,
+				617DDA212461B25B00BA86B9 /* CKError+additions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		61518D3B24533A9200011BB4 /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				6186F4FD2460BAE7007BAB37 /* BeerModel.swift */,
+				61518D5824577A8800011BB4 /* API */,
+			);
+			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		61518D3D24533B0E00011BB4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				61518D3E24533B1C00011BB4 /* BeerListCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		61518D4A24536CE900011BB4 /* TabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				61518D48245365B100011BB4 /* TabBarController.swift */,
+			);
+			path = TabBarController;
+			sourceTree = "<group>";
+		};
+		61518D4D24536FD200011BB4 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */,
+				61518D4B24536F9000011BB4 /* BeerListViewController.swift */,
+				6186F4F6245CF867007BAB37 /* MapViewController.swift */,
+				6186F4FA245DF623007BAB37 /* HomeViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		61518D5824577A8800011BB4 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				6186F5012460E484007BAB37 /* Sync */,
+				61805D98245875EE003EC9FE /* CloudKitManager.swift */,
+				61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */,
+				61518D5B24577AA000011BB4 /* WriteToCloudKit.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		617DDA232461BADE00BA86B9 /* CoreDataTests */ = {
+			isa = PBXGroup;
+			children = (
+				617DDA242461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift */,
+				617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */,
+			);
+			path = CoreDataTests;
+			sourceTree = "<group>";
+		};
+		61805D9C24587BB5003EC9FE /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				61805D9D24587BC0003EC9FE /* Notifications.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		61805DA22458A8B5003EC9FE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				61805DA32458A8B5003EC9FE /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6186F4DA245B1CA8007BAB37 /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				61518D3D24533B0E00011BB4 /* Cells */,
+				6186F4DB245B1CB7007BAB37 /* BeerListHeaderView.swift */,
+			);
+			path = CollectionView;
+			sourceTree = "<group>";
+		};
+		6186F4DF245B24AB007BAB37 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				6186F4EE245CE43C007BAB37 /* LocationAuthorization.swift */,
+				6186F4DD245B24A3007BAB37 /* MapView.swift */,
+				6186F4F0245CE76E007BAB37 /* RegionManager.swift */,
+				6186F4F2245CED2F007BAB37 /* Locations.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		6186F4E4245CA8EC007BAB37 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				6186F4E2245CA568007BAB37 /* UserDefaultsObservation.swift */,
+				6186F4E5245CA8FD007BAB37 /* PropertyListValueProtocol.swift */,
+				6186F4E7245CA9A0007BAB37 /* UserDefaultsKey.swift */,
+				6186F4E9245CAA51007BAB37 /* DefaultsStorage.swift */,
+			);
+			path = UserDefaults;
+			sourceTree = "<group>";
+		};
+		6186F4ED245CE06E007BAB37 /* Authorizations */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Authorizations;
+			sourceTree = "<group>";
+		};
+		6186F5012460E484007BAB37 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				6186F5022460E4BB007BAB37 /* RecordsChangedProtocol.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +451,7 @@
 				61518CF7245330D300011BB4 /* Sources */,
 				61518CF8245330D300011BB4 /* Frameworks */,
 				61518CF9245330D300011BB4 /* Resources */,
+				6186F4FC24606C59007BAB37 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -206,15 +538,79 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6186F4FC24606C59007BAB37 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		61518CF7245330D300011BB4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				617DDA2C24648A5000BA86B9 /* Beers+CoreDataClass.swift in Sources */,
+				61518D34245338D600011BB4 /* UIFont+additions.swift in Sources */,
+				6186F4DC245B1CB7007BAB37 /* BeerListHeaderView.swift in Sources */,
+				61518D49245365B100011BB4 /* TabBarController.swift in Sources */,
+				6186F4E3245CA568007BAB37 /* UserDefaultsObservation.swift in Sources */,
+				61518D3A24533A1200011BB4 /* EntityName.swift in Sources */,
+				61805D9E24587BC0003EC9FE /* Notifications.swift in Sources */,
 				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
+				6186F4FB245DF623007BAB37 /* HomeViewController.swift in Sources */,
+				61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */,
+				6186F4F1245CE76E007BAB37 /* RegionManager.swift in Sources */,
+				61518D4324533BED00011BB4 /* AgeVerificationViewController.swift in Sources */,
+				61805D9B24587940003EC9FE /* Section.swift in Sources */,
+				6186F4E1245C6990007BAB37 /* CKRecord+additions.swift in Sources */,
+				6186F4F7245CF867007BAB37 /* MapViewController.swift in Sources */,
+				6186F4DE245B24A3007BAB37 /* MapView.swift in Sources */,
+				61518D382453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift in Sources */,
+				61518D4524533FEB00011BB4 /* Constants.swift in Sources */,
 				61518CFF245330D300011BB4 /* AppDelegate.swift in Sources */,
+				61518D5A24577A9100011BB4 /* ReadFromCloudKit.swift in Sources */,
+				617DDA222461B25B00BA86B9 /* CKError+additions.swift in Sources */,
+				61518D2B245334E500011BB4 /* ReadFromCoreData.swift in Sources */,
+				61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */,
+				61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */,
 				61518D06245330D300011BB4 /* ContentView.swift in Sources */,
+				61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */,
 				61518D01245330D300011BB4 /* SceneDelegate.swift in Sources */,
+				6186F4E8245CA9A0007BAB37 /* UserDefaultsKey.swift in Sources */,
+				61805DA024587F37003EC9FE /* Errors.swift in Sources */,
+				6186F4F9245D0156007BAB37 /* Images.swift in Sources */,
+				61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */,
+				61518D36245338EA00011BB4 /* UICollectionView+additions.swift in Sources */,
+				6186F4EF245CE43C007BAB37 /* LocationAuthorization.swift in Sources */,
+				617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */,
+				6186F5032460E4BB007BAB37 /* RecordsChangedProtocol.swift in Sources */,
+				6186F4A42458D6E1007BAB37 /* PresentAgeVerificationView.swift in Sources */,
+				617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */,
+				6186F4EA245CAA51007BAB37 /* DefaultsStorage.swift in Sources */,
+				61518D2D245334EE00011BB4 /* WriteToCoreData.swift in Sources */,
+				6186F4EC245CC09F007BAB37 /* Alerts.swift in Sources */,
+				61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */,
+				6186F4FE2460BAE7007BAB37 /* BeerModel.swift in Sources */,
+				6186F4E6245CA8FD007BAB37 /* PropertyListValueProtocol.swift in Sources */,
+				6186F4F5245CF44B007BAB37 /* Location.swift in Sources */,
+				61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */,
+				6186F4F3245CED2F007BAB37 /* Locations.swift in Sources */,
+				61518D5C24577AA000011BB4 /* WriteToCloudKit.swift in Sources */,
+				617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +618,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				617DDA1E2461B1A500BA86B9 /* CloudKitTests.swift in Sources */,
 				61518D19245330D900011BB4 /* MrazTests.swift in Sources */,
+				617DDA252461BAF900BA86B9 /* CoreDataUnitTestHelpers.swift in Sources */,
+				617DDA202461B1B100BA86B9 /* CoreDataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +765,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mraz/Mraz.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mraz/Preview Content\"";
 				DEVELOPMENT_TEAM = 3K8HM9CR5K;
@@ -386,6 +786,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mraz/Mraz.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mraz/Preview Content\"";
 				DEVELOPMENT_TEAM = 3K8HM9CR5K;

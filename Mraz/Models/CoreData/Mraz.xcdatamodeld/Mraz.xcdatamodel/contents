@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Beers" representedClassName="Beers" syncable="YES">
+        <attribute name="abv" optional="YES" attributeType="String"/>
+        <attribute name="beerDescription" optional="YES" attributeType="String"/>
+        <attribute name="beerType" optional="YES" attributeType="String"/>
+        <attribute name="changeTag" optional="YES" attributeType="String"/>
+        <attribute name="ckCreatedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="ckModifiedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isOnTap" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="section" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ModifiedRecords" representedClassName="ModifiedRecords" syncable="YES">
+        <attribute name="modifiedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <elements>
+        <element name="Beers" positionX="-63" positionY="-18" width="128" height="208"/>
+        <element name="ModifiedRecords" positionX="-63" positionY="63" width="128" height="58"/>
+    </elements>
+</model>
