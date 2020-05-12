@@ -1,7 +1,6 @@
 //  Created by Dylan  on 4/30/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
-import Foundation
 import UIKit
 
 final class BeerListHeader: UICollectionReusableView {
@@ -11,6 +10,7 @@ final class BeerListHeader: UICollectionReusableView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
         label.font = .preferredFont(for: .title1, weight: .bold)
         label.textColor = .label
         return label
@@ -36,6 +36,7 @@ final class BeerListHeader: UICollectionReusableView {
             sectionHeaderLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             sectionHeaderLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
+        backgroundColor = .systemRed
     }
     
     // MARK: - Interface

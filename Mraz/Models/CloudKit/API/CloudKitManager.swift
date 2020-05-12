@@ -38,6 +38,7 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                 self.records = ckRecords
                 guard self.records.count > 0 else { return }
                 self.setFetchedValue(true)
+                self.createLastModifiedDate()
                 completion(.success(true))
                 
             case .failure(let error):
@@ -49,10 +50,10 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// Fetch any records that have been updated in the Public Database. This method uses
     /// the
     func fetchUpdatedRecordsFromCloud() {
-        let fromDate = fetchModifiedDate()?.modifiedDate
-        print("CloudKitManager -- FROM DATE: \(fromDate!)")
+        guard let objectID = modifiedDateObjectID() else { return }
+        let fromDate = getLastModifiedFetchDate()
         let toDate = Date()
-        
+        print("CloudKitManager -- Fetching Objects From:\(fromDate!) to \(toDate)")
         let predicate = NSPredicate(format: "modificationDate >= %@ && modificationDate <= %@", fromDate! as NSDate, toDate as NSDate)
         fetchFromCloudKit(predicate, qualityOfService: .utility) { (result) in
             switch result {
@@ -61,26 +62,30 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                 // to BeerModel objects and save to Core Data.
                 self.records.removeAll()
                 self.records = fetchedRecords
+                print("These are the records that have changes: \n \(fetchedRecords)")
                 self.convertChangedRecordsToBeerObjects()
+                self.updateLastModifiedDate(id: objectID)
             case .failure(let error):
                 //
-                print(error)
+                print("CloudKitManager -- Error fetching updated records: \(error.localizedDescription)")
             }
         }
     }
  
-    // TO-DO: Should this return 'Beers' or should I create a new Core Data Entity that I'll use for the Home VC?
     /// Fetches list of beers that have the 'isOnTap' value set to true.
     /// - Parameter completion: Completion handler that returns a
-    func fetchOnTapList(_ completion: @escaping (Result<[Beers], Error>) -> Void) {
-        let onTapPredicate = NSPredicate(format: "isOnTap == %@", 1)
-        fetchFromCloudKit(onTapPredicate, qualityOfService: .utility) { (result) in
+    func fetchOnTapList() {
+        let onTapPredicate = NSPredicate(format: "isOnTap == %d", 1)
+        fetchFromCloudKit(onTapPredicate, qualityOfService: .userInitiated) { (result) in
             switch result {
             case .success(let ckRecords):
+                self.records.removeAll()
+                self.records = ckRecords
+                self.convertChangedRecordsToBeerObjects()
                 // TO-DO: Convert these to Beer Model -> Core Data Objects
-                print("Success")
+                print("CloudKitManager - Success fetching onTap FromCK")
             case .failure(let error):
-                completion(.failure(error))
+                print("CloudKitManager: \(error.localizedDescription)")
             }
         }
     }
@@ -95,8 +100,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
             case .success(let beerModelObjects):
                 for beer in beerModelObjects {
                     self.saveBeerObjectToCoreData(from: beer)
-//                    self.saveObject(object: <#T##T#>, beerModel: beer, inContext: self.mainThreadManagedObjectContext)
-//                    self.createManagedObjectFrom(beer, in: self.mainThreadManagedObjectContext)
                 }
             case .failure(let error):
                 print(error)
@@ -108,7 +111,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// matching the CKRecord's recordName.
     func convertChangedRecordsToBeerObjects() {
         guard records.count > 0 else { return }
-        
         self.convertCKRecordsToBeerModelObjects(records) {[unowned self] (result) in
             switch result {
             case .success(let beerModelObjects):

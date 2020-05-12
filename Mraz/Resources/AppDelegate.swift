@@ -15,16 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         requestNotifications(application: application)
 //        checkCloudStatus()
-//        debug()
+//        UserDefaults.standard.setValue(false, forKey: Key.cloudSubscriptionExists.rawValue)
+//        UserDefaults.standard.setValue(false, forKey: Key.initialFetchSuccessful.rawValue)
+        
         cloudKitManager.performInitialCloudKitFetch()
         cloudKitManager.subscribeToBeerChanges()
         return true
-    }
-    
-    /// Using this method while debugging. Setting the User Defaults values back to original.
-    func debug() {
-        UserDefaults.standard.setValue(nil, forKey: Key.cloudSubscriptionExists.rawValue)
-        //UserDefaults.standard.setValue(false, forKey: Key.initialFetchSuccessful.rawValue)
     }
     
     // MARK: - Helpers
