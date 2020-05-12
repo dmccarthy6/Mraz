@@ -32,7 +32,7 @@ class OnTapCell: UICollectionViewCell {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .title1, weight: .bold)
+        label.font = .preferredFont(for: .title2, weight: .bold)
         return label
     }()
     private let beerDescriptionLabel: UILabel = {
@@ -48,7 +48,7 @@ class OnTapCell: UICollectionViewCell {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .secondarySystemBackground
+        
         setupLayout()
         setupCardView()
     }
@@ -60,7 +60,7 @@ class OnTapCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.shadowColor = UIColor.label.resolvedColor(with: traitCollection).cgColor
-        layer.shadowOpacity = traitCollection.userInterfaceStyle == .some(.dark) ? 0.1 : 0.3
+        layer.shadowOpacity = traitCollection.userInterfaceStyle == .some(.dark) ? 0.0 : 0.3
     }
     
     // MARK: - Helpers
@@ -96,7 +96,7 @@ class OnTapCell: UICollectionViewCell {
     private func setupCardView() {
         contentView.layer.cornerCurve = .circular
         contentView.layer.cornerRadius = 20
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = .secondarySystemBackground
         contentView.layer.masksToBounds = true
         
         layer.shadowRadius = 8.0

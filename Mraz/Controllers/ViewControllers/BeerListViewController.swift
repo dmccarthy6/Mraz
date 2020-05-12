@@ -51,18 +51,17 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
             collectionView, kind, indexPath -> UICollectionReusableView? in
             let section = diffableDatasource.snapshot().sectionIdentifiers[indexPath.section]
             let header: BeerListHeader = collectionView.dequeueReusableView(indexPath: indexPath)
-            header.configureHeader(with: "title" )//section?.title
+            header.configureHeader(with: section.title )
             return header
         }
         return diffableDatasource
     }()
     private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        let controller = configureFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
+        let controller = configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
         controller.delegate = self
         return controller
     }()
     private var currentSearchText = ""
-    private var dataSource = [Beers]()
     private var activityIndicator: UIActivityIndicatorView?
     private let refreshControl = UIRefreshControl()
     
@@ -72,7 +71,7 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         view.backgroundColor = .systemBackground
         
         setupView()
-        createBeersSnapshot()
+        createSnapshot()
         pullToRefresh()
         setupSearchController()
     }
@@ -89,13 +88,17 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
     }
     
     /// Create the snapshot
-    private func createBeersSnapshot(_ animate: Bool = true) {
+    private func createSnapshot() {
+        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        updateSnapshot(with: beers)
+    }
+    
+    private func updateSnapshot(with datasource: [Beers], animate: Bool = true) {
         var snapshot = BeersSnapshot()
         snapshot.appendSections(Section.allCases)
-        guard let dataSource = fetchedResultsController.fetchedObjects as? [Beers] else { return }
         
         for section in snapshot.sectionIdentifiers {
-            let items = dataSource.filter({ $0.section == section.title })
+            let items = datasource.filter({ $0.section == section.title })
             snapshot.appendItems(items, toSection: section)
         }
         beersDiffableDatasource.apply(snapshot, animatingDifferences: animate)
@@ -117,7 +120,7 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
     }
 
     // MARK: - Activity indicator methods
-    /// Initializer the activity indicator view
+    /// Create the activity indicator view and start animating.
     private func startActivityIndicator() {
         self.activityIndicator = UIActivityIndicatorView(style: .large)
         self.activityIndicator?.center = self.view.center
@@ -125,13 +128,14 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         self.activityIndicator?.startAnimating()
     }
     
-    /// Stop the activity indicator
+    /// Stop animating the activity indicator.
     private func stopActivityIndicator() {
         if let activityIndicator = self.activityIndicator {
             activityIndicator.stopAnimating()
         }
     }
     
+    // MARK: - Refresh Methods
     private func pullToRefresh() {
         collectionView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -145,9 +149,11 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
     
     @objc func refresh() {
         CloudKitManager.shared.fetchUpdatedRecordsFromCloud()
+        refreshControl.endRefreshing()
     }
     
     // MARK: - Search
+    /// Implement the search bar controller
     private func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -156,20 +162,20 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         navigationItem.searchController = searchController
     }
 }
-
+// MARK: - Fetched Results Controller Delegate
 extension BeerListViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        createBeersSnapshot()
+        guard let updatedBeers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        updateSnapshot(with: updatedBeers)
     }
 }
-
+// MARK: - UISearch Controller
 extension BeerListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
-        //Do something with text
         currentSearchText = searchText
-        //Call FRC with current search text in it?
-//        fetchedResultsController = configureFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
-        print(searchText)
+        fetchedResultsController = configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: searchText, ascending: true)
+        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        updateSnapshot(with: beers)
     }
 }

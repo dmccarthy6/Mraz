@@ -7,6 +7,9 @@ import UIKit
 enum SystemImages {
     static let favoriteButton = UIImage(systemName: "star")
     static let favoriteButtonFilled = UIImage(systemName: "star.fill")
+    static let mapPin =  UIImage(systemName: "mappin.and.ellipse")
+    static let phoneCircleFill = UIImage(systemName: "phone.circle.fill")
+    static let linkCircleFill = UIImage(systemName: "link.circle.fill")
 }
 
 // MARK: - Map Annotation Images
