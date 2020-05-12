@@ -108,6 +108,7 @@ extension ReadFromCloudKit {
                 print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
                 return
             }
+
             if let safeSubscriptions = subscriptions {
                 guard safeSubscriptions.count >= 1 else {
                     self.createBeersSubscription()
@@ -159,6 +160,7 @@ extension ReadFromCloudKit {
                             if error != nil {
                                 //TO-DO: Error Handling
                                 print("ReadFromCK -- Error deleting subscription: \(String(describing: error?.localizedDescription))")
+
                             } else {
                                 print("ReadFromCK - Subscription Deleted: \(str ?? "NIL STR")")
                             }
@@ -166,6 +168,7 @@ extension ReadFromCloudKit {
                     }
                 }
             } else {
+
                 print(error?.localizedDescription)
                 //TO-DO: Error Handling
             }

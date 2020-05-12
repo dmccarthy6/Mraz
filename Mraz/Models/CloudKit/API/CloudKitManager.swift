@@ -38,7 +38,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                 self.records = ckRecords
                 guard self.records.count > 0 else { return }
                 self.setFetchedValue(true)
-                self.createLastModifiedDate()
                 completion(.success(true))
                 
             case .failure(let error):
@@ -50,10 +49,12 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// Fetch any records that have been updated in the Public Database. This method uses
     /// the
     func fetchUpdatedRecordsFromCloud() {
+
         guard let objectID = modifiedDateObjectID() else { return }
         let fromDate = getLastModifiedFetchDate()
         let toDate = Date()
         print("CloudKitManager -- Fetching Objects From:\(fromDate!) to \(toDate)")
+
         let predicate = NSPredicate(format: "modificationDate >= %@ && modificationDate <= %@", fromDate! as NSDate, toDate as NSDate)
         fetchFromCloudKit(predicate, qualityOfService: .utility) { (result) in
             switch result {
@@ -62,12 +63,14 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                 // to BeerModel objects and save to Core Data.
                 self.records.removeAll()
                 self.records = fetchedRecords
+
                 print("These are the records that have changes: \n \(fetchedRecords)")
                 self.convertChangedRecordsToBeerObjects()
                 self.updateLastModifiedDate(id: objectID)
             case .failure(let error):
                 //
                 print("CloudKitManager -- Error fetching updated records: \(error.localizedDescription)")
+
             }
         }
     }
@@ -111,6 +114,7 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// matching the CKRecord's recordName.
     func convertChangedRecordsToBeerObjects() {
         guard records.count > 0 else { return }
+
         self.convertCKRecordsToBeerModelObjects(records) {[unowned self] (result) in
             switch result {
             case .success(let beerModelObjects):

@@ -2,6 +2,7 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import UIKit
+
 import CoreData
 
 final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
@@ -68,6 +69,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
     override func viewDidLoad() {
         super.viewDidLoad()
         PresentAgeVerificationView(viewController: self)
+
         view.backgroundColor = .systemBackground
 //        CloudKitManager.shared.fetchOnTapList()
         navigationItem.title = "Mraz Brewing Co."

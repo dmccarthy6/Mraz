@@ -38,6 +38,7 @@ extension ReadFromCoreData {
                                                                   managedObjectContext: mainThreadManagedObjectContext,
                                                                   sectionNameKeyPath: nil,
                                                                   cacheName: nil)
+        
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -65,7 +66,7 @@ extension ReadFromCoreData {
         }
         return fetchResultsController
     }
-    
+  
     // MARK: - Fetch Functions
     /// This method takes in an NSManagedObjectID value and returns the last modified date set.
     /// - Parameter objectID: NSManagedObjectID of the ModifiedRecords date value that was created.

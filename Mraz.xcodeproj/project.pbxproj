@@ -67,6 +67,7 @@
 		61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE72465DC37000D4193 /* BreweryDataView.swift */; };
 		61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE92465E378000D4193 /* OnTapCell.swift */; };
 		61BD6BEC246612FB000D4193 /* OnTapHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		61BD6BE72465DC37000D4193 /* BreweryDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryDataView.swift; sourceTree = "<group>"; };
 		61BD6BE92465E378000D4193 /* OnTapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapCell.swift; sourceTree = "<group>"; };
 		61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapHeaderView.swift; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +268,7 @@
 				6186F4DA245B1CA8007BAB37 /* CollectionView */,
 				61518D4024533BA600011BB4 /* AgeVerificationView.swift */,
 				61BD6BE72465DC37000D4193 /* BreweryDataView.swift */,
+
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -346,6 +349,8 @@
 			children = (
 				6186F4FD2460BAE7007BAB37 /* BeerModel.swift */,
 				6147A12D2469B310000508FE /* OnTapModel.swift */,
+
+
 				61518D5824577A8800011BB4 /* API */,
 			);
 			path = CloudKit;
@@ -356,6 +361,8 @@
 			children = (
 				61518D3E24533B1C00011BB4 /* BeerListCell.swift */,
 				61BD6BE92465E378000D4193 /* OnTapCell.swift */,
+
+
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -418,8 +425,10 @@
 		6186F4DA245B1CA8007BAB37 /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
+
 				6147A12F2469D148000508FE /* HeaderViews */,
-				61518D3D24533B0E00011BB4 /* Cells */,
+				61518D3D24533B0E00011BB4 /* Cells */
+
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -606,11 +615,13 @@
 				617DDA222461B25B00BA86B9 /* CKError+additions.swift in Sources */,
 				61518D2B245334E500011BB4 /* ReadFromCoreData.swift in Sources */,
 				61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */,
+
 				61BD6BEC246612FB000D4193 /* OnTapHeaderView.swift in Sources */,
 				61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */,
 				61518D06245330D300011BB4 /* ContentView.swift in Sources */,
 				61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */,
 				61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */,
+
 				61518D01245330D300011BB4 /* SceneDelegate.swift in Sources */,
 				6186F4E8245CA9A0007BAB37 /* UserDefaultsKey.swift in Sources */,
 				61805DA024587F37003EC9FE /* Errors.swift in Sources */,
@@ -634,6 +645,7 @@
 				61518D5C24577AA000011BB4 /* WriteToCloudKit.swift in Sources */,
 				61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */,
 				6147A12E2469B310000508FE /* OnTapModel.swift in Sources */,
+
 				617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

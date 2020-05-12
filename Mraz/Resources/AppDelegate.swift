@@ -15,14 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         requestNotifications(application: application)
 //        checkCloudStatus()
+
 //        UserDefaults.standard.setValue(false, forKey: Key.cloudSubscriptionExists.rawValue)
 //        UserDefaults.standard.setValue(false, forKey: Key.initialFetchSuccessful.rawValue)
-        
         cloudKitManager.performInitialCloudKitFetch()
         cloudKitManager.subscribeToBeerChanges()
         return true
     }
-    
+
     // MARK: - Helpers
     func requestNotifications(application: UIApplication) {
         Notifications().requestAuthFromUserToAllowNotifications { (result) in
