@@ -27,7 +27,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
             let columns = isCompact ? 1 : 3
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .fractionalHeight(0.70), itemSpacing: 12, numberOfColumns: columns)//.absolute(375)
+                .grid(itemHeight: .fractionalHeight(0.70), itemSpacing: 12, groupWidthDimension: 0.9, numberOfColumns: columns)//.absolute(375)
                 .withSectionHeader(estimatedHeight: 55, kind: OnTapHeaderView.viewReuseIdentifier)
                 .withContentInsets(top: 10, leading: inset, bottom: 0, trailing: inset)
             section.orthogonalScrollingBehavior = .continuous
@@ -39,6 +39,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .systemBackground
+        collectionView.delegate = self
         collectionView.registerCell(cellClass: OnTapCell.self)
         collectionView.registerSupplementaryView(viewClass: OnTapHeaderView.self)
         collectionView.alwaysBounceVertical = true
@@ -113,6 +114,19 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         onTapDiffDatasource.apply(snapshot, animatingDifferences: animated)
     }
 }
+// MARK: - CollectionView Delegate
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let selectedBeer = onTapDiffDatasource.itemIdentifier(for: indexPath) else { return }
+        let selectedID = selectedBeer.objectID
+        let beerInfoVC = BeerInfoViewController()
+        beerInfoVC.objectID = selectedID
+        let navController = UINavigationController(rootViewController: beerInfoVC)
+        present(navController, animated: true, completion: nil)
+    }
+}
+
+// MARK: - NSFetchedResultsController Delegate
 extension HomeViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let beers = onTapResultsController.fetchedObjects as? [Beers] else { return }

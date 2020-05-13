@@ -73,17 +73,25 @@ extension ReadFromCoreData {
     /// - Returns: Optional Date value containing the last fetched date
     func getLastModifiedFetchDate() -> Date? {
         guard let createdObjectID = modifiedDateObjectID() else { return nil }
-        guard let lastModifiedEntity = getModifiedDateBy(objectID: createdObjectID) else { return nil }
+        guard let lastModifiedEntity = getObjectBy(createdObjectID) as? ModifiedRecords else { return nil }
+//        guard let lastModifiedEntity = getModifiedDateBy(objectID: createdObjectID) else { return nil }
         return lastModifiedEntity.modifiedDate
     }
 
-    /// Uses the
-    /// - Parameter objectID: NSManagedObjectID of the Modified Record object created.
-    func getModifiedDateBy(objectID: NSManagedObjectID) -> ModifiedRecords? {
-        guard let modifiedDateObj = mainThreadManagedObjectContext.object(with: objectID) as? ModifiedRecords else {
+//    /// Uses the
+//    /// - Parameter objectID: NSManagedObjectID of the Modified Record object created.
+//    func getModifiedDateBy(objectID: NSManagedObjectID) -> ModifiedRecords? {
+//        guard let modifiedDateObj = mainThreadManagedObjectContext.object(with: objectID) as? ModifiedRecords else {
+//            return nil
+//        }
+//        return modifiedDateObj
+//    }
+    
+    func getObjectBy<T: NSManagedObject>(_ objectID: NSManagedObjectID) -> T? {
+        guard let fetchedObject = mainThreadManagedObjectContext.object(with: objectID) as? T else {
             return nil
         }
-        return modifiedDateObj
+        return fetchedObject
     }
     
     /// Obtain the ObjectID

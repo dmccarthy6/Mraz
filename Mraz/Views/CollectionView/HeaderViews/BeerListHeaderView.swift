@@ -12,7 +12,7 @@ final class BeerListHeader: UICollectionReusableView {
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
         label.font = .preferredFont(for: .title1, weight: .bold)
-        label.textColor = .label
+        label.textColor = .systemRed
         return label
     }()
     
@@ -36,7 +36,7 @@ final class BeerListHeader: UICollectionReusableView {
             sectionHeaderLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             sectionHeaderLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
-        backgroundColor = .systemRed
+        backgroundColor = .tertiarySystemBackground
     }
     
     // MARK: - Interface

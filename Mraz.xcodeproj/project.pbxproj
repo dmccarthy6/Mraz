@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		6147A12E2469B310000508FE /* OnTapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6147A12D2469B310000508FE /* OnTapModel.swift */; };
+		6147A131246AF57E000508FE /* UIButton+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6147A130246AF57E000508FE /* UIButton+additions.swift */; };
+		6147A133246B3D38000508FE /* SocialMediaIconsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6147A132246B3D38000508FE /* SocialMediaIconsStackView.swift */; };
+		6147A135246B41EA000508FE /* ContactIconsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6147A134246B41EA000508FE /* ContactIconsStackView.swift */; };
+		6147A137246B467D000508FE /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6147A136246B467D000508FE /* Contact.swift */; };
 		61518CFF245330D300011BB4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518CFE245330D300011BB4 /* AppDelegate.swift */; };
 		61518D01245330D300011BB4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D00245330D300011BB4 /* SceneDelegate.swift */; };
 		61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 61518D02245330D300011BB4 /* Mraz.xcdatamodeld */; };
@@ -40,6 +44,8 @@
 		617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */; };
 		617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */; };
 		617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */; };
+		617F82D7246B67C8006195F0 /* BeerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F82D6246B67C8006195F0 /* BeerInfoViewController.swift */; };
+		617F82D9246B6815006195F0 /* BeerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F82D8246B6815006195F0 /* BeerInfoView.swift */; };
 		61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D922457B6F0003EC9FE /* Integer+additions.swift */; };
 		61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D98245875EE003EC9FE /* CloudKitManager.swift */; };
 		61805D9B24587940003EC9FE /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D9A24587940003EC9FE /* Section.swift */; };
@@ -67,7 +73,6 @@
 		61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE72465DC37000D4193 /* BreweryDataView.swift */; };
 		61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE92465E378000D4193 /* OnTapCell.swift */; };
 		61BD6BEC246612FB000D4193 /* OnTapHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +87,10 @@
 
 /* Begin PBXFileReference section */
 		6147A12D2469B310000508FE /* OnTapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapModel.swift; sourceTree = "<group>"; };
+		6147A130246AF57E000508FE /* UIButton+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+additions.swift"; sourceTree = "<group>"; };
+		6147A132246B3D38000508FE /* SocialMediaIconsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMediaIconsStackView.swift; sourceTree = "<group>"; };
+		6147A134246B41EA000508FE /* ContactIconsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactIconsStackView.swift; sourceTree = "<group>"; };
+		6147A136246B467D000508FE /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		61518CFB245330D300011BB4 /* Mraz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mraz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61518CFE245330D300011BB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61518D00245330D300011BB4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +127,8 @@
 		617DDA2924648A5000BA86B9 /* Beers+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Beers+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		617DDA2A24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModifiedRecords+CoreDataClass.swift"; sourceTree = "<group>"; };
 		617DDA2B24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModifiedRecords+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		617F82D6246B67C8006195F0 /* BeerInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerInfoViewController.swift; sourceTree = "<group>"; };
+		617F82D8246B6815006195F0 /* BeerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerInfoView.swift; sourceTree = "<group>"; };
 		61805D922457B6F0003EC9FE /* Integer+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Integer+additions.swift"; sourceTree = "<group>"; };
 		61805D98245875EE003EC9FE /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		61805D9A24587940003EC9FE /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
@@ -146,7 +157,6 @@
 		61BD6BE72465DC37000D4193 /* BreweryDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryDataView.swift; sourceTree = "<group>"; };
 		61BD6BE92465E378000D4193 /* OnTapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapCell.swift; sourceTree = "<group>"; };
 		61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapHeaderView.swift; sourceTree = "<group>"; };
-
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,11 +274,15 @@
 		61518D262453344A00011BB4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				617F82DB246B697B006195F0 /* IconsBlock */,
+				617F82DA246B6973006195F0 /* AgeVerification */,
 				6186F4DF245B24AB007BAB37 /* Map */,
 				6186F4DA245B1CA8007BAB37 /* CollectionView */,
 				61518D4024533BA600011BB4 /* AgeVerificationView.swift */,
 				61BD6BE72465DC37000D4193 /* BreweryDataView.swift */,
-
+				6147A132246B3D38000508FE /* SocialMediaIconsStackView.swift */,
+				6147A134246B41EA000508FE /* ContactIconsStackView.swift */,
+				617F82D8246B6815006195F0 /* BeerInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -312,6 +326,7 @@
 				61805D9C24587BB5003EC9FE /* Notifications */,
 				61518D32245338BF00011BB4 /* Extensions */,
 				61518D31245338BA00011BB4 /* Enums */,
+				6147A136246B467D000508FE /* Contact.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -340,6 +355,7 @@
 				61805D922457B6F0003EC9FE /* Integer+additions.swift */,
 				6186F4E0245C6990007BAB37 /* CKRecord+additions.swift */,
 				617DDA212461B25B00BA86B9 /* CKError+additions.swift */,
+				6147A130246AF57E000508FE /* UIButton+additions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -349,8 +365,6 @@
 			children = (
 				6186F4FD2460BAE7007BAB37 /* BeerModel.swift */,
 				6147A12D2469B310000508FE /* OnTapModel.swift */,
-
-
 				61518D5824577A8800011BB4 /* API */,
 			);
 			path = CloudKit;
@@ -361,8 +375,6 @@
 			children = (
 				61518D3E24533B1C00011BB4 /* BeerListCell.swift */,
 				61BD6BE92465E378000D4193 /* OnTapCell.swift */,
-
-
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -378,10 +390,11 @@
 		61518D4D24536FD200011BB4 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */,
-				61518D4B24536F9000011BB4 /* BeerListViewController.swift */,
-				6186F4F6245CF867007BAB37 /* MapViewController.swift */,
 				6186F4FA245DF623007BAB37 /* HomeViewController.swift */,
+				61518D4B24536F9000011BB4 /* BeerListViewController.swift */,
+				617F82D6246B67C8006195F0 /* BeerInfoViewController.swift */,
+				6186F4F6245CF867007BAB37 /* MapViewController.swift */,
+				61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -406,6 +419,20 @@
 			path = CoreDataTests;
 			sourceTree = "<group>";
 		};
+		617F82DA246B6973006195F0 /* AgeVerification */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AgeVerification;
+			sourceTree = "<group>";
+		};
+		617F82DB246B697B006195F0 /* IconsBlock */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = IconsBlock;
+			sourceTree = "<group>";
+		};
 		61805D9C24587BB5003EC9FE /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,10 +452,8 @@
 		6186F4DA245B1CA8007BAB37 /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-
 				6147A12F2469D148000508FE /* HeaderViews */,
-				61518D3D24533B0E00011BB4 /* Cells */
-
+				61518D3D24533B0E00011BB4 /* Cells */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -599,6 +624,7 @@
 				6186F4E3245CA568007BAB37 /* UserDefaultsObservation.swift in Sources */,
 				61518D3A24533A1200011BB4 /* EntityName.swift in Sources */,
 				61805D9E24587BC0003EC9FE /* Notifications.swift in Sources */,
+				6147A135246B41EA000508FE /* ContactIconsStackView.swift in Sources */,
 				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
 				6186F4FB245DF623007BAB37 /* HomeViewController.swift in Sources */,
 				61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */,
@@ -611,17 +637,18 @@
 				61518D382453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift in Sources */,
 				61518D4524533FEB00011BB4 /* Constants.swift in Sources */,
 				61518CFF245330D300011BB4 /* AppDelegate.swift in Sources */,
+				6147A137246B467D000508FE /* Contact.swift in Sources */,
 				61518D5A24577A9100011BB4 /* ReadFromCloudKit.swift in Sources */,
 				617DDA222461B25B00BA86B9 /* CKError+additions.swift in Sources */,
 				61518D2B245334E500011BB4 /* ReadFromCoreData.swift in Sources */,
+				6147A131246AF57E000508FE /* UIButton+additions.swift in Sources */,
 				61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */,
-
 				61BD6BEC246612FB000D4193 /* OnTapHeaderView.swift in Sources */,
 				61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */,
 				61518D06245330D300011BB4 /* ContentView.swift in Sources */,
 				61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */,
+				617F82D9246B6815006195F0 /* BeerInfoView.swift in Sources */,
 				61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */,
-
 				61518D01245330D300011BB4 /* SceneDelegate.swift in Sources */,
 				6186F4E8245CA9A0007BAB37 /* UserDefaultsKey.swift in Sources */,
 				61805DA024587F37003EC9FE /* Errors.swift in Sources */,
@@ -639,13 +666,14 @@
 				61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */,
 				6186F4FE2460BAE7007BAB37 /* BeerModel.swift in Sources */,
 				6186F4E6245CA8FD007BAB37 /* PropertyListValueProtocol.swift in Sources */,
+				617F82D7246B67C8006195F0 /* BeerInfoViewController.swift in Sources */,
 				6186F4F5245CF44B007BAB37 /* Location.swift in Sources */,
 				61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */,
 				6186F4F3245CED2F007BAB37 /* Locations.swift in Sources */,
 				61518D5C24577AA000011BB4 /* WriteToCloudKit.swift in Sources */,
+				6147A133246B3D38000508FE /* SocialMediaIconsStackView.swift in Sources */,
 				61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */,
 				6147A12E2469B310000508FE /* OnTapModel.swift in Sources */,
-
 				617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

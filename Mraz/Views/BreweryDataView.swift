@@ -10,6 +10,7 @@ class BreweryDataView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textColor = .label
+        label.textAlignment = .center
         label.font = .preferredFont(for: .title1, weight: .bold)
         label.text = BreweryInfo.name
         return label
@@ -23,33 +24,24 @@ class BreweryDataView: UIView {
         label.text = BreweryInfo.address
         return label
     }()
-    private var horizontalStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.alignment = .leading
-        stack.
-        return stack
+    private var allIconsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+        stackView.spacing = 15
+        return stackView
     }()
-    private var mapImageView: UIImageView = {
-        let mapImageView = UIImageView()
-        mapImageView.translatesAutoresizingMaskIntoConstraints = false
-        mapImageView.image = SystemImages.mapPin
-        mapImageView.contentMode = .scaleAspectFill
-        return mapImageView
+    private var socialIcons: SocialMediaView = {
+        let view = SocialMediaView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
-    private var phoneImageView: UIImageView = {
-        let phoneImageView = UIImageView()
-        phoneImageView.translatesAutoresizingMaskIntoConstraints = false
-        phoneImageView.image = SystemImages.phoneCircleFill
-        phoneImageView.contentMode = .scaleAspectFill
-        return phoneImageView
-    }()
-    private var websiteImageView: UIImageView = {
-        let webImageView = UIImageView()
-        webImageView.translatesAutoresizingMaskIntoConstraints = false
-        webImageView.contentMode = .scaleAspectFill
-        webImageView.image = SystemImages.linkCircleFill
-        return webImageView
+    private var contactIcons: ContactIconsStackView = {
+        let contactIconsView = ContactIconsStackView()
+        contactIconsView.translatesAutoresizingMaskIntoConstraints = false
+        return contactIconsView
     }()
     
     // MARK: - Life Cycle
@@ -66,36 +58,21 @@ class BreweryDataView: UIView {
     // MARK: - Helpers
     private func setupViews() {
         addSubview(nameLabel)
-        addSubview(addressLabel)
-        addSubview(mapImageView)
-        addSubview(phoneImageView)
-        addSubview(websiteImageView)
-        
+//        addSubview(addressLabel)
+        addSubview(allIconsStackView)
+        allIconsStackView.addArrangedSubview(socialIcons)
+        allIconsStackView.addArrangedSubview(contactIcons)
+
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             
-            addressLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            addressLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            addressLabel.topAnchor.constraint(equalToSystemSpacingBelow: nameLabel.bottomAnchor, multiplier: 1),
-            
-            mapImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 4),
-            mapImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            mapImageView.widthAnchor.constraint(equalToConstant: 25),
-            mapImageView.heightAnchor.constraint(equalToConstant: 25),
-            
-            phoneImageView.leadingAnchor.constraint(equalTo: mapImageView.trailingAnchor),
-            phoneImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            phoneImageView.widthAnchor.constraint(equalToConstant: 25),
-            phoneImageView.heightAnchor.constraint(equalToConstant: 25),
-            
-            websiteImageView.leadingAnchor.constraint(equalToSystemSpacingAfter: phoneImageView.trailingAnchor, multiplier: 1),
-            websiteImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            websiteImageView.widthAnchor.constraint(equalToConstant: 25),
-            websiteImageView.heightAnchor.constraint(equalToConstant: 25),
+            allIconsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            allIconsStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
+
 }
 
 enum BreweryInfo {

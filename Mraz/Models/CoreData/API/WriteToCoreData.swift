@@ -58,7 +58,8 @@ extension WriteToCoreData {
     /// Create the ModifiedRecords object that will be used to persist the 'modifiedDate' property
     /// for keeping track of fetches performed on updated CloudKit records. Initially set to nil.
     func updateLastModifiedDate( id: NSManagedObjectID) {
-        guard let modifiedDateObject = getModifiedDateBy(objectID: id) else { return }
+        guard let modifiedDateObject = getObjectBy(id) else { return } //CHANGED THIS TO GENERIC, SEE IF THIS WORKS IF SO DELETE BELOW
+//        guard let modifiedDateObject = getModifiedDateBy(objectID: id) else { return }
         saveObject(object: modifiedDateObject, inContext: mainThreadContext)
     }
     
