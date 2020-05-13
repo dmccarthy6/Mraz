@@ -5,7 +5,7 @@ import CoreData
 import CloudKit
 
 protocol ReadFromCoreData {
-    func configureFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool) -> NSFetchedResultsController<NSFetchRequestResult>
+    func configureAllBeersFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool) -> NSFetchedResultsController<NSFetchRequestResult>
 }
 
 extension ReadFromCoreData {
@@ -18,20 +18,27 @@ extension ReadFromCoreData {
         return CoreDataManager.sharedDatabase.privateContext
     }
     
-    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> {
-        return configureFetchedResultsController(for: .beers, key: "name", searchText: "")
+    var beerFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> {
+        return configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: "")
+    }
+    var onTapFetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> {
+        return configureOnTapFetchedResultsController(for: .beers)
     }
     
     // MARK: - Configure Fetched Results Controller
     /// Default implementation of the FRC. Will implement this in the ViewController in order to update my snapshot.
-    func configureFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool = true) -> NSFetchedResultsController<NSFetchRequestResult> {
+    func configureAllBeersFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool = true) -> NSFetchedResultsController<NSFetchRequestResult> {
         let fetchRequest = CoreDataFetchRequestFor(entityName: entity.rawValue)
         let sortDescriptor = [NSSortDescriptor(key: key, ascending: ascending)]
         fetchRequest.sortDescriptors = sortDescriptor
         if !searchText.isEmpty {
             fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c] %@", searchText)
         }
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: mainThreadManagedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: mainThreadManagedObjectContext,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+        
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -40,32 +47,71 @@ extension ReadFromCoreData {
         return fetchedResultsController
     }
     
+    /// Configure the onTap FRC.
+    /// - Parameter entity: Entity performing the fetch on.
+    func configureOnTapFetchedResultsController(for entity: EntityName) -> NSFetchedResultsController<NSFetchRequestResult> {
+        let fetchRequest = CoreDataFetchRequestFor(entityName: entity.rawValue)
+        let predicate = NSPredicate(format: "isOnTap == %d", true)
+        let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        fetchRequest.predicate = predicate
+        fetchRequest.sortDescriptors = sortDescriptors
+        let fetchResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                managedObjectContext: mainThreadManagedObjectContext,
+                                                                sectionNameKeyPath: nil,
+                                                                cacheName: nil)
+        do {
+            try fetchResultsController.performFetch()
+        } catch {
+            fatalError("ReadFromCoreData -- Could not configure onTapFetchedResultsController - \(error.localizedDescription)")
+        }
+        return fetchResultsController
+    }
+  
     // MARK: - Fetch Functions
     /// This method takes in an NSManagedObjectID value and returns the last modified date set.
     /// - Parameter objectID: NSManagedObjectID of the ModifiedRecords date value that was created.
     /// - Returns: Optional Date value containing the last fetched date
     func getLastModifiedFetchDate() -> Date? {
-        guard let lastModifiedEntity = fetchModifiedDate() else {
-            return nil
-        }
+        guard let createdObjectID = modifiedDateObjectID() else { return nil }
+        guard let lastModifiedEntity = getObjectBy(createdObjectID) as? ModifiedRecords else { return nil }
+//        guard let lastModifiedEntity = getModifiedDateBy(objectID: createdObjectID) else { return nil }
         return lastModifiedEntity.modifiedDate
     }
+
+//    /// Uses the
+//    /// - Parameter objectID: NSManagedObjectID of the Modified Record object created.
+//    func getModifiedDateBy(objectID: NSManagedObjectID) -> ModifiedRecords? {
+//        guard let modifiedDateObj = mainThreadManagedObjectContext.object(with: objectID) as? ModifiedRecords else {
+//            return nil
+//        }
+//        return modifiedDateObj
+//    }
     
-    /// Fetch the Main Context for 'ModifiedRecords' Entity
-    /// - Returns: NSManagedObject of type 'ModifiedRecords'
-    func fetchModifiedDate() -> ModifiedRecords? {
+    func getObjectBy<T: NSManagedObject>(_ objectID: NSManagedObjectID) -> T? {
+        guard let fetchedObject = mainThreadManagedObjectContext.object(with: objectID) as? T else {
+            return nil
+        }
+        return fetchedObject
+    }
+    
+    /// Obtain the ObjectID
+    /// - Returns: NSManagedObjectID for the modified date entity.
+    func modifiedDateObjectID() -> NSManagedObjectID? {
         let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.modifiedDate.rawValue)
-        let sortDescriptor = [NSSortDescriptor(key: "modifiedDate", ascending: true)]
-        fetchRequest.sortDescriptors = sortDescriptor
+        fetchRequest.predicate = NSPredicate(value: true)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modifiedDate", ascending: true)]
         do {
-            let modEntity = try mainThreadManagedObjectContext.fetch(fetchRequest) as? [ModifiedRecords]
-            return modEntity?[0]
+            let modifiedEntity = try mainThreadManagedObjectContext.fetch(fetchRequest) as? [ModifiedRecords]
+            guard let safeModifiedEntity = modifiedEntity, let rec = safeModifiedEntity.first else {
+                fatalError("Could Not Find")
+            }
+            return rec.objectID
         } catch {
-            fatalError("ReadFromCoreData -- Error fetching ModifiedDate: \(error.localizedDescription)")
+            print("ReadFromCoreData == Error Fetching Modified Recprd: \(error.localizedDescription)")
         }
         return nil
     }
-
+    
     // MARK: - Background Fetch
     /// Background fetch method to perform fetch on the background context, if needed.
     func backgroundFetch() {

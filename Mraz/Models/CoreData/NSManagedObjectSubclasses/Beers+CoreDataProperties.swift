@@ -23,4 +23,7 @@ extension Beers {
     @NSManaged public var name: String?
     @NSManaged public var section: String?
 
+    static func == (lhs: Beers, rhs: Beers) -> Bool {
+        lhs.id == rhs.id
+    }
 }

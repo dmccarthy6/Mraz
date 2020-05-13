@@ -108,18 +108,19 @@ extension ReadFromCloudKit {
                 print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
                 return
             }
-            let subscriptionExists = UserDefaults.standard.bool(forKey: Key.cloudSubscriptionExists.rawValue)
-            if !subscriptionExists {
-                print("Adding Beers Subscription")
-                self.createBeersSubscription()
-                self.setModifiedDate(Date())
-            } else {
-                if let subscriptions = subscriptions {
-                    for subscription in subscriptions {
-                        if subscription.subscriptionID == UserDefaults.standard.value(forKey: Key.cksubscriptionID.rawValue) as? String {
-                            print("Subscription Already Exists")
-                            return
-                        }
+
+            if let safeSubscriptions = subscriptions {
+                guard safeSubscriptions.count >= 1 else {
+                    self.createBeersSubscription()
+                    guard let modifiedID = self.modifiedDateObjectID() else { return }
+                    self.updateLastModifiedDate(id: modifiedID)
+                    return
+                }
+                for subscription in safeSubscriptions {
+                    let id = UserDefaults.standard.value(forKey: Key.cksubscriptionID.rawValue) as? String
+                    if subscription.subscriptionID == id {
+                        print("Subscription Exists -- returning")
+                        return
                     }
                 }
             }
@@ -141,11 +142,10 @@ extension ReadFromCloudKit {
         
         let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
+        info.alertBody = ""
         subscription.notificationInfo = info
         //Save subscription to database
         createCKSubscription(subscription)
-        var storage = Storage()
-        storage.cloudSubscriptionExists = true
     }
     
     /// Delete all  current subscriptions from CloudKit to reduce
@@ -160,12 +160,16 @@ extension ReadFromCloudKit {
                             if error != nil {
                                 //TO-DO: Error Handling
                                 print("ReadFromCK -- Error deleting subscription: \(String(describing: error?.localizedDescription))")
+
+                            } else {
+                                print("ReadFromCK - Subscription Deleted: \(str ?? "NIL STR")")
                             }
                         }
                     }
                 }
             } else {
-                print(error)
+
+                print(error?.localizedDescription)
                 //TO-DO: Error Handling
             }
         }

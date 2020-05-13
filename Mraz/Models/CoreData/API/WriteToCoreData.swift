@@ -57,9 +57,17 @@ extension WriteToCoreData {
     
     /// Create the ModifiedRecords object that will be used to persist the 'modifiedDate' property
     /// for keeping track of fetches performed on updated CloudKit records. Initially set to nil.
-    func setModifiedDate(_ date: Date?) {
-        let modifiedDateObject = ModifiedRecords(context: mainThreadContext)
-        saveObject(object: modifiedDateObject, modifiedDate: date, inContext: mainThreadContext)
+    func updateLastModifiedDate( id: NSManagedObjectID) {
+        guard let modifiedDateObject = getObjectBy(id) else { return } //CHANGED THIS TO GENERIC, SEE IF THIS WORKS IF SO DELETE BELOW
+//        guard let modifiedDateObject = getModifiedDateBy(objectID: id) else { return }
+        saveObject(object: modifiedDateObject, inContext: mainThreadContext)
+    }
+    
+    /// Creates the single instance of the ManagedObject used for tracking the modified date. This method is called
+    /// when the application first loads to trigger notifications for any updates to CloudKit database after the initial fetch.
+    func createLastModifiedDate() {
+        let modifiedDate = ModifiedRecords(context: mainThreadContext)
+        saveObject(object: modifiedDate, inContext: mainThreadContext)
     }
     
     /// Generic save function to save the specified ManagedObject to the context.
@@ -73,8 +81,9 @@ extension WriteToCoreData {
             saveBeer(from: model, beer: beerObject)
         }
         if let modDateObject = object as? ModifiedRecords {
-            /// Set the modified date parameter to today's date.
-            modDateObject.modifiedDate = Date()
+            /// Setting modified date to the current date each time we call this to get the date the last changes were obtained.
+            modDateObject.modifiedDate = modifiedDate ?? Date()
+            print(Date())
             saveContext()
         }
     }
@@ -122,14 +131,7 @@ extension WriteToCoreData {
         beer.abv = from.abv
         beer.beerDescription = from.beerDescription
         beer.isOnTap = from.isOnTap
-        print("WriteToCoreData -- UpdatedBeer: \(beer)")
-        saveContext()
-    }
-    
-    /// Set the 'ModifiedRecords' modified date to today's date.
-    func setModifiedDate() {
-        guard let modifiedDateEntity = fetchModifiedDate() else { return }
-        modifiedDateEntity.modifiedDate = Date()
+//        print("WriteToCoreData -- UpdatedBeer: \(beer)")
         saveContext()
     }
     
@@ -150,8 +152,9 @@ extension WriteToCoreData {
         request.predicate = filterPredicate
         
         do {
-            let filteredObjects = try mainThreadContext.fetch(request) as! [Beers]
-            return filteredObjects[0].objectID
+            guard let filteredObjects = try mainThreadContext.fetch(request) as? [Beers] else { return nil }
+            guard let objID = filteredObjects.first?.objectID else { return nil }
+            return objID
         } catch {
             print("WriteToCoreData -- Error filtering Core Data: \(error.localizedDescription)")
         }
@@ -161,17 +164,14 @@ extension WriteToCoreData {
     // MARK: - Deleting Methods
     /// Uses the background context to perform the delete method on that context.
     /// - Parameter beer: The 'Beers' NSManagedObject to be deleted
-    func delete(_ beer: Beers) {
-        persistentContainer.performBackgroundTask { (privateManagedContext) in
-            do {
-                ///Delete the object
-                privateManagedContext.delete(beer)
-                ///Save in the private context
-                try privateManagedContext.save()
-            } catch {
-                fatalError("WriteToCD -- Failure to save context -- delete: \(error.localizedDescription)")
-            }
+    func delete<T: NSManagedObject>(_ managedObject: T) {
+        if let beerObject = managedObject as? Beers {
+            self.mainThreadManagedObjectContext.delete(beerObject)
         }
+        if let modDateObject = managedObject as? ModifiedRecords {
+            self.mainThreadManagedObjectContext.delete(modDateObject)
+        }
+        self.saveContext()
     }
     
     /**
@@ -224,4 +224,30 @@ extension WriteToCoreData {
          }
      }
  }
+ */
+
+/*
+  func delete<T: NSManagedObject>(_ managedObject: T) {
+         if let beerObject = managedObject as? Beers {
+             self.mainThreadManagedObjectContext.delete(beerObject)
+         } else {
+             if let modDateObject = managedObject as? ModifiedRecords {
+             self.mainThreadManagedObjectContext.delete(modDateObject)
+         }
+         }
+         self.saveContext()
+ //        persistentContainer.performBackgroundTask { (privateManagedContext) in
+ //            do {
+ //                if let object = managedObject as? Beers {
+ //                    self.mainThreadManagedObjectContext.delete(object)
+ //                }
+ //                if let object = managedObject as? ModifiedRecords {
+ //                    self.mainThreadManagedObjectContext.delete(object)
+ //                }
+ //                self.saveContext()
+ //            } catch {
+ //                fatalError("WriteToCD -- Failure to save context -- delete: \(error.localizedDescription)")
+ //            }
+ //        }
+     }
  */

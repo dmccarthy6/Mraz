@@ -18,3 +18,8 @@ enum AgeVerificationConstants {
 enum BeerCellConstants {
     static let favIcon = CGFloat(35)
 }
+
+enum SocialConstants {
+    static let iconWidth = CGFloat(25)
+    static let iconHeight = CGFloat(25)
+}
