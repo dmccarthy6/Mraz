@@ -49,7 +49,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// Fetch any records that have been updated in the Public Database. This method uses
     /// the
     func fetchUpdatedRecordsFromCloud() {
-
         guard let objectID = modifiedDateObjectID() else { return }
         let fromDate = getLastModifiedFetchDate()
         let toDate = Date()

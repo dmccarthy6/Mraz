@@ -5,14 +5,14 @@ import Foundation
 @testable import Mraz
 
 struct LocationService {
-    let network: Networking
+    let network: MockNetworking
     
     func fetchLocations(urlRequest: NearbyRestaurantsGP, _ completion: @escaping (Result<RootLocal, Error>) -> Void) {
         guard let url = urlRequest.urlRequest.url else {
             fatalError("Couldnt get url in tests")
         }
         
-        network.fetch(url) { (data, urlResponse, error) in
+        network.fetch(url) { (data, _, error) in
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             

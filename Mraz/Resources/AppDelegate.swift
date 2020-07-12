@@ -7,9 +7,8 @@ import CloudKit
 import NotificationCenter
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
+class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, NotificationManager {
     let cloudKitManager = CloudKitManager.shared
-    weak var recordsChangedDelegate: CloudKitRecordsChangedDelegate?
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -25,17 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
 
     // MARK: - Helpers
     func requestNotifications(application: UIApplication) {
-        Notifications().requestAuthFromUserToAllowNotifications { (result) in
+        requestUserAuthenticationForNotifications { (result) in
             switch result {
-            case .success(let granted):
-                if granted {
-                    DispatchQueue.main.async {
-                        application.registerForRemoteNotifications()
-                    }
-                } else { return }
-                
+            case .success(true):
+                DispatchQueue.main.async {
+                    application.registerForRemoteNotifications()
+                }
+            case .success(false): break
             case .failure(let error):
-                print("App Delegate -- Error Requesting Auth: \(error)")
+                print("App Delegate -- Error Requesting Notifications Auth: \(error.localizedDescription)")
             }
         }
     }
@@ -75,12 +72,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
     }
 
     // MARK: - Remote Notifications
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        print("AppDelegate -- CloudKit Remote Notification Received!")
-        let dict = userInfo as! [String: NSObject]
-        guard let notification: CKDatabaseNotification = CKNotification(fromRemoteNotificationDictionary: dict) as? CKDatabaseNotification else {
-            return
+  
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let identifier = response.notification.request.identifier
+        print("NotificationManager -- Notifications ID: \(identifier)")
+    }
+    
+    // Should this be in app delegate?
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        guard let dict = userInfo as? [String: NSObject] else { return }
+        let notification = CKNotification(fromRemoteNotificationDictionary: dict)
+ 
+        if notification?.notificationType == CKNotification.NotificationType.query {
+            let queryNotification = notification as! CKQueryNotification
+            guard let recordName = queryNotification.recordID?.recordName else { return }
+            let sync = SyncCloudKitRecordChanges(changedRecordName: recordName)
+            sync.fetchUpdatedObject()
         }
-        cloudKitManager.fetchUpdatedRecordsFromCloud()
+        completionHandler(.newData)
     }
 }
+
+/*
+ let notification: CKNotification =
+     CKNotification(fromRemoteNotificationDictionary:
+         userInfo as! [String : NSObject])
+
+ if (notification.notificationType ==
+             CKNotificationType.query) {
+
+     let queryNotification =
+         notification as! CKQueryNotification
+
+     let recordID = queryNotification.recordID
+
+     viewController.fetchRecord(recordID!)
+ }
+ */
+  

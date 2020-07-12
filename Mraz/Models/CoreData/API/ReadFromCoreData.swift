@@ -103,7 +103,7 @@ extension ReadFromCoreData {
         do {
             let modifiedEntity = try mainThreadManagedObjectContext.fetch(fetchRequest) as? [ModifiedRecords]
             guard let safeModifiedEntity = modifiedEntity, let rec = safeModifiedEntity.first else {
-                fatalError("Could Not Find")
+                return nil
             }
             return rec.objectID
         } catch {

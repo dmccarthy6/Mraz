@@ -10,15 +10,6 @@ enum ContainerID: String {
 enum CKRecordType {
     static let beers = "Beers"
     static let onTap = "OnTap"
-//    case beers
-//    case onTap
-//    
-//    var name: String {
-//        switch self {
-//        case .beers: return "Beers"
-//        case .onTap: return "OnTap"
-//        }
-//    }
 }
 
 enum CloudKitKey: String {

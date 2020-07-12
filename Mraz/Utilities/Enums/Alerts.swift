@@ -84,30 +84,29 @@ enum Alerts {
     }
     
     /// Action sheet presented when the user taps a MKAnnotation on the Map Screen.
-    static func showRestaurantActionSheet(_ viewController: UIViewController) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        //Actions
-        let phoneCallAction = UIAlertAction(title: "Call", style: .default) { (action) in
-            //Handle Phone Calls
-        }
-        let directionsAction = UIAlertAction(title: "Directions", style: .default) { (action) in
-            //Handle Directions
-        }
-        let menuAction = UIAlertAction(title: "Menu", style: .default) { (action) in
-            //Handle Menu Action
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
-        alertController.addAction(phoneCallAction)
-        alertController.addAction(directionsAction)
-        alertController.addAction(menuAction)
-        alertController.addAction(cancelAction)
-        /// Present Controller
-        viewController.present(alertController, animated: true, completion: nil)
-    }
+//    static func showRestaurantActionSheet(_ viewController: UIViewController) {
+//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//        
+//        //Actions
+//        let phoneCallAction = UIAlertAction(title: "Call", style: .default) { (action) in
+//            //Handle Phone Calls
+//        }
+//        let directionsAction = UIAlertAction(title: "Directions", style: .default) { (action) in
+//            //Handle Directions
+//        }
+//        let menuAction = UIAlertAction(title: "Menu", style: .default) { (action) in
+//            //Handle Menu Action
+//        }
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+//        alertController.addAction(phoneCallAction)
+//        alertController.addAction(directionsAction)
+//        alertController.addAction(menuAction)
+//        alertController.addAction(cancelAction)
+//        /// Present Controller
+//        viewController.present(alertController, animated: true, completion: nil)
+//    }
     
 }
-
 //CloudKit Button Type
 enum CloudKitPromptButtonType: String {
     case okButton = "OK"

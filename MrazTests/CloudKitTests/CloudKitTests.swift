@@ -14,17 +14,17 @@ class CloudKitTests: XCTestCase {
 
     // MARK: - CloudKit Tests:
     
-    func testFetchPerformedCorrectly() {
-        cloudKitManager.fetchBeerListFromCloud { (result) in
-            switch result {
-            case .success(let beers):
-                XCTAssert(beers.count > 0, "Error converting CloudKit to Core Data")
-                
-            case .failure(let error):
-                XCTAssertNil(error, "Error is not Nil fetching beer list from cloud")
-            }
-        }
-    }
+//    func testFetchPerformedCorrectly() {
+//        cloudKitManager.fetchBeerListFromCloud { (result) in
+//            switch result {
+//            case .success(let beers):
+//                XCTAssert(beers.count > 0, "Error converting CloudKit to Core Data")
+//                
+//            case .failure(let error):
+//                XCTAssertNil(error, "Error is not Nil fetching beer list from cloud")
+//            }
+//        }
+//    }
 
     // MARK: - Performance
     func testPerformanceExample() throws {

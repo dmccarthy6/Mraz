@@ -35,7 +35,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
     private var favoriteButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.favoriteButton, for: .normal)
+        button.setImage(SystemImages.starImage, for: .normal)
         button.tintColor = .gray
         return button
     }()

@@ -3,8 +3,9 @@
 
 import Foundation
 import CoreData
+@testable import Mraz
 
-class CoreDataUnitTestHelpers {
+class CoreDataUnitTestHelpers: CoreDataAPI {
     // MARK: - Types
     enum CoreDataError: Error {
         case missingContext
@@ -30,15 +31,15 @@ class CoreDataUnitTestHelpers {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.persistentStoreCoordinator = persistentStoreCoordinator
         
-//        //
-//        let textObject = ExampleObject(context: context)
-//        context.delete(textObject)
-//
-//        do {
-//            try context.save()
-//        } catch {
-//            fatalError(CoreDataError.missingContext.localizedDescription)
-//        }
+        //Create a dummy managed object then delete it. This prevents fetch request failures later.
+        let textObject = Beers(context: context)
+        context.delete(textObject)
+
+        do {
+            try context.save()
+        } catch {
+            fatalError(CoreDataError.missingContext.localizedDescription)
+        }
         return context
     }
     
@@ -74,9 +75,5 @@ class CoreDataUnitTestHelpers {
         } catch {
             throw CoreDataError.errorFetchingData
         }
-    }
-    
-    class func createTestObject() throws {
-        
     }
 }

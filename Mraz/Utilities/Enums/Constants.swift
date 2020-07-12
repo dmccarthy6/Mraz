@@ -4,9 +4,14 @@
 import Foundation
 import UIKit
 
-//enum UserDefaultsKeys {
-//    static let ageVerification = "ageVerification"
-//}
+// MARK: - Brewery Information
+
+/// Enum that containts all the brewery information (Name, Address, Phone#).
+enum Mraz {
+    static let title = "Mraz Brewing Co."
+    static let address = "222 Francisco Dr., Suite 510 El Dorado Hills, CA"
+    static let phone = "916-934-0744"
+}
 
 // MARK: - View Constants
 enum AgeVerificationConstants {

@@ -18,3 +18,13 @@ enum AuthorizationError: Error {
         }
     }
 }
+
+enum LocationAuthError: Error {
+    case deniedRestricted
+    
+    var localizedDescription: String {
+        switch self {
+        case .deniedRestricted: return "Location services are not turned on for this application. To utilize this go to Settings and authorize location services for Mraz."
+        }
+    }
+}

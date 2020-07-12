@@ -23,6 +23,41 @@ final class CoreDataManager: CoreDataAPI {
         return container
     }()
     
+   // @available(iOS 14.0, *)
+//    private lazy var syncPersistentContainer: NSPersistentCloudKitContainer = {
+//        let container = NSPersistentCloudKitContainer(name: "Mraz")
+//
+//        guard let description = container.persistentStoreDescriptions.first else {
+//            fatalError("Error - CK")
+//        }
+//        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+//        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+//        description.cloudKitContainerOptions!.databaseScope = .public
+//        container.persistentStoreDescriptions.append(description)
+//
+////        let description = NSPersistentStoreDescription()
+////        let publicStoreURL = description.url!.deletingLastPathComponent()
+////            .appendingPathComponent("Mraz.sqlite")
+////        let identifier = description.cloudKitContainerOptions!.containerIdentifier
+////
+////        let publicDescription = NSPersistentStoreDescription(url: publicStoreURL)
+////        publicDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+////        publicDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+////
+////        var publicOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: identifier)
+////        publicOptions.databaseScope = .public
+////
+////        publicDescription.cloudKitContainerOptions = publicOptions
+////        container.persistentStoreDescriptions.append(publicDescription)
+////
+//        container.loadPersistentStores { (storeDescription, error) in
+//            if let error = error as NSError? {
+//                fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
+//            }
+//        }
+//        return container
+//    }()
+    
     /// Managed Object Context
     private lazy var mainThreadContext: NSManagedObjectContext = {
         let context = persistentContainer.viewContext

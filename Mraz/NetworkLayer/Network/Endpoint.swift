@@ -3,9 +3,6 @@
 
 import Foundation
 
-/*
- My Google Places API Key: AIzaSyCdusZ1mwdOgk3M7s1l2N_MH_PZYhDWQ70
- */
 protocol Endpoint: RequestProviding {
     var scheme: String { get }
     var host: String { get }

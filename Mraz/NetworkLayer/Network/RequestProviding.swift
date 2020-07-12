@@ -6,5 +6,3 @@ import Foundation
 protocol RequestProviding {
     var urlRequest: URLRequest { get }
 }
-
-

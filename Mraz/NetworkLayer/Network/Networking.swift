@@ -8,10 +8,17 @@ protocol Networking {
 }
 
 extension Networking {
+    /// Method that executes a urlSession method on the network. This method
+    ///  - Parameter requestProvider: Endpoint enum value used to create the urlRequest.
+    ///  - Parameter completion: Completion handler that returns a resut type of a Decodable object and an API Error upon failure.
     func execute<T: Decodable>(_ requestProvider: Endpoint, completion: @escaping (Result<T, APIError>) -> Void) {
         let urlRequest = requestProvider.urlRequest
         
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                completion(.failure(.httpRequestFailed))
+                print("Error: \(error.localizedDescription)")
+            }
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.httpRequestFailed))
                 return
@@ -40,6 +47,8 @@ extension Networking {
         }.resume()
     }
     
-    /// Method used for testing
-    func fetch(_ url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void){}
+    /// Method used to mock the networking protocol and test the url session performance. Only use this method for testing.
+    /// - Parameter url: URL value used to test the Networking protocol.
+    /// - Parameter completion: Completion handler returning Data, URLResponse, and Error.
+    func fetch(_ url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) { }
 }

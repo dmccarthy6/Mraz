@@ -1,15 +1,16 @@
 //  Created by Dylan  on 5/13/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
-@testable import Mraz
+
 import Foundation
+@testable import Mraz
 
 class NearbyResponseFactory {
-    static func createResponseWithLocations(_ results: [SearchResult], token: String, status: String) -> RootLocal {
-        return RootLocal(results: results, status: status)
-        //return RootLocal(htmlAttributions: [], nextPageToken: token, results: results, status: status)
+    static func createResponseWithLocations(_ results: [SearchResult], status: String) -> RootLocal {
+        return RootLocal(htmlAttributions: nil, nextPageToken: "", results: results, status: status)
     }
 }
 
+/// Extension on Codable Model to convert Codable data back to JSON for testing.
 extension RootLocal {
     var dataValue: Data {
         let encoder = JSONEncoder()

@@ -17,21 +17,21 @@ final class ContactIconsStackView: UIStackView {
     private var mapButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.mapPin!, for: .normal)
+        button.setImage(SystemImages.mapPinImage!, for: .normal)
         button.tintColor = .systemBackground
         return button
     }()
     private var websiteButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.linkCircleFill!, for: .normal)
+        button.setImage(SystemImages.linkCircleFillImage!, for: .normal)
         button.tintColor = .systemBackground
         return button
     }()
     private var phoneButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.phoneCircleFill!, for: .normal)
+        button.setImage(SystemImages.phoneCircleFillImage!, for: .normal)
         button.tintColor = .systemBackground
         return button
     }()

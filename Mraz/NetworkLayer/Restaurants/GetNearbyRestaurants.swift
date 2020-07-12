@@ -3,6 +3,8 @@
 
 import Foundation
 
+typealias Network = SearchNearbyRestaurants & Networking
+
 protocol SearchNearbyRestaurants {
     var network: Networking { get }
     func fetchNearbyRestaurants(_ completion: @escaping (Result<RootLocal, APIError>) -> Void)
