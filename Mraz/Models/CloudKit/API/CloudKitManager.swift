@@ -18,10 +18,9 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
             switch result {
             case .success(let currentCKStatus):
                 switch currentCKStatus {
-                case .available:
-                    self.performInitialCloudKitFetch()
-                    self.subscribeToBeerChanges()
+                case .available: self.fetchAndSubscribe()
                 case .couldNotDetermine, .noAccount:
+                    self.fetchAndSubscribe()
                     DispatchQueue.main.async {
                         Alerts.cloudKitAlert(title: .iCloudError, message: .noAccountOrCouldNotDetermine)
                     }
@@ -36,6 +35,13 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
                 }
             }
         }
+    }
+    
+    /// Helper method that performs the initial fetch
+    /// and subscribes to CK record changes.
+    func fetchAndSubscribe() {
+        performInitialCloudKitFetch()
+        subscribeToBeerChanges()
     }
     
     // MARK: - CloudKit Fetch Methods

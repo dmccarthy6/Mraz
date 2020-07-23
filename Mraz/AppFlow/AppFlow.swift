@@ -10,7 +10,6 @@ final class AppFlow {
     private let context: AppContext
     private let window: UIWindow
     private var rootViewController: UIViewController { return window.rootViewController! }
-    private let cloudKitManager = CloudKitManager.shared
     
     // MARK: - Life Cycle
     init(context: AppContext, window: UIWindow?) {

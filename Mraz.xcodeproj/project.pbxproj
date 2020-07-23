@@ -40,7 +40,6 @@
 		61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4B24536F9000011BB4 /* BeerListViewController.swift */; };
 		61518D5A24577A9100011BB4 /* ReadFromCloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */; };
 		61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5D24577BCE00011BB4 /* CloudKit.swift */; };
-		615D13C224C666C8002EDE30 /* MapInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D13C124C666C8002EDE30 /* MapInteractions.swift */; };
 		615D13C424C90A6B002EDE30 /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D13C324C90A6B002EDE30 /* NotificationCenter.swift */; };
 		616FB9EC24C1070A00ECBA95 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FB9EB24C1070A00ECBA95 /* AppContext.swift */; };
 		616FB9EE24C109AF00ECBA95 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */; };
@@ -142,7 +141,6 @@
 		61518D4B24536F9000011BB4 /* BeerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListViewController.swift; sourceTree = "<group>"; };
 		61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFromCloudKit.swift; sourceTree = "<group>"; };
 		61518D5D24577BCE00011BB4 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
-		615D13C124C666C8002EDE30 /* MapInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractions.swift; sourceTree = "<group>"; };
 		615D13C324C90A6B002EDE30 /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		616FB9EB24C1070A00ECBA95 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
@@ -416,14 +414,13 @@
 		61518D30245338AA00011BB4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				615D13C124C666C8002EDE30 /* MapInteractions.swift */,
+				6147A136246B467D000508FE /* Contact.swift */,
 				6142515F24BB961F00258BD8 /* UserLocation */,
 				6142515A24BAC1CD00258BD8 /* Notifications */,
 				617F82EC246C7FB2006195F0 /* Errors */,
 				6186F4E4245CA8EC007BAB37 /* UserDefaults */,
 				61518D32245338BF00011BB4 /* Extensions */,
 				61518D31245338BA00011BB4 /* Enums */,
-				6147A136246B467D000508FE /* Contact.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -833,7 +830,6 @@
 				61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */,
 				6186F4FE2460BAE7007BAB37 /* BeerModel.swift in Sources */,
 				617F82D7246B67C8006195F0 /* BeerInfoViewController.swift in Sources */,
-				615D13C224C666C8002EDE30 /* MapInteractions.swift in Sources */,
 				6186F4F5245CF44B007BAB37 /* Location.swift in Sources */,
 				61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */,
 				617F82E8246C75B1006195F0 /* LocalRestaurants.swift in Sources */,

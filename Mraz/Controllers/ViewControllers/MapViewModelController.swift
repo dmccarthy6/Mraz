@@ -5,7 +5,7 @@ import Foundation
 import CoreLocation
 import MapKit
 
-final class MapViewModelController: NSObject, Network, MapContextMenu {
+final class MapViewModelController: NSObject, Network {
     // MARK: - Properties
     var network: Networking {
         return self
@@ -61,19 +61,5 @@ final class MapViewModelController: NSObject, Network, MapContextMenu {
                                                   latitudinalMeters: regionRadius,
                                                   longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
-    }
-    
-    // MARK: - Context Menu
-    func createInteraction(annotationView: MKAnnotationView) {
-        let interaction = UIContextMenuInteraction(delegate: self)
-        annotationView.addInteraction(interaction)
-    }
-}
-
-extension MapViewModelController: UIContextMenuInteractionDelegate {
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedAction in
-            return self.makeMrazMapContextMenu()
-        }
     }
 }
