@@ -2,6 +2,7 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import UIKit
+import MapKit
 
 enum Alerts {
     // MARK: - Types
@@ -13,8 +14,6 @@ enum Alerts {
         ///CloudKit Status Messages
         case available = "User is logged in"
         case noAccountOrCouldNotDetermine = "Could not find iCloud stats. Please try logging into iCloud again."
-//        case noAccount = "Looks like you are not logged into iCloud. This application utilizes iCloud and it works best if you're logged in."
-//        case couldNotDetermine = "Could not get iCloud status. Please try to log in again"
         case restricted = "Could not connect to iCloud. Looks like your settings are restricted"
     }
     
@@ -87,27 +86,33 @@ enum Alerts {
     }
     
     /// Action sheet presented when the user taps a MKAnnotation on the Map Screen.
-//    static func showRestaurantActionSheet(_ viewController: UIViewController) {
-//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-//        
-//        //Actions
-//        let phoneCallAction = UIAlertAction(title: "Call", style: .default) { (action) in
-//            //Handle Phone Calls
-//        }
-//        let directionsAction = UIAlertAction(title: "Directions", style: .default) { (action) in
-//            //Handle Directions
-//        }
-//        let menuAction = UIAlertAction(title: "Menu", style: .default) { (action) in
-//            //Handle Menu Action
-//        }
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
-//        alertController.addAction(phoneCallAction)
-//        alertController.addAction(directionsAction)
-//        alertController.addAction(menuAction)
-//        alertController.addAction(cancelAction)
-//        /// Present Controller
-//        viewController.present(alertController, animated: true, completion: nil)
-//    }
+    static func showRestaurantActionSheet(_ viewController: UIViewController,
+                                          location: CLLocationCoordinate2D,
+                                          title: String?,
+                                          annotation: MKAnnotationView) {
+        let actionSheet = UIAlertController(title: nil,
+                                            message: nil,
+                                            preferredStyle: .actionSheet)
+        
+        let phoneCallAction = UIAlertAction(title: "Call", style: .default) { (action) in
+            Contact.placePhoneCall(to: "")
+        }
+        let directionsAction = UIAlertAction(title: "Directions", style: .default) { (action) in
+            Contact.getDirections(to: location, title: title)
+        }
+        let menuAction = UIAlertAction(title: "Menu", style: .default) { (action) in
+            Contact.open(website: "")
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+        actionSheet.addAction(phoneCallAction)
+        actionSheet.addAction(directionsAction)
+        actionSheet.addAction(menuAction)
+        actionSheet.addAction(cancelAction)
+        if let alertPopover = actionSheet.popoverPresentationController {
+            alertPopover.sourceView = annotation
+        }
+        viewController.present(actionSheet, animated: true, completion: nil)
+    }
     
 }
 //CloudKit Button Type
