@@ -14,33 +14,38 @@ final class ContactIconsStackView: UIStackView {
         stack.axis = .horizontal
         return stack
     }()
-    private var mapButton: UIButton = {
+    private lazy var mapButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.mapPinImage!, for: .normal)
+        button.setImage(SystemImages.mapPinImage, for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(_mapButtonTapped), for: .touchUpInside)
         return button
     }()
     private var websiteButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.linkCircleFillImage!, for: .normal)
+        button.setImage(SystemImages.linkCircleFillImage, for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(_webButtonTapped), for: .touchUpInside)
         return button
     }()
     private var phoneButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.phoneCircleFillImage!, for: .normal)
+        button.setImage(SystemImages.phoneCircleFillImage, for: .normal)
         button.tintColor = .systemBackground
+        button.addTarget(self, action: #selector(_phoneButtonTapped), for: .touchUpInside)
         return button
     }()
+    var mapButtonTapped: EmptyClosure?
+    var phoneButtonTapped: EmptyClosure?
+    var webButtonTapped: EmptyClosure?
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        addButtonFunctions()
     }
     
     required init(coder: NSCoder) {
@@ -69,28 +74,21 @@ final class ContactIconsStackView: UIStackView {
             heightAnchor.constraint(equalToConstant: 25)
         ])
     }
-    
-    /// Set the button targets for each of the buttons.
-    private func addButtonFunctions() {
-        mapButton.addTarget(self, action: #selector(mapButtonTapped), for: .touchUpInside)
-        websiteButton.addTarget(self, action: #selector(webButtonTapped), for: .touchUpInside)
-        phoneButton.addTarget(self, action: #selector(phoneButtonTapped), for: .touchUpInside)
-    }
-    
+
     // MARK: - Button Targets
     /// Function called when the Map button tapped.
-    @objc private func mapButtonTapped() {
-        print("ContactBlockView -- Map Button Tapped")
-        Contact.showBreweryLocationOnMap()
+    @objc private func _mapButtonTapped() {
+        self.mapButtonTapped?()
+        //Contact.getDirections()
     }
     /// Method called when Website button tapped
-    @objc private func webButtonTapped() {
-        print("ContactBlockView -- Web Button Tapped")
-        Contact.openBreweryWebsite()
+    @objc private func _webButtonTapped() {
+        self.webButtonTapped?()
+        //Contact.open()
     }
     /// Method called when Phone button tapped.
-    @objc private func phoneButtonTapped() {
-        print("ContactBlockView -- Phone Button Tapped")
-        Contact.callBrewery()
+    @objc private func _phoneButtonTapped() {
+        self.phoneButtonTapped?()
+        //Contact.placePhoneCall()
     }
 }

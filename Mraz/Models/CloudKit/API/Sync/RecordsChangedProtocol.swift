@@ -1,72 +1,89 @@
 //  Created by Dylan  on 5/4/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
-import Foundation
+import UserNotifications
 import CloudKit
 import CoreData
 
-protocol CloudKitRecordsChanged: class, ReadFromCloudKit {
-    func fetchChangedCloudKitRecord(by ckRecordID: CKRecord.ID)
-}
-
-extension CloudKitRecordsChanged {
-    func fetchChangedCloudKitRecord(by ckRecordID: CKRecord.ID) {
-        publicDatabase.fetch(withRecordID: ckRecordID) { (record, error) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                guard let record = record else { return }
-                self.fetchManagedObject(from: record)
-            }
-        }
-    }
-    
-    // first fetch by beer name and update
-    func fetchManagedObject(from record: CKRecord) {
-        let changedObjectFetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
-        changedObjectFetchRequest.predicate = NSPredicate(format: "name == %@", record[.name] as! String)
-    }
-    
-    // if no beer exists by that name, create it
-    func createNewBeerRecord() {
-        
-    }
-}
-
 struct SyncCloudKitRecordChanges: ReadFromCloudKit {
+    // MARK: - Types
+    enum UpdatedRecordType {
+        case updatedRecord
+        case newRecord
+    }
+    
     // MARK: - Properties
     var changedRecordName: String
-    var changedRecordID: CKRecord.ID?
-    
-    //Assume it exists
-    func fetchUpdatedObject<T: NSManagedObject>() -> T {
-        let changedObjFR = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
-        changedObjFR.predicate = NSPredicate(format: "id == %@", changedRecordName)
-        do {
-            let updatedRecord = try self.mainThreadContext.fetch(changedObjFR) as? [T]
-            guard let safeRecord = updatedRecord, safeRecord.count > 0 else {
-                return T()
+    var changedRecordID: CKRecord.ID
+
+    /// Fetch updated record from CKNotification. Create new record if it doesn't exist in Core Data or Update the record if it does.
+    func fetchUpdatedRecord() {
+        publicDatabase.fetch(withRecordID: changedRecordID) { (addedRecord, error) in
+            if let error = error {
+                print("Error Fetching Record From CloudKit: \(error.localizedDescription)")
             }
-            return safeRecord[0]
-        } catch {
-            createNewBeerRecord()
-            return T()
+            DispatchQueue.main.async {
+                guard let record = addedRecord,
+                    let updatedBeer = self.fetchBeerBy(recordName: record.recordID.recordName) else {
+                        if let record = addedRecord {
+                            self.createNewBeer(from: record)
+                        }
+                        return
+                }
+                self.manage(object: updatedBeer, from: record, recordType: .updatedRecord)
+            }
         }
     }
     
     // if no beer exists by that name, create it
-    func createNewBeerRecord() {
-        
+    func createNewBeer(from record: CKRecord) {
+        let newBeerObject = Beers(context: mainThreadManagedObjectContext)
+        manage(object: newBeerObject, from: record, recordType: .newRecord)
     }
     
-    private func fetchCK() {
-        guard let changedID = changedRecordID else { return }
-        publicDatabase.fetch(withRecordID: changedID) { (addedRecord, error) in
-            if let error = error {
-                
-            }
-            
-            
+    func fetchBeerBy(recordName: String) -> Beers? {
+        let changedBeerRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
+        changedBeerRequest.predicate = NSPredicate(format: "id == %@", recordName)
+        do {
+            let beers = try self.mainThreadManagedObjectContext.fetch(changedBeerRequest) as? [Beers]
+            guard let safeBeers = beers, safeBeers.count > 0 else { return  nil}
+            return safeBeers[0]
+        } catch {
+            return nil
         }
+    }
+    
+    /// Take the CK Record passed in, update or create a beer record and 
+    func manage(object: Beers, from record: CKRecord, recordType: UpdatedRecordType) {
+        let tapStatus = record[.isOnTap] as? Int64 ?? 0
+        let recordID = record.recordID.recordName//New Only
+        let changeTag = record.recordChangeTag ?? "Error - No Change Tag"
+        let section = record[.sectionType] as? String
+        let name = record[.name] as? String ?? "Beer Name"
+        let description = record[.description] as? String ?? ""
+        let abv = record[.abv] as? String ?? "No ABV"
+        let type = record[.type] as? String ?? "Beer Type"
+        let createdDate = record.creationDate ?? Date()
+        let modifiedDate = record.modificationDate ?? Date()
+        let isOnTap = tapStatus.boolValue
+        
+        switch recordType {
+        case.newRecord, .updatedRecord:
+            object.abv = abv
+            object.beerDescription = description
+            object.beerType = type
+            object.changeTag = changeTag
+            object.ckCreatedDate = createdDate
+            object.ckModifiedDate = modifiedDate
+            object.id = recordID
+            object.isOnTap = isOnTap
+            object.name = name
+            object.section = section
+        }
+        if object.isFavorite && object.isOnTap == true {
+            let favoriteBeerNotification = FavoriteBeerNotifications(beer: object)
+            favoriteBeerNotification.checkStatusSendNotification()
+        }
+        save(context: mainThreadManagedObjectContext)
     }
 }

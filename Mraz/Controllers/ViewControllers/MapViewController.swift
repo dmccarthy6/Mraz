@@ -78,8 +78,8 @@ final class MapViewController: UIViewController, LocationManager, MapContextMenu
     private func addMapAnnotations() {
         modelController.addRestaurantLocations(on: mapView)
     }
-    
 }
+
 // MARK: - MKMapView Delegate
 extension MapViewController: MKMapViewDelegate {
     /// Method called when the user taps the annotation,
@@ -88,11 +88,22 @@ extension MapViewController: MKMapViewDelegate {
             return
         } else {
             guard let currentAnnotation = view.annotation else { return }
+            let mapInteractions = MapInteractions(viewController: self, coordinate: currentAnnotation.coordinate)
             if view.reuseIdentifier == mapIdentifier {
-                self.showRestaurantActionSheet(self, location: currentAnnotation.coordinate, title: currentAnnotation.title ?? "Destination")
+                let url = URL(string: "")
+                mapInteractions.showRestaurantActionSheet(alertTitle: "",
+                                                          alertMessage: "",
+                                                          phone: "", //TO-DO: FIX
+                                                          url: url, //TO-DO: FIX
+                                                          restTitle: currentAnnotation.title ?? "Destination")
             } else {
-                print("Title =- \(view.annotation?.title)")
-                self.showRestaurantActionSheet(self, location: currentAnnotation.coordinate, title: currentAnnotation.title ?? "Destination")
+                print("Title =- \(String(describing: view.annotation?.title))")
+                let url = URL(string: "")
+                mapInteractions.showRestaurantActionSheet(alertTitle: "",
+                                                          alertMessage: "",
+                                                          phone: "", //TO-DO: FIX
+                                                          url: url, //TO-DO: FIX
+                                                          restTitle: currentAnnotation.title ?? "Destination")
             }
         }
     }
@@ -122,10 +133,10 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        //
-        print("View \(view.annotation?.title ?? "NO TITLE")")
         guard let currentAnnotation = view.annotation else { return }
-        self.showRestaurantActionSheet(self, title: currentAnnotation.title ?? "Destination")
+        let mapInteractions = MapInteractions(viewController: self, coordinate: currentAnnotation.coordinate)
+        let url = URL(string: "")
+        mapInteractions.showRestaurantActionSheet(alertTitle: "", alertMessage: "", phone: "", url: url, restTitle: currentAnnotation.title ?? "Destination")
     }
 }
 // MARK: - CLLocationManager Delegate

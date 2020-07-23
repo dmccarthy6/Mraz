@@ -47,7 +47,7 @@ class BreweryDataView: UIView {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemRed
+        backgroundColor = .secondarySystemBackground
         setupViews()
     }
     
@@ -57,20 +57,32 @@ class BreweryDataView: UIView {
     
     // MARK: - Helpers
     private func setupViews() {
-        addSubview(nameLabel)
-//        addSubview(addressLabel)
+//        addSubview(nameLabel)
         addSubview(allIconsStackView)
         allIconsStackView.addArrangedSubview(socialIcons)
         allIconsStackView.addArrangedSubview(contactIcons)
 
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+//            nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
+//            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             
             allIconsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             allIconsStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
+    }
+    
+    func setButtons() {
+        contactIcons.mapButtonTapped = {
+            Contact.getDirections(to: Coordinates.mraz.location, title: BreweryInfo.name)
+        }
+        
+        contactIcons.phoneButtonTapped = {
+            Contact.placePhoneCall(to: BreweryInfo.phone)
+        }
+        contactIcons.webButtonTapped = {
+            Contact.open(website: BreweryInfo.website)
+        }
     }
 
 }
@@ -78,5 +90,6 @@ class BreweryDataView: UIView {
 enum BreweryInfo {
     static let name = "Mraz Brewing Company"
     static let address = "222 Francisco Drive \nEl Dorado Hills, CA 95762"
-    static let phone = "916-"
+    static let phone = "9169340744"
+    static let website = "https://mrazbrewingcompany.com"
 }

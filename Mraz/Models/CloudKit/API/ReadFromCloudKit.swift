@@ -14,13 +14,14 @@ extension ReadFromCloudKit {
         let database = container.publicCloudDatabase
         return database
     }
-    
     var ckContainer: CKContainer {
         return CKContainer.default()
     }
-    
     var cloudKitChangeToken: String {
         return "Mraz + \(UUID().uuidString)"
+    }
+    var mrazSettings: MrazSettings {
+        return MrazSettings()
     }
     
     // MARK: - Account Status
@@ -95,7 +96,6 @@ extension ReadFromCloudKit {
                 return
             }
             userRecord = record
-            print("The user record is: \(record)")
         }
         return userRecord!
     }
@@ -104,7 +104,7 @@ extension ReadFromCloudKit {
     /// Create the CloudKit Subscription on Beers values
     func subscribeToBeerChanges() {
         publicDatabase.fetchAllSubscriptions { (subscriptions, error) in
-            let currentSubID = UserDefaults.standard.value(forKey: Key.cksubscriptionID.rawValue) as? String
+            let currentSubID = self.mrazSettings.readValue(for: .mrazCloudKitSubscriptionID) as? String
             if error != nil {
                 print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
                 return
@@ -116,10 +116,9 @@ extension ReadFromCloudKit {
                 }
                 ckSubscriptions.forEach { (subscription) in
                     if subscription.subscriptionID == currentSubID {
-                        print("SUB EXISTS")
                         return
                     } else {
-                        print("CREATING SUB")
+                        print("ReadFromCloudKit -- Creating CK Subscription")
                         self.createBeersSubscription()
                     }
                 }
@@ -164,7 +163,7 @@ extension ReadFromCloudKit {
                     }
                 }
             } else {
-                print(error?.localizedDescription)
+                print(error?.localizedDescription ?? "Error deleting CK Subscriptions")
                 //TO-DO: Error Handling
             }
         }
@@ -182,9 +181,8 @@ extension ReadFromCloudKit {
             if let error = error {
                 print("ReadFromCloudKit -- Error saving subscription: \(error.localizedDescription)")
             } else {
-                let userDef = UserDefaults.standard
                 let subscriptionID = ckSubscription?.subscriptionID
-                userDef.set(subscriptionID, forKey: Key.cksubscriptionID.rawValue)
+                self.mrazSettings.set(subscriptionID as Any, for: .mrazCloudKitSubscriptionID)
                 print("ReadFromCloudKit -- CK Subscription Saved Successfully!")
             }
         }
@@ -283,5 +281,4 @@ extension ReadFromCloudKit {
         }
         completion(.success(beerModelObjects))
     }
-    
 }

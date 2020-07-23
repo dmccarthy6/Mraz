@@ -9,5 +9,5 @@ enum GeoRegion {
 
 enum GeoNotificationContent {
     static let title = "Mraz"
-    static let body = "You look thirsty"
+    static let body = "You're right by the tasting room. Stop in for a beer!"
 }

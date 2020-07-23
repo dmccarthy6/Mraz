@@ -24,7 +24,7 @@ extension WriteToCoreData {
     // MARK: - Saving Methods
     /// Core Data Save. This method checks if the Main Thread Context Or Private Context has changes
     /// If yes, it performs the 'save()' method on the context.
-    func saveContext() {
+    func save(context: NSManagedObjectContext) {
         if mainThreadContext.hasChanges {
             mainThreadContext.performAndWait {
                 do {
@@ -58,8 +58,7 @@ extension WriteToCoreData {
     /// Create the ModifiedRecords object that will be used to persist the 'modifiedDate' property
     /// for keeping track of fetches performed on updated CloudKit records. Initially set to nil.
     func updateLastModifiedDate( id: NSManagedObjectID) {
-        guard let modifiedDateObject = getObjectBy(id) else { return } //CHANGED THIS TO GENERIC, SEE IF THIS WORKS IF SO DELETE BELOW
-//        guard let modifiedDateObject = getModifiedDateBy(objectID: id) else { return }
+        guard let modifiedDateObject = getObjectBy(id) else { return }
         saveObject(object: modifiedDateObject, in: mainThreadContext)
     }
     
@@ -80,13 +79,13 @@ extension WriteToCoreData {
                                         in context: NSManagedObjectContext) {
         if let beerObject = object as? Beers, let model = beerModel {
             createBeerObject(from: model, beer: beerObject)
-            saveContext()
+            save(context: mainThreadContext)
         }
         if let modDateObject = object as? ModifiedRecords {
             /// Setting modified date to the current date each time we call this to get the date the last changes were obtained.
             modDateObject.modifiedDate = modifiedDate ?? Date()
             print(Date())
-            saveContext()
+            save(context: mainThreadContext)
         }
     }
     
@@ -115,7 +114,7 @@ extension WriteToCoreData {
             guard let queueSafeBeer = privateContext.object(with: beer.objectID) as? Beers else { return }
             queueSafeBeer.isFavorite = !queueSafeBeer.isFavorite
             queueSafeBeer.ckModifiedDate = Date()
-            self.saveContext()
+            self.save(context: self.mainThreadContext)
         }
     }
     
@@ -132,8 +131,7 @@ extension WriteToCoreData {
         beer.abv = from.abv
         beer.beerDescription = from.beerDescription
         beer.isOnTap = from.isOnTap
-//        print("WriteToCoreData -- UpdatedBeer: \(beer)")
-        saveContext()
+        save(context: mainThreadContext)
     }
     
     // MARK: - Search Methods
@@ -172,7 +170,7 @@ extension WriteToCoreData {
         if let modDateObject = managedObject as? ModifiedRecords {
             self.mainThreadManagedObjectContext.delete(modDateObject)
         }
-        self.saveContext()
+        self.save(context: self.mainThreadContext)
     }
     
     /**
@@ -225,30 +223,4 @@ extension WriteToCoreData {
          }
      }
  }
- */
-
-/*
-  func delete<T: NSManagedObject>(_ managedObject: T) {
-         if let beerObject = managedObject as? Beers {
-             self.mainThreadManagedObjectContext.delete(beerObject)
-         } else {
-             if let modDateObject = managedObject as? ModifiedRecords {
-             self.mainThreadManagedObjectContext.delete(modDateObject)
-         }
-         }
-         self.saveContext()
- //        persistentContainer.performBackgroundTask { (privateManagedContext) in
- //            do {
- //                if let object = managedObject as? Beers {
- //                    self.mainThreadManagedObjectContext.delete(object)
- //                }
- //                if let object = managedObject as? ModifiedRecords {
- //                    self.mainThreadManagedObjectContext.delete(object)
- //                }
- //                self.saveContext()
- //            } catch {
- //                fatalError("WriteToCD -- Failure to save context -- delete: \(error.localizedDescription)")
- //            }
- //        }
-     }
  */

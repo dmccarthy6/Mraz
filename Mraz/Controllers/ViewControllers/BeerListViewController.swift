@@ -38,10 +38,12 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         let diffableDatasource = BeersDiffableDatasource(collectionView: collectionView) { (collectionView, indexPath, element) -> UICollectionViewCell? in
             let cell: BeerListCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.configureBeerCell(beerName: element.name, type: element.beerType, abv: element.abv, isFavorite: element.isFavorite, isOnTap: element.isOnTap)
-            cell.setFavoriteStatus { cell.setFavorite(element) }
-            
-            // TO-DO: Properly set Cell color based on 'isOnTap' boolean val
-//            cell.setOnTapCellColor(element: element)
+            cell.makeBeerFavorite = { [weak self] in
+                cell.configureFavoritesButton(forElement: element)
+                let beerCurrentStatus = element.isFavorite
+                element.isFavorite = !beerCurrentStatus
+                self?.updateLocalFavoriteStatus(element)
+            }
             return cell
         }
         /// Configure section headers
@@ -61,7 +63,6 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
     }()
     private var currentSearchText = ""
     private var activityIndicator: UIActivityIndicatorView?
-    private let refreshControl = UIRefreshControl()
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -70,7 +71,6 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         navigationItem.title = "Our Beers"
         setupView()
         createSnapshot()
-        pullToRefresh()
         setupSearchController()
     }
     
@@ -96,8 +96,6 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
             snapshot.appendItems(items, toSection: section)
         }
         beersDiffableDatasource.apply(snapshot, animatingDifferences: animate)
-//        stopActivityIndicator()
-        refreshControl.endRefreshing()
     }
 
     // MARK: - Helpers
@@ -113,39 +111,6 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         ])
     }
 
-//    // MARK: - Activity indicator methods
-//    /// Create the activity indicator view and start animating.
-//    private func startActivityIndicator() {
-//        self.activityIndicator = UIActivityIndicatorView(style: .large)
-//        self.activityIndicator?.center = self.view.center
-//        self.activityIndicator?.color = .systemGray
-//        self.activityIndicator?.startAnimating()
-//    }
-//
-//    /// Stop animating the activity indicator.
-//    private func stopActivityIndicator() {
-//        if let activityIndicator = self.activityIndicator {
-//            activityIndicator.stopAnimating()
-//        }
-//    }
-
-    // MARK: - Refresh Methods
-    private func pullToRefresh() {
-        collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refreshControl.tintColor = .systemGray
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.systemGray
-        ]
-        refreshControl.attributedTitle = NSAttributedString(string: "Updating Beers", attributes: attributes)
-    }
-    
-    @objc func refresh() {
-        CloudKitManager.shared.fetchUpdatedRecordsFromCloud()
-        refreshControl.endRefreshing()
-    }
-    
     // MARK: - Search
     private func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)

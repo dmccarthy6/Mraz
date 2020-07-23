@@ -3,6 +3,17 @@
 
 import Foundation
 
+/*  API
+    * Endpoint: https://maps.googleapis.com/maps/api/place/nearbysearch/output?parameters
+    * Example: https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY
+    *Search Requirements:
+        * Key: API Key
+        * Location: Lat/Long
+        * Radius: Distance (meters)
+    * Data for Mraz Search:
+        *Key: AIzaSyCdusZ1mwdOgk3M7s1l2N_MH_PZYhDWQ70
+        *Lat: 38.710252 / Long: -121.086191
+ */
 enum NearbyRestaurantsGP: Endpoint {
     case restaurant
 }
@@ -46,23 +57,3 @@ extension NearbyRestaurantsGP {
         return URLRequest(url: url)
     }
 }
-/* API Search Parameters:
-// NEARBY SEARCH REQ
-//https://maps.googleapis.com/maps/api/place/nearbysearch/output?parameters
-// PARAMETERS:
-// key: API Key
-// location: lat/long specified as latitude,longitude
-// radius: distance in meters
-
- Examplea nearby search request for places of type 'restaurant' within 15000m radiys of a point in Sydney Australia containing word 'cruise'
- https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY
- */
-
-/*
-Data Used/Needed for search parameters:
- 
- My Google Places API Key: AIzaSyCdusZ1mwdOgk3M7s1l2N_MH_PZYhDWQ70
- Mraz Lat: 38.710252
- Mraz Lng: -121.086191
- 
- */

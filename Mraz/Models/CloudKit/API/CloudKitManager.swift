@@ -4,13 +4,39 @@
 import Foundation
 import CloudKit
 
-typealias CloudKitAPI = ReadFromCloudKit & WriteToCloudKit
-
 final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     // MARK: - Properties
     static let shared = CloudKitManager()
-    var storage: Storage = Storage()
+    let settings: MrazSettings = MrazSettings()
     var records: [CKRecord] = []
+    
+    // MARK: - Authorizations
+    /// Checks the user's current iCloud status, if available performs the initial fetch
+    /// and subscribes to all beer changes.
+    func checkUserCloudKitAccountStatusAndSubscribe() {
+        getUserAccountStatus { (result) in
+            switch result {
+            case .success(let currentCKStatus):
+                switch currentCKStatus {
+                case .available:
+                    self.performInitialCloudKitFetch()
+                    self.subscribeToBeerChanges()
+                case .couldNotDetermine, .noAccount:
+                    DispatchQueue.main.async {
+                        Alerts.cloudKitAlert(title: .iCloudError, message: .noAccountOrCouldNotDetermine)
+                    }
+                case .restricted:
+                    DispatchQueue.main.async {
+                        Alerts.cloudKitAlert(title: .iCloudError, message: .restricted)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    Alerts.cloudKitErrorAlert(error)
+                }
+            }
+        }
+    }
     
     // MARK: - CloudKit Fetch Methods
     /// Check if initial CloudKit Fetch was successful, if so do not fetch again.
@@ -45,35 +71,7 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
             }
         }
     }
-    
-    /// Fetch any records that have been updated in the Public Database. This method uses
-    /// the
-    func fetchUpdatedRecordsFromCloud() {
-        guard let objectID = modifiedDateObjectID() else { return }
-        let fromDate = getLastModifiedFetchDate()
-        let toDate = Date()
-        print("CloudKitManager -- Fetching Objects From:\(fromDate!) to \(toDate)")
 
-        let predicate = NSPredicate(format: "modificationDate >= %@ && modificationDate <= %@", fromDate! as NSDate, toDate as NSDate)
-        fetchFromCloudKit(predicate, qualityOfService: .utility) { (result) in
-            switch result {
-            case .success(let fetchedRecords):
-                //Remove current records values (if any) set the records to the fetchedRecords then convert
-                // to BeerModel objects and save to Core Data.
-                self.records.removeAll()
-                self.records = fetchedRecords
-
-                print("These are the records that have changes: \n \(fetchedRecords)")
-                self.convertChangedRecordsToBeerObjects()
-                self.updateLastModifiedDate(id: objectID)
-            case .failure(let error):
-                //
-                print("CloudKitManager -- Error fetching updated records: \(error.localizedDescription)")
-
-            }
-        }
-    }
- 
     /// Fetches list of beers that have the 'isOnTap' value set to true.
     /// - Parameter completion: Completion handler that returns a
     func fetchOnTapList() {
@@ -136,14 +134,11 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
     /// If this is true, no need to call CloudKit again. This data
     /// should hae been saved to local database.
     func hasInitialFetchBeenPerformed() -> Bool {
-        guard let hasFetched = storage.initialFetchSuccessful else {
-            return false
-        }
-        return hasFetched
+        return settings.readBool(for: .initialFetchSuccessful)
     }
     
     /// Set Initial fetch value
     func setFetchedValue(_ bool: Bool) {
-        storage.initialFetchSuccessful = bool
+        settings.set(bool, for: .initialFetchSuccessful)
     }
 }

@@ -45,6 +45,7 @@ extension LocationManager {
         }
     }
     
+    /// Request location authorization from users - for Geofencing.
     func requestAuthorizationFromUser() {
         locationManager.requestWhenInUseAuthorization()
     }
@@ -62,8 +63,8 @@ extension LocationManager {
         locationManager.startUpdatingLocation()
     }
     
-    ///
-    func reateGeofencingRegionAndNotify() {
+    /// Method that creates the Geofencing Region and Notifies User when they enter via Local Notification.
+    func createGeofencingRegionAndNotify() {
         let region = CLCircularRegion(center: Coordinates.mraz.location, radius: defaultGeofencingRadius, identifier: GeoRegion.identifier)
         region.notifyOnEntry = true
         locationManager.startMonitoring(for: region)
@@ -100,7 +101,7 @@ extension LocationManager {
         }
     }
     
-    // MARK: -
+    // MARK: - Map Directions
     func getDirectonsTo(locationCoordinate: CLLocationCoordinate2D, title: String? = "Destination") {
         let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
         let destination = MKPlacemark(coordinate: locationCoordinate)
@@ -108,37 +109,4 @@ extension LocationManager {
         mapItem.name = title
         mapItem.openInMaps(launchOptions: launchOptions)
     }
-    
-    func showRestaurantActionSheet(_ viewController: UIViewController, location: CLLocationCoordinate2D = Coordinates.mraz.location, title: String?) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        //Actions
-        let phoneCallAction = UIAlertAction(title: "Call", style: .default) { (action) in
-            //Handle Phone Calls
-        }
-        let directionsAction = UIAlertAction(title: "Directions", style: .default) { [unowned self] (action) in
-            self.getDirectonsTo(locationCoordinate: location, title: title)
-        }
-        let menuAction = UIAlertAction(title: "Menu", style: .default) { (action) in
-            //Handle Menu Action
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
-        alertController.addAction(phoneCallAction)
-        alertController.addAction(directionsAction)
-        alertController.addAction(menuAction)
-        alertController.addAction(cancelAction)
-        /// Present Controller
-        viewController.present(alertController, animated: true, completion: nil)
-    }
 }
-
-/*
- static func showBreweryLocationOnMap() {
-     let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
-     let coordinate = Coordinates.mraz.location
-     let destination = MKPlacemark(coordinate: coordinate)
-     let mrazMapItem = MKMapItem(placemark: destination)
-     mrazMapItem.name = "Mraz Brewing Co."
-     mrazMapItem.openInMaps(launchOptions: launchOptions)
- }
- */

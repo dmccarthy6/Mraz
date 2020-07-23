@@ -6,7 +6,6 @@ import CloudKit
 /// Core Data Stack - This class holds the Persistent Container and the Managed Object Context for the Core Data Model.
 /// The save context functionality is also in this class.
 
-typealias CoreDataAPI = ReadFromCoreData & WriteToCoreData
 typealias CoreDataFetchRequestFor = NSFetchRequest<NSFetchRequestResult>
 
 final class CoreDataManager: CoreDataAPI {
@@ -19,44 +18,10 @@ final class CoreDataManager: CoreDataAPI {
             if let error = error as NSError? {
                 fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
             }
+            print("Successfully created store: \(storeDescription.url!)")
         }
         return container
     }()
-    
-   // @available(iOS 14.0, *)
-//    private lazy var syncPersistentContainer: NSPersistentCloudKitContainer = {
-//        let container = NSPersistentCloudKitContainer(name: "Mraz")
-//
-//        guard let description = container.persistentStoreDescriptions.first else {
-//            fatalError("Error - CK")
-//        }
-//        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-//        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-//        description.cloudKitContainerOptions!.databaseScope = .public
-//        container.persistentStoreDescriptions.append(description)
-//
-////        let description = NSPersistentStoreDescription()
-////        let publicStoreURL = description.url!.deletingLastPathComponent()
-////            .appendingPathComponent("Mraz.sqlite")
-////        let identifier = description.cloudKitContainerOptions!.containerIdentifier
-////
-////        let publicDescription = NSPersistentStoreDescription(url: publicStoreURL)
-////        publicDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-////        publicDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-////
-////        var publicOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: identifier)
-////        publicOptions.databaseScope = .public
-////
-////        publicDescription.cloudKitContainerOptions = publicOptions
-////        container.persistentStoreDescriptions.append(publicDescription)
-////
-//        container.loadPersistentStores { (storeDescription, error) in
-//            if let error = error as NSError? {
-//                fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
-//            }
-//        }
-//        return container
-//    }()
     
     /// Managed Object Context
     private lazy var mainThreadContext: NSManagedObjectContext = {

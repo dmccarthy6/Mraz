@@ -14,8 +14,6 @@ class MrazTabBarController: UITabBarController {
         setUpTabBarController()
     }
     
-    // MARK: -
-    /// Age has been verified, show the Tab Bar
     private func setUpTabBarController() {
         //
         mrazTabBar = UITabBarController()

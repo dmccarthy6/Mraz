@@ -8,4 +8,3 @@ protocol Endpoint: RequestProviding {
     var host: String { get }
     var path: String { get }
 }
-

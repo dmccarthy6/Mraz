@@ -7,4 +7,3 @@ enum LocationAuthStatus {
     case startTrackingUpdates
     case requestAuthorization
 }
-

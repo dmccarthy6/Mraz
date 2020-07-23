@@ -20,13 +20,13 @@ final class MapViewModelController: NSObject, Network, MapContextMenu {
                 for location in mod.results {
                     let restaurantLoc = location.geometry.location
                     self.restaurants.append(Restaurant(lat: restaurantLoc.lat, lng: restaurantLoc.lng, name: location.name))
+                    print("Viscinity: \(location.vicinity)")
                     print("Heres the photo attributions: \(location.photos[0].htmlAttributions)")
                 }
                 completion(.success(true))
             case .failure(let apiError):
                 print(apiError)
                 completion(.failure(apiError))
-                
             }
         }
     }

@@ -1,11 +1,16 @@
 //  Created by Dylan  on 5/14/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
-import UserNotifications
 import UIKit
+import UserNotifications
+import CloudKit
 
 protocol NotificationManager {
-    
+    var notificationContent: UNMutableNotificationContent { get }
+    var notificationTimeTrigger: UNTimeIntervalNotificationTrigger { get }
+    var notificationRequest: UNNotificationRequest { get }
+    var currentNotificationCenter: UNUserNotificationCenter { get }
+    var notificationSound: UNNotificationSound { get }
 }
 
 extension NotificationManager {
@@ -13,18 +18,36 @@ extension NotificationManager {
         return UNUserNotificationCenter.current()
     }
     
+    var notificationContent: UNMutableNotificationContent {
+        return UNMutableNotificationContent()
+    }
+    
+    var notificationTimeTrigger: UNTimeIntervalNotificationTrigger {
+        return UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+    }
+    
+    var notificationRequest: UNNotificationRequest {
+        return UNNotificationRequest(identifier: UUID().uuidString, content: notificationContent, trigger: notificationTimeTrigger)
+    }
+    
+    var currentNotificationCenter: UNUserNotificationCenter {
+        return UNUserNotificationCenter.current()
+    }
+    
+    var notificationSound: UNNotificationSound {
+        return UNNotificationSound.default
+    }
+    
     // MARK: - Authorization
-    func requestUserAuthenticationForNotifications(_ completion: @escaping (Result<Bool, Error>) -> Void) {
+    func requestUserAuthForNotifications(_ completion: @escaping (Result<Bool, Error>) -> Void) {
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             if let error = error {
-                //Failure
                 completion(.failure(error))
             }
             if !granted {
                 completion(.success(false))
                 print("Authorization Not Granted")
             } else {
-                print("NotificationManager -- Notifications Authorized -- ")
                 completion(.success(true))
             }
         }
@@ -43,6 +66,4 @@ extension NotificationManager {
             }
         }
     }
-    
 }
-
