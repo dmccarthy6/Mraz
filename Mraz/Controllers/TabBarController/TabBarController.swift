@@ -11,21 +11,17 @@ class MrazTabBarController: UITabBarController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setUpTabBarController()
     }
     
-    // MARK: -
-    /// Age has been verified, show the Tab Bar
     private func setUpTabBarController() {
         //
         mrazTabBar = UITabBarController()
         
         //Set Up Tabs
-        // -> This is the home controller
+        // Home View Controller
         let homeController = HomeViewController()
-        let homeTabBarImage = UIImage(systemName: "house")
-        homeController.tabBarItem = UITabBarItem(title: "Home", image: homeTabBarImage, tag: 0)
+        homeController.tabBarItem = UITabBarItem(title: "Home", image: SystemImages.houseImage, tag: 0)
         
         //Beer List Controller
         let beerListViewController = BeerListViewController()
@@ -33,11 +29,11 @@ class MrazTabBarController: UITabBarController {
         beerListViewController.tabBarItem = UITabBarItem(title: "Beer", image: beerImage, tag: 1)
         
         //MapKit Controller
-        
-        //Ritual Controller?
+        let mapController = MapViewController()
+        mapController.tabBarItem = UITabBarItem(title: "Map", image: SystemImages.mapImage, tag: 2)
         
         ///Add View Controllers to the tab bar
-        let controllers = [homeController, beerListViewController]
+        let controllers = [homeController, beerListViewController, mapController]
        
         viewControllers = controllers.map({
             UINavigationController(rootViewController: $0)

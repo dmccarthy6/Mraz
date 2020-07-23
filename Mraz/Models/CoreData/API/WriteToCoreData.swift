@@ -24,7 +24,7 @@ extension WriteToCoreData {
     // MARK: - Saving Methods
     /// Core Data Save. This method checks if the Main Thread Context Or Private Context has changes
     /// If yes, it performs the 'save()' method on the context.
-    func saveContext() {
+    func save(context: NSManagedObjectContext) {
         if mainThreadContext.hasChanges {
             mainThreadContext.performAndWait {
                 do {
@@ -52,22 +52,21 @@ extension WriteToCoreData {
     /// - Parameter beerModel: The model object used to save 
     func saveBeerObjectToCoreData(from beerModel: BeerModel) {
         let beer = Beers(context: mainThreadContext)
-        saveObject(object: beer, beerModel: beerModel, inContext: mainThreadContext)
+        saveObject(object: beer, beerModel: beerModel, in: mainThreadContext)
     }
     
     /// Create the ModifiedRecords object that will be used to persist the 'modifiedDate' property
     /// for keeping track of fetches performed on updated CloudKit records. Initially set to nil.
     func updateLastModifiedDate( id: NSManagedObjectID) {
-        guard let modifiedDateObject = getObjectBy(id) else { return } //CHANGED THIS TO GENERIC, SEE IF THIS WORKS IF SO DELETE BELOW
-//        guard let modifiedDateObject = getModifiedDateBy(objectID: id) else { return }
-        saveObject(object: modifiedDateObject, inContext: mainThreadContext)
+        guard let modifiedDateObject = getObjectBy(id) else { return }
+        saveObject(object: modifiedDateObject, in: mainThreadContext)
     }
     
     /// Creates the single instance of the ManagedObject used for tracking the modified date. This method is called
     /// when the application first loads to trigger notifications for any updates to CloudKit database after the initial fetch.
     func createLastModifiedDate() {
         let modifiedDate = ModifiedRecords(context: mainThreadContext)
-        saveObject(object: modifiedDate, inContext: mainThreadContext)
+        saveObject(object: modifiedDate, in: mainThreadContext)
     }
     
     /// Generic save function to save the specified ManagedObject to the context.
@@ -75,23 +74,25 @@ extension WriteToCoreData {
     /// - Parameter beerModel: 'BeerModel' object used to save a beer NSManagedObject.
     /// - Parameter modifiedDate: ModifiedDate property to set the modified date on the NSManagedObject.
     /// - Parameter inContext: ManagedObjectContext used to save the Core Data object.
-    func saveObject<T: NSManagedObject>(object: T, beerModel: BeerModel? = nil, modifiedDate: Date? = nil,
-                                    inContext: NSManagedObjectContext) {
+    func saveObject<T: NSManagedObject>(object: T, beerModel: BeerModel? = nil,
+                                        modifiedDate: Date? = nil,
+                                        in context: NSManagedObjectContext) {
         if let beerObject = object as? Beers, let model = beerModel {
-            saveBeer(from: model, beer: beerObject)
+            createBeerObject(from: model, beer: beerObject)
+            save(context: mainThreadContext)
         }
         if let modDateObject = object as? ModifiedRecords {
             /// Setting modified date to the current date each time we call this to get the date the last changes were obtained.
             modDateObject.modifiedDate = modifiedDate ?? Date()
             print(Date())
-            saveContext()
+            save(context: mainThreadContext)
         }
     }
     
     /// Create and save a beer object from a local 'BeerModel'
     /// - Parameter model: 'BeerModel' object that contains the data needd to save the 'Beers' object.
     /// - Parameter beer: The 'Beers' managed object being created.
-    func saveBeer(from model: BeerModel, beer: Beers, context: NSManagedObjectContext? = nil) {
+    func createBeerObject(from model: BeerModel, beer: Beers, context: NSManagedObjectContext? = nil) {
         beer.id =                 model.id
         beer.changeTag =           model.changeTag
         beer.name =               model.name
@@ -103,7 +104,6 @@ extension WriteToCoreData {
         beer.isFavorite =          model.isFavorite
         beer.isOnTap =             model.isOnTap
         beer.section =             model.section
-        saveContext()
     }
 
     // MARK: - Update Objects
@@ -114,7 +114,7 @@ extension WriteToCoreData {
             guard let queueSafeBeer = privateContext.object(with: beer.objectID) as? Beers else { return }
             queueSafeBeer.isFavorite = !queueSafeBeer.isFavorite
             queueSafeBeer.ckModifiedDate = Date()
-            self.saveContext()
+            self.save(context: self.mainThreadContext)
         }
     }
     
@@ -131,8 +131,7 @@ extension WriteToCoreData {
         beer.abv = from.abv
         beer.beerDescription = from.beerDescription
         beer.isOnTap = from.isOnTap
-//        print("WriteToCoreData -- UpdatedBeer: \(beer)")
-        saveContext()
+        save(context: mainThreadContext)
     }
     
     // MARK: - Search Methods
@@ -171,7 +170,7 @@ extension WriteToCoreData {
         if let modDateObject = managedObject as? ModifiedRecords {
             self.mainThreadManagedObjectContext.delete(modDateObject)
         }
-        self.saveContext()
+        self.save(context: self.mainThreadContext)
     }
     
     /**
@@ -224,30 +223,4 @@ extension WriteToCoreData {
          }
      }
  }
- */
-
-/*
-  func delete<T: NSManagedObject>(_ managedObject: T) {
-         if let beerObject = managedObject as? Beers {
-             self.mainThreadManagedObjectContext.delete(beerObject)
-         } else {
-             if let modDateObject = managedObject as? ModifiedRecords {
-             self.mainThreadManagedObjectContext.delete(modDateObject)
-         }
-         }
-         self.saveContext()
- //        persistentContainer.performBackgroundTask { (privateManagedContext) in
- //            do {
- //                if let object = managedObject as? Beers {
- //                    self.mainThreadManagedObjectContext.delete(object)
- //                }
- //                if let object = managedObject as? ModifiedRecords {
- //                    self.mainThreadManagedObjectContext.delete(object)
- //                }
- //                self.saveContext()
- //            } catch {
- //                fatalError("WriteToCD -- Failure to save context -- delete: \(error.localizedDescription)")
- //            }
- //        }
-     }
  */

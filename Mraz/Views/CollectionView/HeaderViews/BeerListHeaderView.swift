@@ -20,6 +20,8 @@ final class BeerListHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        backgroundColor = .tertiarySystemBackground
+        self.layer.cornerRadius = 20
     }
     
     required init?(coder: NSCoder) {

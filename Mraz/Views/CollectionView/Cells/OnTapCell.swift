@@ -9,46 +9,36 @@ class OnTapCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
+        label.textAlignment = .natural
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .title1, weight: .bold)
+        label.font = .preferredFont(for: .title3, weight: .bold)
         return label
     }()
     private let beerTypeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
+        label.textAlignment = .natural
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .title3, weight: .bold)
+        label.font = .preferredFont(for: .body, weight: .medium)
         return label
     }()
     private let beerABVLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
+        label.textAlignment = .natural
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .title2, weight: .bold)
-        return label
-    }()
-    private let beerDescriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        label.textColor = .label
-        label.font = .preferredFont(for: .body, weight: .medium)
+        label.font = .preferredFont(for: .caption1, weight: .medium)
         return label
     }()
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupLayout()
         setupCardView()
     }
@@ -68,27 +58,21 @@ class OnTapCell: UICollectionViewCell {
         contentView.addSubview(beerNameLabel)
         contentView.addSubview(beerTypeLabel)
         contentView.addSubview(beerABVLabel)
-        contentView.addSubview(beerDescriptionLabel)
         
         let guide = contentView.layoutMarginsGuide
         
         NSLayoutConstraint.activate([
             beerNameLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerNameLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: guide.topAnchor, multiplier: 2),
+            beerNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: guide.topAnchor, multiplier: 1),
             
             beerTypeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerTypeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerTypeLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerNameLabel.bottomAnchor, multiplier: 1),
+            beerTypeLabel.topAnchor.constraint(equalTo: beerNameLabel.bottomAnchor),
             
             beerABVLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerABVLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerABVLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerTypeLabel.bottomAnchor, multiplier: 1),
-            
-            beerDescriptionLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            beerDescriptionLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerDescriptionLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerABVLabel.bottomAnchor, multiplier: 2),
-            beerDescriptionLabel.bottomAnchor.constraint(lessThanOrEqualTo: guide.bottomAnchor)
+            beerABVLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerTypeLabel.bottomAnchor, multiplier: 1)
         ])
         contentView.layer.cornerRadius = 20
     }
@@ -106,10 +90,9 @@ class OnTapCell: UICollectionViewCell {
     }
     
     // MARK: - Interface
-    func configureOnTapCell(name: String?, type: String?, beerABV: String?, description: String?) {
+    func configureOnTapCell(name: String?, type: String?, beerABV: String?) {
         beerNameLabel.text = name
         beerTypeLabel.text = type
         beerABVLabel.text = ("\(beerABV ?? "") ABV")
-        beerDescriptionLabel.text = description
     }
 }

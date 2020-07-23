@@ -4,7 +4,6 @@
 import Foundation
 import CoreData
 
-
 extension ModifiedRecords {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ModifiedRecords> {

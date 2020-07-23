@@ -12,8 +12,13 @@ final class OnTapHeaderView: UICollectionReusableView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .title1, weight: .bold)
+        label.font = .preferredFont(for: .title2, weight: .bold)
         return label
+    }()
+    private var breweryDataView: BreweryDataView = {
+        let view = BreweryDataView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     // MARK: - Life Cycle
@@ -28,12 +33,18 @@ final class OnTapHeaderView: UICollectionReusableView {
     
     // MARK: - Layout
     private func setupHeader() {
+        addSubview(breweryDataView)
         addSubview(onTapHeaderLabel)
         
         NSLayoutConstraint.activate([
+            breweryDataView.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
+            //breweryDataView.heightAnchor.constraint(equalToConstant: 50),
+            breweryDataView.widthAnchor.constraint(equalTo: layoutMarginsGuide.widthAnchor),
+            breweryDataView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            
             onTapHeaderLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             onTapHeaderLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            onTapHeaderLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            onTapHeaderLabel.topAnchor.constraint(equalTo: breweryDataView.bottomAnchor),
             onTapHeaderLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
     }

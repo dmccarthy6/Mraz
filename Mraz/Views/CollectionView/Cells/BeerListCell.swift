@@ -35,11 +35,11 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
     private var favoriteButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(SystemImages.favoriteButton, for: .normal)
+        button.setImage(SystemImages.starImage, for: .normal)
         button.tintColor = .gray
         return button
     }()
-    var setAsFavorite: (() -> Void)!
+    var makeBeerFavorite: EmptyClosure?
     
     // MARK: - View Life Cycle
     override init(frame: CGRect) {
@@ -102,41 +102,17 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         self.typeLabel.text = type
         favoriteButton.tintColor = isFavorite ? .systemYellow : .systemBlue
         favoriteButton.setImage(isFavorite ? UIImage(systemName: "star.fill") : UIImage(systemName: "star"), for: .normal)
-        
     }
     
     /// Save new favorite status to Core Data
-    func setFavorite(_ objectAtIndex: Beers) {
-        let newStatus = !objectAtIndex.isFavorite
-        objectAtIndex.isFavorite = newStatus
-        favoriteButton.tintColor = newStatus ? .systemYellow : .systemBlue
-        favoriteButton.setImage(newStatus ? UIImage(systemName: "star.fill") : UIImage(systemName: "star"), for: .normal)
-        updateLocalFavoriteStatus(objectAtIndex)
-    }
-    
-    /// Set button function to the closure passed in by the VC
-    func setFavoriteStatus(_ function: @escaping () -> Void) {
-        self.setAsFavorite = function
+    func configureFavoritesButton(forElement: Beers) {
+        let currentStatus = forElement.isFavorite
+        favoriteButton.tintColor = currentStatus ? .systemBlue : .systemYellow
+        favoriteButton.setImage(currentStatus ? UIImage(systemName: "star") : UIImage(systemName: "star.fill"), for: .normal)
     }
     
     // MARK: - Button Functions
     @objc private func favoriteButtonTapped() {
-        setAsFavorite()
-    }
-    
-    // MARK: - Try to set Cell Color
-    func setIsOnTapColor(_ isOnTap: Bool) {
-        if isOnTap == true {
-            
-            contentView.backgroundColor = .systemRed
-        }
-    }
-    // ???
-    func setOnTapCellColor(element: Beers) {
-        if element.isOnTap {
-            print("ELEMENT: \(element)")
-            contentView.backgroundColor = .systemRed
-            
-        }
+        makeBeerFavorite?()
     }
 }

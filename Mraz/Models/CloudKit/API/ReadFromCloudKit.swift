@@ -14,13 +14,14 @@ extension ReadFromCloudKit {
         let database = container.publicCloudDatabase
         return database
     }
-    
     var ckContainer: CKContainer {
         return CKContainer.default()
     }
-    
     var cloudKitChangeToken: String {
         return "Mraz + \(UUID().uuidString)"
+    }
+    var mrazSettings: MrazSettings {
+        return MrazSettings()
     }
     
     // MARK: - Account Status
@@ -95,7 +96,6 @@ extension ReadFromCloudKit {
                 return
             }
             userRecord = record
-            print("The user record is: \(record)")
         }
         return userRecord!
     }
@@ -104,23 +104,22 @@ extension ReadFromCloudKit {
     /// Create the CloudKit Subscription on Beers values
     func subscribeToBeerChanges() {
         publicDatabase.fetchAllSubscriptions { (subscriptions, error) in
+            let currentSubID = self.mrazSettings.readValue(for: .mrazCloudKitSubscriptionID) as? String
             if error != nil {
                 print("Error fetching CK Subscriptions: \(error!.localizedDescription)")
                 return
             }
-
-            if let safeSubscriptions = subscriptions {
-                guard safeSubscriptions.count >= 1 else {
+            if let ckSubscriptions = subscriptions {
+                guard ckSubscriptions.count > 0 else {
                     self.createBeersSubscription()
-                    guard let modifiedID = self.modifiedDateObjectID() else { return }
-                    self.updateLastModifiedDate(id: modifiedID)
                     return
                 }
-                for subscription in safeSubscriptions {
-                    let id = UserDefaults.standard.value(forKey: Key.cksubscriptionID.rawValue) as? String
-                    if subscription.subscriptionID == id {
-                        print("Subscription Exists -- returning")
+                ckSubscriptions.forEach { (subscription) in
+                    if subscription.subscriptionID == currentSubID {
                         return
+                    } else {
+                        print("ReadFromCloudKit -- Creating CK Subscription")
+                        self.createBeersSubscription()
                     }
                 }
             }
@@ -139,13 +138,9 @@ extension ReadFromCloudKit {
         let subscription = CKQuerySubscription(recordType: CKRecordType.beers,
                                                predicate: predicate,
                                                options: [.firesOnRecordUpdate, .firesOnRecordCreation])
-        
-        let info = CKSubscription.NotificationInfo()
-        info.shouldSendContentAvailable = true
-        info.alertBody = ""
-        subscription.notificationInfo = info
         //Save subscription to database
         createCKSubscription(subscription)
+        print("ReadFromCloudKit - SUBSCRIPTION SAVED!")
     }
     
     /// Delete all  current subscriptions from CloudKit to reduce
@@ -168,8 +163,7 @@ extension ReadFromCloudKit {
                     }
                 }
             } else {
-
-                print(error?.localizedDescription)
+                print(error?.localizedDescription ?? "Error deleting CK Subscriptions")
                 //TO-DO: Error Handling
             }
         }
@@ -179,15 +173,16 @@ extension ReadFromCloudKit {
     /// - Parameter subscription: CKSubscription value.
     private func createCKSubscription(_ subscription: CKSubscription) {
         let notificationInfo = CKSubscription.NotificationInfo()
+        notificationInfo.shouldSendContentAvailable = true
+        notificationInfo.alertBody = ""
         subscription.notificationInfo = notificationInfo
         
         publicDatabase.save(subscription) { (ckSubscription, error) in
             if let error = error {
                 print("ReadFromCloudKit -- Error saving subscription: \(error.localizedDescription)")
             } else {
-                let userDef = UserDefaults.standard
                 let subscriptionID = ckSubscription?.subscriptionID
-                userDef.set(subscriptionID, forKey: Key.cksubscriptionID.rawValue)
+                self.mrazSettings.set(subscriptionID as Any, for: .mrazCloudKitSubscriptionID)
                 print("ReadFromCloudKit -- CK Subscription Saved Successfully!")
             }
         }
@@ -286,5 +281,4 @@ extension ReadFromCloudKit {
         }
         completion(.success(beerModelObjects))
     }
-    
 }

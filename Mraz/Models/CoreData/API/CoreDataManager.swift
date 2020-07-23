@@ -6,7 +6,6 @@ import CloudKit
 /// Core Data Stack - This class holds the Persistent Container and the Managed Object Context for the Core Data Model.
 /// The save context functionality is also in this class.
 
-typealias CoreDataAPI = ReadFromCoreData & WriteToCoreData
 typealias CoreDataFetchRequestFor = NSFetchRequest<NSFetchRequestResult>
 
 final class CoreDataManager: CoreDataAPI {
@@ -19,6 +18,7 @@ final class CoreDataManager: CoreDataAPI {
             if let error = error as NSError? {
                 fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
             }
+            print("Successfully created store: \(storeDescription.url!)")
         }
         return container
     }()

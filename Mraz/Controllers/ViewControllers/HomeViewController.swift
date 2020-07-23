@@ -19,18 +19,16 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    private lazy var layout: UICollectionViewLayout = {
+     private lazy var layout: UICollectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { section, environment -> NSCollectionLayoutSection in
-            //
             let inset = CGFloat(12)
             let isCompact = environment.container.effectiveContentSize.width < 450
-            let columns = isCompact ? 1 : 3
+            let columns = isCompact ? 1 : 2
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .fractionalHeight(0.70), itemSpacing: 12, groupWidthDimension: 0.9, numberOfColumns: columns)//.absolute(375)
-                .withSectionHeader(estimatedHeight: 55, kind: OnTapHeaderView.viewReuseIdentifier)
+                .grid(itemHeight: .fractionalHeight(0.14), itemSpacing: 10, groupWidthDimension: 1.0, numberOfColumns: columns)//.absolute(375)
+                .withSectionHeader(estimatedHeight: 25, kind: OnTapHeaderView.viewReuseIdentifier)
                 .withContentInsets(top: 10, leading: inset, bottom: 0, trailing: inset)
-            section.orthogonalScrollingBehavior = .continuous
             return section
         }
         return layout
@@ -49,7 +47,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         /// Cell
         let diffDatasource = OnTapDatasource(collectionView: collectionView) { (collectionView, indexPath, element) -> UICollectionViewCell? in
             let cell: OnTapCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.configureOnTapCell(name: element.name, type: element.beerType, beerABV: element.abv, description: element.beerDescription)
+            cell.configureOnTapCell(name: element.name, type: element.beerType, beerABV: element.abv)
             return cell
         }
         /// Header
@@ -69,18 +67,10 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        PresentAgeVerificationView(viewController: self)
-
         view.backgroundColor = .systemBackground
-//        CloudKitManager.shared.fetchOnTapList()
         navigationItem.title = "Mraz Brewing Co."
         setupView()
         createSnapshot()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
     }
     
     // MARK: -
@@ -96,9 +86,8 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
             
             breweryInfoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             breweryInfoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            breweryInfoView.heightAnchor.constraint(equalToConstant: 150),
+            breweryInfoView.heightAnchor.constraint(equalToConstant: 50),
             breweryInfoView.widthAnchor.constraint(equalTo: view.widthAnchor)
-            //150 / 350
         ])
     }
     

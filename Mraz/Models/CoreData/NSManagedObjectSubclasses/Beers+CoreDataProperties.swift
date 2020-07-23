@@ -4,7 +4,6 @@
 import Foundation
 import CoreData
 
-
 extension Beers {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Beers> {

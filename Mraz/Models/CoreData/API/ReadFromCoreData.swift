@@ -38,7 +38,6 @@ extension ReadFromCoreData {
                                                                   managedObjectContext: mainThreadManagedObjectContext,
                                                                   sectionNameKeyPath: nil,
                                                                   cacheName: nil)
-        
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -74,19 +73,9 @@ extension ReadFromCoreData {
     func getLastModifiedFetchDate() -> Date? {
         guard let createdObjectID = modifiedDateObjectID() else { return nil }
         guard let lastModifiedEntity = getObjectBy(createdObjectID) as? ModifiedRecords else { return nil }
-//        guard let lastModifiedEntity = getModifiedDateBy(objectID: createdObjectID) else { return nil }
         return lastModifiedEntity.modifiedDate
     }
 
-//    /// Uses the
-//    /// - Parameter objectID: NSManagedObjectID of the Modified Record object created.
-//    func getModifiedDateBy(objectID: NSManagedObjectID) -> ModifiedRecords? {
-//        guard let modifiedDateObj = mainThreadManagedObjectContext.object(with: objectID) as? ModifiedRecords else {
-//            return nil
-//        }
-//        return modifiedDateObj
-//    }
-    
     func getObjectBy<T: NSManagedObject>(_ objectID: NSManagedObjectID) -> T? {
         guard let fetchedObject = mainThreadManagedObjectContext.object(with: objectID) as? T else {
             return nil
@@ -103,38 +92,12 @@ extension ReadFromCoreData {
         do {
             let modifiedEntity = try mainThreadManagedObjectContext.fetch(fetchRequest) as? [ModifiedRecords]
             guard let safeModifiedEntity = modifiedEntity, let rec = safeModifiedEntity.first else {
-                fatalError("Could Not Find")
+                return nil
             }
             return rec.objectID
         } catch {
             print("ReadFromCoreData == Error Fetching Modified Recprd: \(error.localizedDescription)")
         }
         return nil
-    }
-    
-    // MARK: - Background Fetch
-    /// Background fetch method to perform fetch on the background context, if needed.
-    func backgroundFetch() {
-        let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
-        let asyncFetchRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) { (asyncFetchResult) in
-        guard let result = asyncFetchResult.finalResult as? [Beers] else { return }
-            
-            //Dipatch to main queue
-            DispatchQueue.main.async {
-                //Create queue safe array of beers
-                var beers: [Beers] = result.lazy
-                    /// Get all the object ID's.
-                    .compactMap({ $0.objectID})
-                    ///Create a new Beer entity queue-safe for each objectID.
-                    .compactMap({ self.mainThreadManagedObjectContext.object(with: $0) as? Beers })
-                //Do Something with that queue safe array - beers
-            }
-        }
-        do {
-            try privateContext.execute(asyncFetchRequest)
-            
-        } catch {
-            print("READ FROM COREDATA --  error: \(error)")
-        }
     }
 }

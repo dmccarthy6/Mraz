@@ -28,19 +28,21 @@ struct Contact {
         }
     }
     
+    private static let application = UIApplication.shared
+    
     // MARK: - Contact Methods
     /// Open the phone application and call the Brewery. Using the phone number: (916) 934-0744
-    static func callBrewery() {
-        guard let mrazPhoneURL = URL(string: "tel://9169340744"), UIApplication.shared.canOpenURL(mrazPhoneURL) else {
+    static func placePhoneCall(to number: String) {
+        guard let mrazPhoneURL = URL(string: "tel://\(number)"), UIApplication.shared.canOpenURL(mrazPhoneURL) else {
             return
         }
-        UIApplication.shared.open(mrazPhoneURL, options: [:], completionHandler: nil)
+        application.open(mrazPhoneURL, options: [:], completionHandler: nil)
     }
     
     /// Open the Mraz website. Current url is: www.mrazbrewingcompany.com
-    static func openBreweryWebsite() {
-        guard let mrazURL = URL(string: "https://mrazbrewingcompany.com") else { return }
-        UIApplication.shared.open(mrazURL, options: [:]) { (success) in
+    static func open(website: String) {
+        guard let mrazURL = URL(string: "\(website)") else { return }
+        application.open(mrazURL, options: [:]) { (success) in
             if !success {
                 //
                 print("Error opening Mraz URL")
@@ -52,12 +54,11 @@ struct Contact {
     
     /// Open Apple Maps and set pin for Mraz Brewery location
     /// at 222 Francisco Drive, EDH, CA.
-    static func showBreweryLocationOnMap() {
+    static func getDirections(to coordinate: CLLocationCoordinate2D, title: String? = "Destination") {
         let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
-        let coordinate = Coordinates.mraz.location
-        let destination = MKPlacemark(coordinate: coordinate)
-        let mrazMapItem = MKMapItem(placemark: destination)
-        mrazMapItem.name = "Mraz Brewing Co."
+        let destinationPlacemark = MKPlacemark(coordinate: coordinate)
+        let mrazMapItem = MKMapItem(placemark: destinationPlacemark)
+        mrazMapItem.name = title
         mrazMapItem.openInMaps(launchOptions: launchOptions)
     }
     
@@ -80,7 +81,6 @@ struct Contact {
     private static func openInApplicationOrWeb(for social: SocialHooks) {
         let hook = social.hook
         guard let hookUrl = URL(string: hook) else { return }
-        let application = UIApplication.shared
         
         if application.canOpenURL(hookUrl) {
             application.open(hookUrl, options: [:], completionHandler: nil)
