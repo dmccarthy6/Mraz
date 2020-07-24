@@ -26,5 +26,6 @@ enum AnnotationImages {
 enum OnboardingImages {
     static var firstImage = UIImage(named: "mrazBrewery")!
     static var mrazMapImage = UIImage(named: "MrazMap")!
-    static var openAppImage = UIImage(named: "LaunchScreen_Mraz")!
+    static var openAppImage = UIImage(named: "MrazFlag")!
+    static var bellSystemIcon = UIImage(systemName: "bell.fill")!.withTintColor(.red)
 }

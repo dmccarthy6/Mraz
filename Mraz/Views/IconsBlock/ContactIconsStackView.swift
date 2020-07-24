@@ -79,16 +79,13 @@ final class ContactIconsStackView: UIStackView {
     /// Function called when the Map button tapped.
     @objc private func _mapButtonTapped() {
         self.mapButtonTapped?()
-        //Contact.getDirections()
     }
     /// Method called when Website button tapped
     @objc private func _webButtonTapped() {
         self.webButtonTapped?()
-        //Contact.open()
     }
     /// Method called when Phone button tapped.
     @objc private func _phoneButtonTapped() {
         self.phoneButtonTapped?()
-        //Contact.placePhoneCall()
     }
 }

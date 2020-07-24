@@ -10,7 +10,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .title1, weight: .bold)
+        label.font = .preferredFont(for: .title3, weight: .semibold)
         label.textColor = .label
         return label
     }()
@@ -19,7 +19,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .title2, weight: .regular)
+        label.font = .preferredFont(for: .headline, weight: .regular)
         label.textColor = .systemGray2
         return label
     }()
@@ -28,7 +28,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .title3, weight: .bold)
+        label.font = .preferredFont(for: .body, weight: .bold)
         label.textColor = .label
         return label
     }()
@@ -70,10 +70,10 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
             beerNameLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerNameLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor),
             
-            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerNameLabel.bottomAnchor, multiplier: 1),
+            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerNameLabel.bottomAnchor, multiplier: 0.5),
             typeLabel.leadingAnchor.constraint(equalTo: beerNameLabel.leadingAnchor),
             
-            abvLabel.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 1),
+            abvLabel.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 0.5),
             abvLabel.leadingAnchor.constraint(equalTo: typeLabel.leadingAnchor),
             
             favoriteButton.widthAnchor.constraint(equalToConstant: BeerCellConstants.favIcon),

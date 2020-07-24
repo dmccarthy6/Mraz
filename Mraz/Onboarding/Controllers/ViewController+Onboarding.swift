@@ -10,14 +10,12 @@ final class MrazOnboardingViewController: UIViewController, NotificationManager 
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    var didCompleteOnboarding: EmptyClosure?
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         onBoardingView.backgroundColor = .red
         setupView()
-        
     }
  
     // MARK: - Helpers

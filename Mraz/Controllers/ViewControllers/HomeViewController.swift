@@ -27,7 +27,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
             
             let section = NSCollectionLayoutSection
                 .grid(itemHeight: .fractionalHeight(0.14), itemSpacing: 10, groupWidthDimension: 1.0, numberOfColumns: columns)//.absolute(375)
-                .withSectionHeader(estimatedHeight: 25, kind: OnTapHeaderView.viewReuseIdentifier)
+                .withSectionHeader(estimatedHeight: 50, kind: OnTapHeaderView.viewReuseIdentifier)
                 .withContentInsets(top: 10, leading: inset, bottom: 0, trailing: inset)
             return section
         }
@@ -53,7 +53,6 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         /// Header
         diffDatasource.supplementaryViewProvider = { collectionView, kind, indexPath -> UICollectionReusableView? in
             let staticHeader: OnTapHeaderView = collectionView.dequeueReusableView(indexPath: indexPath)
-            staticHeader.configureHeader(with: "Currently On Tap")
             return staticHeader
         }
         return diffDatasource
@@ -68,7 +67,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Mraz Brewing Co."
+        navigationItem.title = "What's On Tap"
         setupView()
         createSnapshot()
     }
@@ -76,18 +75,12 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
     // MARK: -
     private func setupView() {
         view.addSubview(collectionView)
-        view.addSubview(breweryInfoView)
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: breweryInfoView.topAnchor),
-            
-            breweryInfoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            breweryInfoView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            breweryInfoView.heightAnchor.constraint(equalToConstant: 50),
-            breweryInfoView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     

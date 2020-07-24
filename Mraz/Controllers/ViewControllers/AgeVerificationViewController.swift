@@ -11,6 +11,7 @@ class AgeVerificationViewController: UIViewController {
         return view
     }()
     var ageHasBeenVerified: EmptyClosure?
+    var userNotOfAge: EmptyClosure?
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -29,11 +30,19 @@ class AgeVerificationViewController: UIViewController {
             ageVerificationView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         yesButtonTapped()
+        noButtonTapped()
     }
     
     private func yesButtonTapped() {
         ageVerificationView.yesButtonTapped = { [weak self] in
             self?.ageHasBeenVerified?()
+        }
+    }
+    
+    private func noButtonTapped() {
+        ageVerificationView.noButtonTapped = { [weak self] in
+            self?.userNotOfAge?()
+            self?.ageVerificationView.setTextViewForUnderage()
         }
     }
 }

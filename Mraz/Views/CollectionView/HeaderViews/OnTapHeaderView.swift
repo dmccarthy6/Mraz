@@ -5,16 +5,6 @@ import UIKit
 
 final class OnTapHeaderView: UICollectionReusableView {
     // MARK: - Properties
-    private var onTapHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.textColor = .label
-        label.font = .preferredFont(for: .title2, weight: .bold)
-        return label
-    }()
     private var breweryDataView: BreweryDataView = {
         let view = BreweryDataView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -25,6 +15,7 @@ final class OnTapHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupHeader()
+        backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {
@@ -34,23 +25,13 @@ final class OnTapHeaderView: UICollectionReusableView {
     // MARK: - Layout
     private func setupHeader() {
         addSubview(breweryDataView)
-        addSubview(onTapHeaderLabel)
         
         NSLayoutConstraint.activate([
             breweryDataView.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
-            //breweryDataView.heightAnchor.constraint(equalToConstant: 50),
+            breweryDataView.heightAnchor.constraint(equalToConstant: 50),
             breweryDataView.widthAnchor.constraint(equalTo: layoutMarginsGuide.widthAnchor),
-            breweryDataView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            
-            onTapHeaderLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            onTapHeaderLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            onTapHeaderLabel.topAnchor.constraint(equalTo: breweryDataView.bottomAnchor),
-            onTapHeaderLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+            breweryDataView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)
         ])
-    }
-    
-    // MARK: - Interface
-    func configureHeader(with title: String?) {
-        onTapHeaderLabel.text = title
+        breweryDataView.setContactButtonActions()
     }
 }
