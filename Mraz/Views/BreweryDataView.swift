@@ -4,6 +4,13 @@
 import UIKit
 
 class BreweryDataView: UIView {
+    // MARK: - Types
+    enum BreweryInfo {
+        static let name = "Mraz Brewing Company"
+        static let address = "222 Francisco Drive \nEl Dorado Hills, CA 95762"
+        static let phone = "9169340744"
+        static let website = "https://mrazbrewingcompany.com"
+    }
     // MARK: - Properties
     private var nameLabel: UILabel = {
         let label = UILabel()
@@ -47,7 +54,7 @@ class BreweryDataView: UIView {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = .systemGray
         setupViews()
     }
     
@@ -57,22 +64,17 @@ class BreweryDataView: UIView {
     
     // MARK: - Helpers
     private func setupViews() {
-//        addSubview(nameLabel)
         addSubview(allIconsStackView)
         allIconsStackView.addArrangedSubview(socialIcons)
         allIconsStackView.addArrangedSubview(contactIcons)
 
         NSLayoutConstraint.activate([
-//            nameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
-//            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
-            
             allIconsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             allIconsStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
     
-    func setButtons() {
+    func setContactButtonActions() {
         contactIcons.mapButtonTapped = {
             Contact.getDirections(to: Coordinates.mraz.location, title: BreweryInfo.name)
         }
@@ -84,12 +86,4 @@ class BreweryDataView: UIView {
             Contact.open(website: BreweryInfo.website)
         }
     }
-
-}
-
-enum BreweryInfo {
-    static let name = "Mraz Brewing Company"
-    static let address = "222 Francisco Drive \nEl Dorado Hills, CA 95762"
-    static let phone = "9169340744"
-    static let website = "https://mrazbrewingcompany.com"
 }
