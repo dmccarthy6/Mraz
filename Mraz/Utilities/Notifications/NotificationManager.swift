@@ -44,18 +44,25 @@ extension NotificationManager {
             if let error = error {
                 completion(.failure(error))
             }
-            if !granted {
-                completion(.success(false))
-                print("Authorization Not Granted")
-            } else {
+            if granted {
                 completion(.success(true))
+            } else {
+                completion(.success(false))
+            }
+        }
+    }
+    
+    func requestNotificationAuthorization() {
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            if let error = error {
+                print("NotificationManager -- Error while requesting notifications: \(error.localizedDescription)")
             }
         }
     }
     
     /// Check the users UNAuthorization status from UserNotifications
     /// - Parameter completion: Completion hanlder with the status of the user's authorizatons.
-    func checkCurrentAuthorizationStatus(_ completion: @escaping (Result<Bool, LocationAuthError>) -> Void) {
+    func obtainUserNotificationAuthStatus(_ completion: @escaping (Result<Bool, LocationAuthError>) -> Void) {
         notificationCenter.getNotificationSettings { (settings) in
             switch settings.authorizationStatus {
             case .authorized:

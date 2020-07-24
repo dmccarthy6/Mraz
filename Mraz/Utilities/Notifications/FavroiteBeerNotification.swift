@@ -10,7 +10,7 @@ struct FavoriteBeerNotifications: NotificationManager {
     
     // MARK: -
     func checkStatusSendNotification() {
-        checkCurrentAuthorizationStatus { (result) in
+        obtainUserNotificationAuthStatus { (result) in
             switch result {
             case .success(let authorized): self.sendBeerOnTapLocalNotification()
             case .failure(let error): print(error.localizedDescription)
