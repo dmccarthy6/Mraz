@@ -7,16 +7,17 @@ import UIKit
 struct OnboardingModel {
     // MARK: - Types
     enum OnboardDescriptions: String {
-        case firstView = "Welcome to the Mraz Brewery App! "
-        case secondView = "We use notifications to keep our beer list updated, to update our on tap list and alert you when one of your favorite beers is on tap. \n\n We request access to your location to send notifications when you're close to the brewery. We do not store or sell your location."
-        case thirdView = "Take me to the app!"
+        case firstView = "Welcome to the Mraz Brewery App! \n\n We'll go through just 3 short onboarding screens to get the app all set up for you. Click the 'next' button up top or swipe left to start."
+        case secondView = "This application uses notifications to keep everything updated in the background along with sending you a few alerts when your favorite beers are on tap. \n\n Mraz uses your location to send you push notifications when you're nearby the tasting room. Tap accept below to authorize notifications."
+        case thirdView = "\n\n\n Click the button below to get started."
     }
+    
     let title: String
     let description: OnboardDescriptions
     let image: UIImage
     let acceptBtnTitle: String
     let denyBtnTitle: String
-    let isSkipHidden: Bool
+    let nextButtonEnabled: Bool
     let agreeButtonHidden: Bool
     let denyButtonHidden: Bool
     let showAppButtonHidden: Bool
@@ -30,25 +31,25 @@ extension OnboardingModel {
                             image: OnboardingImages.firstImage,
                             acceptBtnTitle: "",
                             denyBtnTitle: "",
-                            isSkipHidden: true,
+                            nextButtonEnabled: true,
                             agreeButtonHidden: true,
                             denyButtonHidden: true,
                             showAppButtonHidden: true),
             OnboardingModel(title: "Notifications",
                             description: .secondView,
-                            image: OnboardingImages.mrazMapImage,
-                            acceptBtnTitle: "Allow Notifications",
-                            denyBtnTitle: "Don't Allow",
-                            isSkipHidden: true,
+                            image: OnboardingImages.bellSystemIcon,
+                            acceptBtnTitle: "Accept",
+                            denyBtnTitle: "Deny",
+                            nextButtonEnabled: false,
                             agreeButtonHidden: false,
                             denyButtonHidden: false,
                             showAppButtonHidden: true),
-            OnboardingModel(title: "Open The App",
+            OnboardingModel(title: "Open Mraz",
                             description: .thirdView,
                             image: OnboardingImages.openAppImage,
                             acceptBtnTitle: "",
                             denyBtnTitle: "",
-                            isSkipHidden: true,
+                            nextButtonEnabled: false,
                             agreeButtonHidden: true,
                             denyButtonHidden: true,
                             showAppButtonHidden: false)

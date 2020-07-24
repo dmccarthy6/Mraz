@@ -20,7 +20,7 @@ class AgeVerificationView: UIView {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textAlignment = .center
         textView.isUserInteractionEnabled = false
-        textView.font = .preferredFont(for: .title2, weight: .medium)
+        textView.font = .preferredFont(for: .body, weight: .medium)
         textView.textColor = .systemRed
         return textView
     }()
@@ -42,29 +42,23 @@ class AgeVerificationView: UIView {
         noButton.setTitle("NOT YET", for: .normal)
         noButton.tintColor = .secondarySystemBackground
         noButton.layer.cornerRadius = 10
+        noButton.addTarget(self, action: #selector(_didTapNoButton), for: .touchUpInside)
         return noButton
     }()
-    private let defaults = UserDefaults.standard
-    private let authVerificationCode = "verifiedAge"
+    private let mrazSettings = MrazSettings()
     var yesButtonTapped: EmptyClosure?
+    var noButtonTapped: EmptyClosure?
     
     // MARK: - View Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        layer.shadowColor = UIColor.label.resolvedColor(with: traitCollection).cgColor
-//        layer.shadowOpacity = traitCollection.userInterfaceStyle == .some(.dark) ? 0.1 : 0.5
-//    }
-    
+ 
     // MARK: - Layout
     private func setupView() {
         addSubview(ageVerificationLabel)
@@ -83,80 +77,32 @@ class AgeVerificationView: UIView {
             ageTextView.topAnchor.constraint(equalTo: topAnchor, constant: 105),
             ageTextView.bottomAnchor.constraint(equalTo: ageVerificationLabel.topAnchor, constant: -2),
             
-            yesButton.topAnchor.constraint(equalTo: ageVerificationLabel.bottomAnchor, constant: 5),
+            yesButton.topAnchor.constraint(equalTo: ageVerificationLabel.bottomAnchor, constant: 25),
             yesButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             yesButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors),
             
-            noButton.topAnchor.constraint(equalTo: yesButton.bottomAnchor, constant: 15),
+            noButton.topAnchor.constraint(equalTo: yesButton.bottomAnchor, constant: 35),
             noButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             noButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors)
         ])
-        
-        //Button Targets
-        
-        noButton.addTarget(self, action: #selector(noButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Button Functions
     @objc
     private func _didTapYesButton() {
         yesButtonTapped?()
-        ageVerificationLabel.text = "Welcome To Our App"
-        
-        print("YES BUTTON TAPPED!")
-        let mrazSettings = MrazSettings()
         mrazSettings.set(true, for: .userIsOfAge)
-        
-        //dismissView()
     }
     
     @objc
-    func noButtonTapped() {
-        let mrazSettings = MrazSettings()
+    private func _didTapNoButton() {
+        noButtonTapped?()
         mrazSettings.set(false, for: .userIsOfAge)
-        setTextViewForUnderage()
-    }
-    
-    private func setTextViewForUnderage() {
-        ageTextView.text = "Thank you for downloading our application. Because the content of this app is geared towards prople that are over 21 we ask that you come back on or after your 21st birthday!"
+        ageTextView.backgroundColor = .systemGray3
     }
     
     // MARK: - Interface
-    func present(_ onView: UIViewController) {
-        UIView.animate(withDuration: 0.5) {
-            let viewX = onView.view.center.x
-            let viewY = onView.view.center.y
-            
-            self.frame = CGRect(x: viewX,
-                                y: viewY,
-                                width: AgeVerificationConstants.viewWidthAnchor,
-                                height: AgeVerificationConstants.viewHeightAnchor)
-            self.center = onView.view.center
-            self.alpha = 1
-        }
-    }
-    
-    private func dismissView() {
-        UIView.animate(withDuration: 2.5) {
-            self.removeFromSuperview()
-        }
+    func setTextViewForUnderage() {
+        ageTextView.text = "Thank you for downloading our application. \n\n The content of this application is intended for adults over the age of 21. \n\n We encourage you to come back on or after your 21st birthday."
     }
 }
-
-/*
- NSLayoutConstraint.activate([
-     widthAnchor.constraint(equalToConstant: AgeVerificationConstants.viewWidthAnchor), //370
-     heightAnchor.constraint(equalToConstant: AgeVerificationConstants.viewHeightAnchor), //350
-     
-     ageVerificationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-     ageVerificationLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 2),
-     
-     yesButton.topAnchor.constraint(equalToSystemSpacingBelow: ageVerificationLabel.bottomAnchor, multiplier: 4),
-     yesButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-     yesButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors), //300
-     
-     noButton.topAnchor.constraint(equalToSystemSpacingBelow: yesButton.bottomAnchor, multiplier: 2),
-     noButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-     noButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors) //300
- ])
- */

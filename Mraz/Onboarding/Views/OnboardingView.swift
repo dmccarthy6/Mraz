@@ -5,7 +5,7 @@ import UIKit
 
 final class MrazOnboardingView: UIView, NotificationManager {
     // MARK: - Communication
-    var didTapSkipButton: (() -> Void)?
+    var didTapNextButton: (() -> Void)?
     var didTapAcceptButton: (() -> Void)?
     var didTapDenyButton: (() -> Void)?
     var didTapOpenAppButton: (() -> Void)?
@@ -21,16 +21,18 @@ final class MrazOnboardingView: UIView, NotificationManager {
         let nextButton = UIButton()
         nextButton.translatesAutoresizingMaskIntoConstraints = false
         nextButton.setTitle("Next", for: .normal)
-        nextButton.addTarget(self, action: #selector(_didTapSkipButton), for: .touchUpInside)
+        nextButton.setTitle(" ", for: .disabled)
+        nextButton.addTarget(self, action: #selector(_didTapNextButton), for: .touchUpInside)
         nextButton.titleLabel?.font = .preferredFont(for: .body, weight: .semibold)
         nextButton.setTitleColor(.systemBlue, for: .normal)
-        nextButton.titleLabel?.textColor = .systemBlue
+        nextButton.setTitleColor(.systemGray, for: .disabled)
         return nextButton
     }()
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .secondarySystemBackground
         return imageView
     }()
     private let titleLabel: UILabel = {
@@ -47,7 +49,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
         textView.automaticallyAdjustsScrollIndicatorInsets = false
         textView.adjustsFontForContentSizeCategory = true
         textView.backgroundColor = .secondarySystemBackground
-        textView.font = .preferredFont(for: .body, weight: .medium)
+        textView.font = .preferredFont(for: .body, weight: .thin)
         textView.textColor = .label
         textView.textAlignment = .center
         textView.isEditable = false
@@ -74,7 +76,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = 15
-        button.setTitle("Show App", for: .normal)
+        button.setTitle("Open App", for: .normal)
         button.addTarget(self, action: #selector(_didTapOpenAppButton), for: .touchUpInside)
         return button
     }()
@@ -117,9 +119,9 @@ final class MrazOnboardingView: UIView, NotificationManager {
             
             textView.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 1),
             textView.heightAnchor.constraint(equalToConstant: 190),
-            textView.leadingAnchor.constraint(equalTo: dataView.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: dataView.trailingAnchor),
-            
+            textView.leadingAnchor.constraint(equalTo: dataView.leadingAnchor, constant: 10),
+            textView.trailingAnchor.constraint(equalTo: dataView.trailingAnchor, constant: -10),
+
             nextButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
             nextButton.topAnchor.constraint(equalToSystemSpacingBelow: dataView.topAnchor, multiplier: 1),
             
@@ -150,8 +152,8 @@ final class MrazOnboardingView: UIView, NotificationManager {
     }
     
     @objc
-    private func _didTapSkipButton() {
-        didTapSkipButton?()
+    private func _didTapNextButton() {
+        didTapNextButton?()
     }
     
     @objc
@@ -172,10 +174,14 @@ final class MrazOnboardingView: UIView, NotificationManager {
         denyButton.setTitleColor(.systemRed, for: .normal)
     }
     
-    func setButton(agreeHidden: Bool, denyHidden: Bool, skipHidden: Bool = false, showAppHidden: Bool = false) {
+    func setButton(agreeHidden: Bool, denyHidden: Bool, skipEnabled: Bool = false, showAppHidden: Bool = false) {
         agreeButton.isHidden = agreeHidden
         denyButton.isHidden = denyHidden
-        nextButton.isHidden = skipHidden
+        nextButton.isEnabled = skipEnabled
         showAppButton.isHidden = showAppHidden
+    }
+    
+    func enableNextButton() {
+        nextButton.isEnabled = true
     }
 }

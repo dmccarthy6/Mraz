@@ -70,7 +70,17 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
                 self?.incrementPageControl()
             }
         }
+        ageVerifViewController.userNotOfAge = { [weak self] in
+            self?.resetPageViewController()
+        }
         pages.append(ageVerifViewController)
+    }
+    
+    private func resetPageViewController() {
+        let ofAgeVC = pages[0]
+        pages = [ofAgeVC]
+        pageControl.numberOfPages = 1
+        pageControl.currentPage = 1
     }
     
     /// Configure the Onboarding View controller that is bing added to the page view
@@ -86,7 +96,7 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
                                                  image: viewImage)
         onboardingView.setButton(agreeHidden: currentVal.agreeButtonHidden,
                                  denyHidden: currentVal.denyButtonHidden,
-                                 skipHidden: currentVal.isSkipHidden,
+                                 skipEnabled: currentVal.nextButtonEnabled,
                                  showAppHidden: currentVal.showAppButtonHidden)
         onboardingView.configureButton(addButtonTitle: currentVal.acceptBtnTitle,
                                        denyButtonTitle: currentVal.denyBtnTitle)
@@ -105,42 +115,26 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         view.didTapDenyButton = { [weak self] in
             DispatchQueue.main.async {
                 Alerts.showAlert(self!, title: .notificationsDenied, message: .userDeniedNotifications)
-                self?.pageContainer.goToNextPage()
+                view.enableNextButton()
             }
         }
         
         view.didTapAcceptButton = { [weak self] in
-            self?.requestUserNotifications()
-            self?.requestAuthAndSetUpGeofencingRegion()
+            self?.requestNotificationAuthorization()
+            self?.requestLocationAuthorizationAndCreateGeofencingRegion()
+            view.enableNextButton()
         }
         
-        view.didTapSkipButton = { [ weak self] in
+        view.didTapNextButton = { [ weak self] in
             DispatchQueue.main.async {
-                self?.pageContainer.goToNextPage()
-                self?.incrementPageControl()
+                self?.handleNextPage()
             }
         }
     }
     
-    private func requestUserNotifications() {
-        self.requestUserAuthForNotifications { (result) in
-            switch result {
-            case .success(let granted):
-                if granted {
-                    DispatchQueue.main.async {
-                        self.pageContainer.goToNextPage()
-                        self.incrementPageControl()
-                    }
-                }
-            case .failure(let error):
-                print("Error Authenticating Notifications: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    private func requestAuthAndSetUpGeofencingRegion() {
-        self.requestAuthorizationFromUser()
-        self.createGeofencingRegionAndNotify()
+    private func handleNextPage() {
+        pageContainer.goToNextPage()
+        incrementPageControl()
     }
     
     /// Increment the page control current page value by 1 forward.
