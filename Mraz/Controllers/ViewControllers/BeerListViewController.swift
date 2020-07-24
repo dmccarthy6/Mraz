@@ -16,7 +16,7 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
             let columns = isCompact ? 1 : 2
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .estimated(160), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)
+                .grid(itemHeight: .estimated(100), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)
                 .withSectionHeader(estimatedHeight: 40, kind: BeerListHeader.viewReuseIdentifier)
                 .withContentInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
             return section

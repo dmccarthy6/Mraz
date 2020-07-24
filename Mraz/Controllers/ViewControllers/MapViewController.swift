@@ -40,7 +40,7 @@ final class MapViewController: UIViewController, LocationManager {
     
     // MARK: - Authorization
     private func checkLocationAuthorization() {
-        self.checkAuthorizationStatus { [unowned self] (result) in
+        self.getUserLocationAuthStatus { [unowned self] (result) in
             switch result {
             case .success(let authStatus):
                 switch authStatus {
