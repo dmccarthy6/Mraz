@@ -23,7 +23,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
         nextButton.setTitle("Next", for: .normal)
         nextButton.setTitle(" ", for: .disabled)
         nextButton.addTarget(self, action: #selector(_didTapNextButton), for: .touchUpInside)
-        nextButton.titleLabel?.font = .preferredFont(for: .body, weight: .semibold)
+        nextButton.titleLabel?.font = .preferredFont(for: .subheadline, weight: .semibold)
         nextButton.setTitleColor(.systemBlue, for: .normal)
         nextButton.setTitleColor(.systemGray, for: .disabled)
         return nextButton
@@ -39,7 +39,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.font = .preferredFont(for: .title1, weight: .bold)
+        label.font = .preferredFont(for: .title3, weight: .bold)
         label.textAlignment = .center
         return label
     }()
@@ -49,7 +49,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
         textView.automaticallyAdjustsScrollIndicatorInsets = false
         textView.adjustsFontForContentSizeCategory = true
         textView.backgroundColor = .secondarySystemBackground
-        textView.font = .preferredFont(for: .body, weight: .thin)
+        textView.font = .preferredFont(for: .subheadline, weight: .thin)
         textView.textColor = .label
         textView.textAlignment = .center
         textView.isEditable = false

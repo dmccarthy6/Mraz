@@ -12,32 +12,41 @@ class MrazTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpTabBarController()
+        setIconColors()
     }
     
     private func setUpTabBarController() {
-        //
-        mrazTabBar = UITabBarController()
+        self.tabBar.barTintColor = .systemRed
         
-        //Set Up Tabs
         // Home View Controller
         let homeController = HomeViewController()
-        homeController.tabBarItem = UITabBarItem(title: "Home", image: SystemImages.houseImage, tag: 0)
+        homeController.tabBarItem = UITabBarItem(title: "On Tap", image: SystemImages.houseImage, tag: 0)
         
         //Beer List Controller
         let beerListViewController = BeerListViewController()
-        let beerImage = UIImage(systemName: "star")
-        beerListViewController.tabBarItem = UITabBarItem(title: "Beer", image: beerImage, tag: 1)
+        let beerImg = TabBarImages.beerMug!
+        beerImg.withTintColor(.green)
+//        let beerImage = UIImage(systemName: "star")
+        beerListViewController.tabBarItem = UITabBarItem(title: "Beers", image: beerImg, tag: 1)
+        
         
         //MapKit Controller
         let mapController = MapViewController()
-        mapController.tabBarItem = UITabBarItem(title: "Map", image: SystemImages.mapImage, tag: 2)
+        mapController.tabBarItem = UITabBarItem(title: "Food", image: SystemImages.mapImage, tag: 2)
         
-        ///Add View Controllers to the tab bar
         let controllers = [homeController, beerListViewController, mapController]
        
         viewControllers = controllers.map({
-            UINavigationController(rootViewController: $0)
+            let navController = UINavigationController(rootViewController: $0)
+            navController.navigationBar.barTintColor = .systemRed
+            navController.navigationBar.prefersLargeTitles = true
+            return navController
         })
+        
+    }
+    
+    private func setIconColors() {
+        self.tabBar.unselectedItemTintColor = .black
         
     }
 }

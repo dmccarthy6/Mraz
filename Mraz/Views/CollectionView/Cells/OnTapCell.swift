@@ -12,7 +12,7 @@ class OnTapCell: UICollectionViewCell {
         label.textAlignment = .natural
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .title3, weight: .bold)
+        label.font = .preferredFont(for: .headline, weight: .bold)
         return label
     }()
     private let beerTypeLabel: UILabel = {
@@ -56,8 +56,8 @@ class OnTapCell: UICollectionViewCell {
     // MARK: - Helpers
     private func setupLayout() {
         contentView.addSubview(beerNameLabel)
-        contentView.addSubview(beerTypeLabel)
-        contentView.addSubview(beerABVLabel)
+//        contentView.addSubview(beerTypeLabel)
+//        contentView.addSubview(beerABVLabel)
         
         let guide = contentView.layoutMarginsGuide
         
@@ -65,21 +65,22 @@ class OnTapCell: UICollectionViewCell {
             beerNameLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerNameLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             beerNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: guide.topAnchor, multiplier: 1),
-            
-            beerTypeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            beerTypeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerTypeLabel.topAnchor.constraint(equalTo: beerNameLabel.bottomAnchor),
-            
-            beerABVLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            beerABVLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerABVLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerTypeLabel.bottomAnchor, multiplier: 1)
+            beerNameLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+//            beerTypeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+//            beerTypeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+//            beerTypeLabel.topAnchor.constraint(equalTo: beerNameLabel.bottomAnchor),
+//
+//            beerABVLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+//            beerABVLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+//            beerABVLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerTypeLabel.bottomAnchor, multiplier: 1),
+//            beerABVLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
         ])
         contentView.layer.cornerRadius = 20
     }
     
     private func setupCardView() {
         contentView.layer.cornerCurve = .circular
-        contentView.layer.cornerRadius = 20
+        contentView.layer.cornerRadius = 12
         contentView.backgroundColor = .secondarySystemBackground
         contentView.layer.masksToBounds = true
         

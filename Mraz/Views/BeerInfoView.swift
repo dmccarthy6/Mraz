@@ -12,7 +12,7 @@ final class BeerInfoView: UIView {
         label.textColor = .label
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .largeTitle, weight: .bold)
+        label.font = .preferredFont(for: .title3, weight: .bold)
         return label
     }()
     private var typeABVLabel: UILabel = {
@@ -22,17 +22,20 @@ final class BeerInfoView: UIView {
         label.textColor = .label
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .title3, weight: .medium)
+        label.font = .preferredFont(for: .headline, weight: .medium)
         return label
     }()
-    private var descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textColor = .label
-        label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .body, weight: .light)
-        return label
+    private var descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.automaticallyAdjustsScrollIndicatorInsets = false
+        textView.adjustsFontForContentSizeCategory = true
+        textView.textColor = .label
+        textView.textAlignment = .center
+        textView.backgroundColor = .systemBackground
+        textView.isEditable = false
+        textView.font = .preferredFont(for: .body, weight: .light)
+        return textView
     }()
     
     // MARK: - Life Cycle
@@ -49,7 +52,7 @@ final class BeerInfoView: UIView {
     private func setupView() {
         addSubview(titleLabel)
         addSubview(typeABVLabel)
-        addSubview(descriptionLabel)
+        addSubview(descriptionTextView)
         
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -60,9 +63,10 @@ final class BeerInfoView: UIView {
             typeABVLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             typeABVLabel.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 2),
             
-            descriptionLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
-            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
-            descriptionLabel.topAnchor.constraint(equalToSystemSpacingBelow: typeABVLabel.bottomAnchor, multiplier: 3)
+            descriptionTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
+            descriptionTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
+            descriptionTextView.topAnchor.constraint(equalToSystemSpacingBelow: typeABVLabel.bottomAnchor, multiplier: 3),
+            descriptionTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
@@ -70,6 +74,6 @@ final class BeerInfoView: UIView {
     func createBeerInfoView(title: String?, type: String?, abv: String?, description: String?) {
         titleLabel.text = title
         typeABVLabel.text = "\(type ?? ""), \(abv ?? "") ABV"
-        descriptionLabel.text = description
+        descriptionTextView.text = description
     }
 }
