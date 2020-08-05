@@ -26,8 +26,8 @@ final class BeerInfoViewController: UIViewController, CoreDataAPI {
         view.addSubview(beerInfoView)
         
         NSLayoutConstraint.activate([
-            beerInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            beerInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            beerInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            beerInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             beerInfoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             beerInfoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
@@ -41,7 +41,6 @@ final class BeerInfoViewController: UIViewController, CoreDataAPI {
                                                             action: #selector(dismissVC))
     }
     
-    ///
     private func configureBeerInfoView() {
         guard let safeObjectID = objectID else { return }
         guard let safeBeerObject = getObjectBy(safeObjectID) as? Beers else { return }

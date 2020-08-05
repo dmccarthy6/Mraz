@@ -11,12 +11,12 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
     typealias BeersDiffableDatasource = UICollectionViewDiffableDataSource<Section, Element>
     private lazy var layout: UICollectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { section, environment -> NSCollectionLayoutSection in
-            let inset = CGFloat(15)
+            let inset = CGFloat(10)
             let isCompact = environment.container.effectiveContentSize.width < 450
             let columns = isCompact ? 1 : 2
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .estimated(100), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)
+                .grid(itemHeight: .estimated(85), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)
                 .withSectionHeader(estimatedHeight: 40, kind: BeerListHeader.viewReuseIdentifier)
                 .withContentInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
             return section
@@ -37,7 +37,7 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         /// Set Up CollectionView Cells
         let diffableDatasource = BeersDiffableDatasource(collectionView: collectionView) { (collectionView, indexPath, element) -> UICollectionViewCell? in
             let cell: BeerListCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.configureBeerCell(beerName: element.name, type: element.beerType, abv: element.abv, isFavorite: element.isFavorite, isOnTap: element.isOnTap)
+            cell.configureBeerCell(beerName: element.name, type: element.beerType, abv: element.abv, isFavorite: element.isFavorite)
             cell.makeBeerFavorite = { [weak self] in
                 cell.configureFavoritesButton(forElement: element)
                 let beerCurrentStatus = element.isFavorite

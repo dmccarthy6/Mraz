@@ -1,0 +1,43 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "BeerMug50px_2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "BeerMug75px_3x-1.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "BeerMug36px_2x.png",
+      "idiom" : "universal",
+      "scale" : "2x",
+      "width-class" : "compact"
+    },
+    {
+      "filename" : "BeerMug54px_3x-1.png",
+      "idiom" : "universal",
+      "scale" : "3x",
+      "width-class" : "compact"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
+  }
+}

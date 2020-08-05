@@ -11,8 +11,8 @@ final class BeerListHeader: UICollectionReusableView {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
-        label.font = .preferredFont(for: .title1, weight: .bold)
-        label.textColor = .systemRed
+        label.font = .preferredFont(for: .title3, weight: .bold)
+        label.textColor = .systemBlue
         return label
     }()
     
@@ -20,7 +20,7 @@ final class BeerListHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .systemBackground
         self.layer.cornerRadius = 20
     }
     
@@ -38,7 +38,6 @@ final class BeerListHeader: UICollectionReusableView {
             sectionHeaderLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             sectionHeaderLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
         ])
-        backgroundColor = .tertiarySystemBackground
     }
     
     // MARK: - Interface

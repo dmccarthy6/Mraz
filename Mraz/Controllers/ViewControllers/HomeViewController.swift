@@ -21,16 +21,17 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
     }()
      private lazy var layout: UICollectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { section, environment -> NSCollectionLayoutSection in
-            let inset = CGFloat(12)
+            let inset = CGFloat(10)
             let isCompact = environment.container.effectiveContentSize.width < 450
-            let columns = isCompact ? 1 : 2
+            let columns = isCompact ? 2 : 2
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .fractionalHeight(0.14), itemSpacing: 10, groupWidthDimension: 1.0, numberOfColumns: columns)//.absolute(375)
+                .grid(itemHeight: .estimated(200), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)//.absolute(375)
                 .withSectionHeader(estimatedHeight: 50, kind: OnTapHeaderView.viewReuseIdentifier)
-                .withContentInsets(top: 10, leading: inset, bottom: 0, trailing: inset)
+                .withContentInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
             return section
         }
+        
         return layout
     }()
     private lazy var collectionView: UICollectionView = { [unowned self] in

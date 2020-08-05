@@ -19,8 +19,8 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .headline, weight: .regular)
-        label.textColor = .systemGray2
+        label.font = .preferredFont(for: .callout, weight: .medium)
+        label.textColor = .systemGray
         return label
     }()
     private let abvLabel: UILabel = {
@@ -28,7 +28,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = .preferredFont(for: .body, weight: .bold)
+        label.font = .preferredFont(for: .callout, weight: .bold)
         label.textColor = .label
         return label
     }()
@@ -36,7 +36,6 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(SystemImages.starImage, for: .normal)
-        button.tintColor = .gray
         return button
     }()
     var makeBeerFavorite: EmptyClosure?
@@ -52,10 +51,6 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
     // MARK: - Layout
     private func layoutCell() {
         contentView.backgroundColor = .secondarySystemBackground
@@ -69,12 +64,15 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
         NSLayoutConstraint.activate([
             beerNameLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerNameLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor),
+            beerNameLabel.topAnchor.constraint(equalTo: guide.topAnchor, constant: 0),
+            beerNameLabel.bottomAnchor.constraint(equalTo: typeLabel.topAnchor, constant: -2),
+ 
+            typeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            typeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
             
-            typeLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerNameLabel.bottomAnchor, multiplier: 0.5),
-            typeLabel.leadingAnchor.constraint(equalTo: beerNameLabel.leadingAnchor),
-            
-            abvLabel.topAnchor.constraint(equalToSystemSpacingBelow: typeLabel.bottomAnchor, multiplier: 0.5),
-            abvLabel.leadingAnchor.constraint(equalTo: typeLabel.leadingAnchor),
+            abvLabel.topAnchor.constraint(equalTo: typeLabel.bottomAnchor, constant: 2),
+            abvLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
+            abvLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             
             favoriteButton.widthAnchor.constraint(equalToConstant: BeerCellConstants.favIcon),
             favoriteButton.heightAnchor.constraint(equalToConstant: BeerCellConstants.favIcon),
@@ -85,7 +83,7 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
     
     private func setupCardView() {
         contentView.layer.cornerCurve = .circular
-        contentView.layer.cornerRadius = 12
+        contentView.layer.cornerRadius = 15
         contentView.backgroundColor = .secondarySystemBackground
         contentView.layer.masksToBounds = true
         
@@ -96,9 +94,9 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
     }
     
     // MARK: - Interface
-    func configureBeerCell(beerName: String?, type: String?, abv: String?, isFavorite: Bool, isOnTap: Bool) {
+    func configureBeerCell(beerName: String?, type: String?, abv: String?, isFavorite: Bool) {
         self.beerNameLabel.text = beerName
-        self.abvLabel.text = abv
+        self.abvLabel.text = "Abv: \(abv ?? "0.0")"
         self.typeLabel.text = type
         favoriteButton.tintColor = isFavorite ? .systemYellow : .systemBlue
         favoriteButton.setImage(isFavorite ? UIImage(systemName: "star.fill") : UIImage(systemName: "star"), for: .normal)
@@ -114,5 +112,12 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
     // MARK: - Button Functions
     @objc private func favoriteButtonTapped() {
         makeBeerFavorite?()
+    }
+}
+
+// MARK: - Accessibility
+extension BeerListCell {
+    func applyAccessibility(_ beers: Beers) {
+        favoriteButton.accessibilityIdentifier = "Star button"
     }
 }

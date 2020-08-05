@@ -11,7 +11,7 @@ import Foundation
         * Location: Lat/Long
         * Radius: Distance (meters)
     * Data for Mraz Search:
-        *Key: AIzaSyCdusZ1mwdOgk3M7s1l2N_MH_PZYhDWQ70
+        *Key: **AIzaSyCdusZ1mwdOgk3M7s1l2N_MH_PZYhDWQ70**
         *Lat: 38.710252 / Long: -121.086191
  */
 enum NearbyRestaurantsGP: Endpoint {

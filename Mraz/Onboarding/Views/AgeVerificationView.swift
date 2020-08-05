@@ -8,6 +8,8 @@ class AgeVerificationView: UIView {
     private var ageVerificationLabel: UILabel = {
         let ageLabel = UILabel()
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
+        ageLabel.adjustsFontForContentSizeCategory = true
+        ageLabel.numberOfLines = 0
         ageLabel.textColor = .label
         ageLabel.text = "Are you over 21?"
         ageLabel.backgroundColor = .clear
