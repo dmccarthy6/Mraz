@@ -37,7 +37,7 @@ class BreweryDataView: UIView {
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .fillEqually
-        stackView.spacing = 15
+        stackView.spacing = 25
         return stackView
     }()
     private var socialIcons: SocialMediaView = {
@@ -56,6 +56,8 @@ class BreweryDataView: UIView {
         super.init(frame: frame)
         backgroundColor = .mrazSecondaryBlue()
         setupViews()
+        socialIcons.backgroundColor = .yellow
+        contactIcons.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
@@ -65,6 +67,7 @@ class BreweryDataView: UIView {
     // MARK: - Helpers
     private func setupViews() {
         addSubview(allIconsStackView)
+        
         allIconsStackView.addArrangedSubview(socialIcons)
         allIconsStackView.addArrangedSubview(contactIcons)
 

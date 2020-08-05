@@ -22,7 +22,7 @@ class OnTapCell: UICollectionViewCell {
         label.textAlignment = .natural
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .body, weight: .medium)
+        label.font = .preferredFont(for: .subheadline, weight: .medium)
         return label
     }()
     private let beerABVLabel: UILabel = {
@@ -32,7 +32,7 @@ class OnTapCell: UICollectionViewCell {
         label.textAlignment = .natural
         label.numberOfLines = 0
         label.textColor = .label
-        label.font = .preferredFont(for: .caption1, weight: .medium)
+        label.font = .preferredFont(for: .subheadline, weight: .medium)
         return label
     }()
     
@@ -56,24 +56,24 @@ class OnTapCell: UICollectionViewCell {
     // MARK: - Helpers
     private func setupLayout() {
         contentView.addSubview(beerNameLabel)
-//        contentView.addSubview(beerTypeLabel)
-//        contentView.addSubview(beerABVLabel)
+        contentView.addSubview(beerTypeLabel)
+        contentView.addSubview(beerABVLabel)
         
         let guide = contentView.layoutMarginsGuide
         
         NSLayoutConstraint.activate([
             beerNameLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             beerNameLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            beerNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: guide.topAnchor, multiplier: 1),
-            beerNameLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
-//            beerTypeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-//            beerTypeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-//            beerTypeLabel.topAnchor.constraint(equalTo: beerNameLabel.bottomAnchor),
-//
-//            beerABVLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-//            beerABVLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-//            beerABVLabel.topAnchor.constraint(equalToSystemSpacingBelow: beerTypeLabel.bottomAnchor, multiplier: 1),
-//            beerABVLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
+            beerNameLabel.topAnchor.constraint(equalTo: guide.topAnchor, constant: 1),
+
+            beerTypeLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            beerTypeLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            beerTypeLabel.topAnchor.constraint(equalTo: beerNameLabel.bottomAnchor, constant: 1),
+
+            beerABVLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            beerABVLabel.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            beerABVLabel.topAnchor.constraint(equalTo: beerTypeLabel.bottomAnchor, constant: 1),
+            beerABVLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -1)
         ])
         contentView.layer.cornerRadius = 20
     }
