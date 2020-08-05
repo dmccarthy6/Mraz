@@ -18,7 +18,7 @@ final class ContactIconsStackView: UIStackView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(SystemImages.mapPinImage, for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = .systemRed
         button.addTarget(self, action: #selector(_mapButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -26,7 +26,7 @@ final class ContactIconsStackView: UIStackView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(SystemImages.linkCircleFillImage, for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = .systemBlue
         button.addTarget(self, action: #selector(_webButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -34,7 +34,7 @@ final class ContactIconsStackView: UIStackView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(SystemImages.phoneCircleFillImage, for: .normal)
-        button.tintColor = .systemBackground
+        button.tintColor = .systemGreen
         button.addTarget(self, action: #selector(_phoneButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -58,7 +58,7 @@ final class ContactIconsStackView: UIStackView {
         addArrangedSubview(websiteButton)
         addArrangedSubview(phoneButton)
         
-        self.spacing = 15
+        self.spacing = 35 //TO-DO: used 2 times in calculation of width!!
         
         NSLayoutConstraint.activate([
             mapButton.heightAnchor.constraint(equalToConstant: SocialConstants.iconHeight),
@@ -70,7 +70,7 @@ final class ContactIconsStackView: UIStackView {
             phoneButton.heightAnchor.constraint(equalToConstant: SocialConstants.iconHeight),
             phoneButton.widthAnchor.constraint(equalToConstant: SocialConstants.iconWidth),
             
-            widthAnchor.constraint(equalToConstant: 105),
+            widthAnchor.constraint(equalToConstant: 145),
             heightAnchor.constraint(equalToConstant: 25)
         ])
     }

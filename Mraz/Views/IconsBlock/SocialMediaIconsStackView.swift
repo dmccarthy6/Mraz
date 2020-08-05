@@ -54,7 +54,7 @@ final class SocialMediaView: UIStackView {
         addArrangedSubview(instagramButton)
         addArrangedSubview(twitterButton)
         
-        self.spacing = 15
+        self.spacing = 35
         
         NSLayoutConstraint.activate([
             facebookButton.heightAnchor.constraint(equalToConstant: SocialConstants.iconHeight),
@@ -66,7 +66,7 @@ final class SocialMediaView: UIStackView {
             twitterButton.heightAnchor.constraint(equalToConstant: SocialConstants.iconHeight),
             twitterButton.widthAnchor.constraint(equalToConstant: SocialConstants.iconWidth),
             
-            widthAnchor.constraint(equalToConstant: 105),
+            widthAnchor.constraint(equalToConstant: 145),
             heightAnchor.constraint(equalToConstant: 25)
         ])
     }

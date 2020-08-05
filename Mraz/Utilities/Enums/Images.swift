@@ -27,9 +27,9 @@ enum OnboardingImages {
     static var firstImage = UIImage(named: "mrazBrewery")!
     static var mrazMapImage = UIImage(named: "MrazMap")!
     static var openAppImage = UIImage(named: "MrazFlag")!
-    static var bellSystemIcon = UIImage(systemName: "bell.fill")!.withTintColor(.red)
+    static var bellSystemIcon = UIImage(systemName: "bell.fill")!
 }
 
 enum TabBarImages {
-    static var beerMug = UIImage(named: "BeerMugTab")
+    static var beerMug = UIImage(named: "BeerMugTab")!
 }
