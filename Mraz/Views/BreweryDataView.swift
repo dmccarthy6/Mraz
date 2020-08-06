@@ -54,10 +54,8 @@ class BreweryDataView: UIView {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .mrazSecondaryBlue()
+        backgroundColor = .systemGray3
         setupViews()
-        socialIcons.backgroundColor = .yellow
-        contactIcons.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {

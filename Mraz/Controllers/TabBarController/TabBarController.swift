@@ -18,19 +18,12 @@ class MrazTabBarController: UITabBarController {
     private func setUpTabBarController() {
         self.tabBar.barTintColor = .systemRed
         
-        // Home View Controller
         let homeController = HomeViewController()
         homeController.tabBarItem = UITabBarItem(title: "On Tap", image: SystemImages.houseImage, tag: 0)
         
-        //Beer List Controller
         let beerListViewController = BeerListViewController()
-        let beerImg = TabBarImages.beerMug!
-        beerImg.withTintColor(.green)
-//        let beerImage = UIImage(systemName: "star")
-        beerListViewController.tabBarItem = UITabBarItem(title: "Beers", image: beerImg, tag: 1)
+        beerListViewController.tabBarItem = UITabBarItem(title: "Beers", image: TabBarImages.beerMug, tag: 1)
         
-        
-        //MapKit Controller
         let mapController = MapViewController()
         mapController.tabBarItem = UITabBarItem(title: "Food", image: SystemImages.mapImage, tag: 2)
         
@@ -42,11 +35,9 @@ class MrazTabBarController: UITabBarController {
             navController.navigationBar.prefersLargeTitles = true
             return navController
         })
-        
     }
     
     private func setIconColors() {
-        self.tabBar.unselectedItemTintColor = .black
-        
+        self.tabBar.unselectedItemTintColor = .white
     }
 }

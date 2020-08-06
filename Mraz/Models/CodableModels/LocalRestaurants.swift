@@ -14,7 +14,7 @@ struct SearchResult: Codable {
     let businessStatus: String
     let geometry: Geometry
     let icon: String
-    let id: String
+    let id: String?
     let name: String
     let photos: [Photos]
     let placeId: String
