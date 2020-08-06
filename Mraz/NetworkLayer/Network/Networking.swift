@@ -15,17 +15,14 @@ extension Networking {
         let urlRequest = requestProvider.urlRequest
         
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let error = error {
+            if let _ = error {
                 completion(.failure(.httpRequestFailed))
-                print("Error: \(error.localizedDescription)")
             }
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.httpRequestFailed))
                 return
             }
             if httpResponse.statusCode == 200 {
-                print("Networking -- 200 response from server.")
-                // Successful response from the server
                 guard let data = data else {
                     preconditionFailure("Networking Protocol -- No Error thrown, but there is no data...")
                 }
@@ -34,14 +31,12 @@ extension Networking {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let decodedModelObject = try decoder.decode(T.self, from: data)
-                    
                     completion(.success(decodedModelObject))
                 } catch {
                     completion(.failure(.httpResponseUnsuccessful))
                 }
             } else {
-                print("NETWORKING -- UNSUCCESSFUL NETWORK RESPONSE")
-                // Did not get a 200 response from server, handle unsuccessful response
+                // Response other than 200
                 completion(.failure(.httpResponseUnsuccessful))
             }
         }.resume()
