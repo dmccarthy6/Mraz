@@ -81,14 +81,14 @@ final class SocialMediaView: UIStackView {
     // MARK: - Button Targets
     /// Function called when the Facebook button tapped.
     @objc private func facebookButtonTapped() {
-        Contact.openBreweryFacebook()
+        ApplicationHook.openIn(.facebook)
     }
     /// Method called when Instagram button tapped
     @objc private func instagramButtonTapped() {
-        Contact.openBreweryInstagram()
+        ApplicationHook.openIn(.instagram)
     }
     /// Method called when Twitter button tapped.
     @objc private func twitterButtonTapped() {
-        Contact.openBreweryTwitter()
+        ApplicationHook.openIn(.twitter)
     }
 }
