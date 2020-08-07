@@ -94,19 +94,11 @@ enum Alerts {
                                             message: nil,
                                             preferredStyle: .actionSheet)
         
-        let phoneCallAction = UIAlertAction(title: "Call", style: .default) { (action) in
-            Contact.placePhoneCall(to: "")
-        }
         let directionsAction = UIAlertAction(title: "Directions", style: .default) { (action) in
-            Contact.getDirections(to: location, title: title)
-        }
-        let menuAction = UIAlertAction(title: "Menu", style: .default) { (action) in
-            Contact.open(website: "")
+            Contact.contact(contactType: .directions, value: title ?? "", coordinate: location)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
-        actionSheet.addAction(phoneCallAction)
         actionSheet.addAction(directionsAction)
-        actionSheet.addAction(menuAction)
         actionSheet.addAction(cancelAction)
         if let alertPopover = actionSheet.popoverPresentationController {
             alertPopover.sourceView = annotation

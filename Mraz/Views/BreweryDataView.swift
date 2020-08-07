@@ -77,14 +77,14 @@ class BreweryDataView: UIView {
     
     func setContactButtonActions() {
         contactIcons.mapButtonTapped = {
-            Contact.getDirections(to: Coordinates.mraz.location, title: BreweryInfo.name)
+            Contact.contact(contactType: .directions, value: BreweryInfo.name)
         }
         
         contactIcons.phoneButtonTapped = {
-            Contact.placePhoneCall(to: BreweryInfo.phone)
+            Contact.contact(contactType: .phone, value: BreweryInfo.phone)
         }
         contactIcons.webButtonTapped = {
-            Contact.open(website: BreweryInfo.website)
+            Contact.contact(contactType: .web, value: BreweryInfo.website)
         }
     }
 }

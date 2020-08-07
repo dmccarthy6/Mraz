@@ -11,6 +11,7 @@ final class MapViewModelController: NSObject, Network {
         return self
     }
     var restaurants: [Restaurant] = []
+    private var annotationID = "ID"
     
     // MARK: - Network
     func fetchLocationData(_ completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -20,8 +21,6 @@ final class MapViewModelController: NSObject, Network {
                 for location in mod.results {
                     let restaurantLoc = location.geometry.location
                     self.restaurants.append(Restaurant(lat: restaurantLoc.lat, lng: restaurantLoc.lng, name: location.name))
-                    print("Viscinity: \(location.vicinity)")
-                    print("Heres the photo attributions: \(location.photos[0].htmlAttributions)")
                 }
                 completion(.success(true))
             case .failure(let apiError):
@@ -52,6 +51,11 @@ final class MapViewModelController: NSObject, Network {
             annotation.coordinate = CLLocationCoordinate2D(latitude: location.lat, longitude: location.lng)
             map.addAnnotation(annotation)
         }
+    }
+    
+    func addInteractions(on view: UIView, contextMenuDelegate: UIContextMenuInteractionDelegate) {
+        let interaction = UIContextMenuInteraction(delegate: contextMenuDelegate)
+        view.addInteraction(interaction)
     }
     
     // MARK: - Set Zoom Region

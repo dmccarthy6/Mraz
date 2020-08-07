@@ -78,24 +78,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
         }
     }
 
-    /// Fetches list of beers that have the 'isOnTap' value set to true.
-    /// - Parameter completion: Completion handler that returns a
-    func fetchOnTapList() {
-        let onTapPredicate = NSPredicate(format: "isOnTap == %d", 1)
-        fetchFromCloudKit(onTapPredicate, qualityOfService: .userInitiated) { (result) in
-            switch result {
-            case .success(let ckRecords):
-                self.records.removeAll()
-                self.records = ckRecords
-                self.convertChangedRecordsToBeerObjects()
-                // TO-DO: Convert these to Beer Model -> Core Data Objects
-                print("CloudKitManager - Success fetching onTap FromCK")
-            case .failure(let error):
-                print("CloudKitManager: \(error.localizedDescription)")
-            }
-        }
-    }
-    
     // MARK: - Helper Methods
     /// Take the CK Record values received from CloudKit and convert
     /// them into locak BeerModel' objects to be saved into Core Data.
@@ -106,29 +88,6 @@ final class CloudKitManager: CloudKitAPI, CoreDataAPI {
             case .success(let beerModelObjects):
                 for beer in beerModelObjects {
                     self.saveBeerObjectToCoreData(from: beer)
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    /// Use this method when CloudKit records are updated. This method searches for the ManagedObject with the 'recordName'
-    /// matching the CKRecord's recordName.
-    func convertChangedRecordsToBeerObjects() {
-        guard records.count > 0 else { return }
-
-        self.convertCKRecordsToBeerModelObjects(records) {[unowned self] (result) in
-            switch result {
-            case .success(let beerModelObjects):
-                for object in beerModelObjects {
-                    guard let objectID = self.getManagedObjectIDFrom(object.id) else {
-                        //Create New Model Object -- it's not an update.
-                        print("CloudKitManager -- This is a new object, not an update. Added: \(object.name)")
-                        return
-                    }
-                    let beerToUpdate = self.getBeerObjectFrom(objectID: objectID)
-                    self.updateCurrentBeersObject(beer: beerToUpdate, from: object, in: self.mainThreadManagedObjectContext)
                 }
             case .failure(let error):
                 print(error)

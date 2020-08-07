@@ -33,8 +33,8 @@ final class MapViewController: UIViewController, LocationManager {
         NSLayoutConstraint.activate([
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -94,7 +94,6 @@ extension MapViewController: MKMapViewDelegate {
                                                  title: currentAnnotation.title ?? "Destination",
                                                  annotation: view)
             } else {
-                print("Title =- \(String(describing: view.annotation?.title))")
                 Alerts.showRestaurantActionSheet(self,
                 location: currentAnnotation.coordinate,
                 title: currentAnnotation.title ?? "Destination",
@@ -130,7 +129,6 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         guard let currentAnnotation = view.annotation else { return }
         Alerts.showRestaurantActionSheet(self, location: currentAnnotation.coordinate, title: currentAnnotation.title ?? "Destination", annotation: view)
-//        mapInteractions.showRestaurantActionSheet(alertTitle: "", alertMessage: "", phone: "", url: url, restTitle: currentAnnotation.title ?? "Destination")
     }
 }
 // MARK: - CLLocationManager Delegate
