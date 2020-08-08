@@ -12,27 +12,28 @@ class AgeVerificationView: UIView {
         ageLabel.numberOfLines = 0
         ageLabel.textColor = .label
         ageLabel.text = "Are you over 21?"
-        ageLabel.backgroundColor = .clear
-        ageLabel.textAlignment = .center
-        ageLabel.font = UIFont(name: "Zapfino", size: 25)
+        ageLabel.backgroundColor = .systemBackground
+        ageLabel.textAlignment = .natural
+        ageLabel.font = .preferredFont(for: .title3, weight: .semibold)
         return ageLabel
     }()
-    private var ageTextView: UITextView = {
-       let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.textAlignment = .center
-        textView.isUserInteractionEnabled = false
-        textView.font = .preferredFont(for: .body, weight: .medium)
-        textView.textColor = .systemRed
-        return textView
+    private var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.textColor = .label
+        label.text = "The content of this application is desiged for adults."
+        label.font = .preferredFont(for: .subheadline, weight: .medium)
+        return label
     }()
     private var yesButton: UIButton = {
         let yesButton = UIButton(type: .system)
         yesButton.translatesAutoresizingMaskIntoConstraints = false
-        yesButton.backgroundColor = .red
+        yesButton.backgroundColor = .systemRed
         yesButton.setTitle("YES", for: .normal)
-        yesButton.tintColor = .secondarySystemBackground
-        yesButton.layer.cornerRadius = 10
+        yesButton.tintColor = .label
+        yesButton.layer.cornerRadius = 20
         yesButton.addTarget(self, action: #selector(_didTapYesButton), for: .touchUpInside)
         yesButton.isUserInteractionEnabled = true
         return yesButton
@@ -40,10 +41,10 @@ class AgeVerificationView: UIView {
     private var noButton: UIButton = {
         let noButton = UIButton(type: .system)
         noButton.translatesAutoresizingMaskIntoConstraints = false
-        noButton.backgroundColor = .red
-        noButton.setTitle("NOT YET", for: .normal)
-        noButton.tintColor = .secondarySystemBackground
-        noButton.layer.cornerRadius = 10
+        noButton.backgroundColor = .systemBlue
+        noButton.setTitle("NO", for: .normal)
+        noButton.tintColor = .label
+        noButton.layer.cornerRadius = 20
         noButton.addTarget(self, action: #selector(_didTapNoButton), for: .touchUpInside)
         return noButton
     }()
@@ -64,28 +65,28 @@ class AgeVerificationView: UIView {
     // MARK: - Layout
     private func setupView() {
         addSubview(ageVerificationLabel)
+        addSubview(descriptionLabel)
         addSubview(yesButton)
         addSubview(noButton)
-        addSubview(ageTextView)
         
         NSLayoutConstraint.activate([
-            ageVerificationLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            ageVerificationLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
             ageVerificationLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            ageVerificationLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            ageVerificationLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            ageVerificationLabel.topAnchor.constraint(equalTo: topAnchor, constant: 100),
+
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 25),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            descriptionLabel.topAnchor.constraint(equalTo: ageVerificationLabel.bottomAnchor, constant: 10),
+
+            yesButton.bottomAnchor.constraint(equalTo: noButton.topAnchor, constant: -12),
+            yesButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 75),
+            yesButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -75),
+            yesButton.heightAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonHeightAnchors),
             
-            ageTextView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            ageTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            ageTextView.topAnchor.constraint(equalTo: topAnchor, constant: 105),
-            ageTextView.bottomAnchor.constraint(equalTo: ageVerificationLabel.topAnchor, constant: -2),
-            
-            yesButton.topAnchor.constraint(equalTo: ageVerificationLabel.bottomAnchor, constant: 25),
-            yesButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            yesButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors),
-            
-            noButton.topAnchor.constraint(equalTo: yesButton.bottomAnchor, constant: 35),
-            noButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            noButton.widthAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonWidthAnchors)
+            noButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -125),
+            noButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 75),
+            noButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -75),
+            noButton.heightAnchor.constraint(equalToConstant: AgeVerificationConstants.buttonHeightAnchors)
         ])
     }
     
@@ -100,11 +101,5 @@ class AgeVerificationView: UIView {
     private func _didTapNoButton() {
         noButtonTapped?()
         mrazSettings.set(false, for: .userIsOfAge)
-        ageTextView.backgroundColor = .systemGray3
-    }
-    
-    // MARK: - Interface
-    func setTextViewForUnderage() {
-        ageTextView.text = "Thank you for downloading our application. \n\n The content of this application is intended for adults over the age of 21. \n\n We encourage you to come back on or after your 21st birthday."
     }
 }
