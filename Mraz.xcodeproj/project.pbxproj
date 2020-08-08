@@ -39,7 +39,6 @@
 		61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4B24536F9000011BB4 /* BeerListViewController.swift */; };
 		61518D5A24577A9100011BB4 /* ReadFromCloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */; };
 		61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5D24577BCE00011BB4 /* CloudKit.swift */; };
-		615D13C424C90A6B002EDE30 /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615D13C324C90A6B002EDE30 /* NotificationCenter.swift */; };
 		616FB9EC24C1070A00ECBA95 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FB9EB24C1070A00ECBA95 /* AppContext.swift */; };
 		616FB9EE24C109AF00ECBA95 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */; };
 		617DDA1E2461B1A500BA86B9 /* CloudKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */; };
@@ -145,7 +144,6 @@
 		61518D4B24536F9000011BB4 /* BeerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListViewController.swift; sourceTree = "<group>"; };
 		61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFromCloudKit.swift; sourceTree = "<group>"; };
 		61518D5D24577BCE00011BB4 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
-		615D13C324C90A6B002EDE30 /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		616FB9EB24C1070A00ECBA95 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTests.swift; sourceTree = "<group>"; };
@@ -229,7 +227,6 @@
 			children = (
 				617F8304246DFA2B006195F0 /* NotificationManager.swift */,
 				6142515B24BAC1E400258BD8 /* FavroiteBeerNotification.swift */,
-				615D13C324C90A6B002EDE30 /* NotificationCenter.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -807,7 +804,6 @@
 				6186F4E1245C6990007BAB37 /* CKRecord+additions.swift in Sources */,
 				617F8303246DF144006195F0 /* Authorization.swift in Sources */,
 				6186F4F7245CF867007BAB37 /* MapViewController.swift in Sources */,
-				615D13C424C90A6B002EDE30 /* NotificationCenter.swift in Sources */,
 				617F82FF246D9485006195F0 /* MapViewModelController.swift in Sources */,
 				6142516524BBA18300258BD8 /* OnboardingView.swift in Sources */,
 				61518D382453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift in Sources */,

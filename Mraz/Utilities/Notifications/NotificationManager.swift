@@ -44,11 +44,10 @@ extension NotificationManager {
             if let error = error {
                 completion(.failure(error))
             }
-            if granted {
-                completion(.success(true))
-            } else {
+            if !granted {
                 completion(.success(false))
             }
+            completion(.success(true))
         }
     }
     
@@ -56,6 +55,11 @@ extension NotificationManager {
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             if let error = error {
                 print("NotificationManager -- Error while requesting notifications: \(error.localizedDescription)")
+            }
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             }
         }
     }
