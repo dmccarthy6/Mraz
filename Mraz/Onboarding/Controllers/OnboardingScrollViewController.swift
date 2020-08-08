@@ -57,7 +57,7 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
                 createAgeVerificationVC()
             }
             let viewController = configureOnboardingViewController(at: page)
-            setButtonActions(on: viewController.onBoardingView)
+            setButtonActions(for: page, on: viewController.onBoardingView)
             pages.append(viewController)
         }
     }
@@ -91,45 +91,31 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         let viewImage = currentVal.image
         let onboardingVC = MrazOnboardingViewController()
         let onboardingView = onboardingVC.onBoardingView
-        onboardingView.configureOnboardingScreen(title: title,
-                                                 descriptionText: viewDescription.rawValue,
-                                                 image: viewImage)
-        onboardingView.setButton(agreeHidden: currentVal.agreeButtonHidden,
-                                 denyHidden: currentVal.denyButtonHidden,
-                                 skipEnabled: currentVal.nextButtonEnabled,
-                                 showAppHidden: currentVal.showAppButtonHidden)
-        onboardingView.configureButton(addButtonTitle: currentVal.acceptBtnTitle,
-                                       denyButtonTitle: currentVal.denyBtnTitle)
+        onboardingView.setData(title: title, buttonTitle: currentVal.actionButtonTitle, description: viewDescription.rawValue, image: viewImage)
         return onboardingVC
     }
     
     // MARK: - Button Functions
     /// Set the button actions for onboarding view buttons
-    private func setButtonActions(on view: MrazOnboardingView) {
-        view.didTapOpenAppButton = { [weak self] in
-            let mrazSettings = MrazSettings()
-            mrazSettings.set(true, for: .didFinishOnboarding)
-            self?.dismissOnboardingView()
+    private func setButtonActions(for page: Int, on view: MrazOnboardingView) {
+        view.actionButtonTapped = { [weak self] in
+            if page == 0 {
+                self?.showNotifications()
+                view.nextButton(isEnabled: true, isHidden: false)
+            } else if page == 1 {
+                self?.dismissOnboardingView()
+            } 
         }
         
-        view.didTapDenyButton = { [weak self] in
-            DispatchQueue.main.async {
-                Alerts.showAlert(self!, title: .notificationsDenied, message: .userDeniedNotifications)
-                view.enableNextButton()
-            }
+        view.nextButtonTapped = { [weak self] in
+            self?.handleNextPage()
         }
-        
-        view.didTapAcceptButton = { [weak self] in
-            self?.requestNotificationAuthorization()
-            self?.requestLocationAuthorizationAndCreateGeofencingRegion()
-            view.enableNextButton()
-        }
-        
-        view.didTapNextButton = { [ weak self] in
-            DispatchQueue.main.async {
-                self?.handleNextPage()
-            }
-        }
+    }
+    
+    // MARK: - Helpers
+    private func showNotifications() {
+        requestNotificationAuthorization()
+        requestLocationAuthorizationAndCreateGeofencingRegion()
     }
     
     private func handleNextPage() {
@@ -188,22 +174,5 @@ extension MrazOnboardingPageViewController: UIPageViewControllerDelegate {
                 pageControl.currentPage = index
             }
         }
-    }
-}
-
-// MARK: - Page View Controller Extension -- Page Control
-extension UIPageViewController {
-    /// Safely jump to the next ViewController in the flow(if any).
-    func goToNextPage() {
-        guard let currentVC = self.viewControllers?.first else { return }
-        guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentVC) else { return }
-        setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
-    }
-    
-    /// Safely return to previous ViewController in the flow(if any).
-    func goToPreviousPage() {
-        guard let currentVC = self.viewControllers?.first else { return }
-        guard let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentVC) else { return }
-        setViewControllers([previousViewController], direction: .forward, animated: true, completion: nil)
     }
 }

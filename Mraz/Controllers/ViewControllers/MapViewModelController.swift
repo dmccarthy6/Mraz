@@ -36,8 +36,8 @@ final class MapViewModelController: NSObject, Network {
     func addBreweryAnnotation(on map: MKMapView) {
         let annotation = MKPointAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: LocationCoordinates.mrazLat, longitude: LocationCoordinates.mrazLong)
-        annotation.title = Mraz.title
-        annotation.subtitle = Mraz.address
+        annotation.title = BreweryInfo.name
+        annotation.subtitle = BreweryInfo.address
         map.addAnnotation(annotation)
     }
     

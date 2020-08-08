@@ -14,7 +14,7 @@ final class MrazOnboardingViewController: UIViewController, NotificationManager 
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        onBoardingView.backgroundColor = .red
+        onBoardingView.backgroundColor = .systemBackground
         setupView()
     }
  

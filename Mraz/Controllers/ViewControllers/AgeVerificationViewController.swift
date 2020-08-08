@@ -42,7 +42,6 @@ class AgeVerificationViewController: UIViewController {
     private func noButtonTapped() {
         ageVerificationView.noButtonTapped = { [weak self] in
             self?.userNotOfAge?()
-            self?.ageVerificationView.setTextViewForUnderage()
         }
     }
 }

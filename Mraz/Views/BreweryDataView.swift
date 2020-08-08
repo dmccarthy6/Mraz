@@ -4,13 +4,6 @@
 import UIKit
 
 class BreweryDataView: UIView {
-    // MARK: - Types
-    enum BreweryInfo {
-        static let name = "Mraz Brewing Company"
-        static let address = "222 Francisco Drive \nEl Dorado Hills, CA 95762"
-        static let phone = "9169340744"
-        static let website = "https://mrazbrewingcompany.com"
-    }
     // MARK: - Properties
     private var nameLabel: UILabel = {
         let label = UILabel()

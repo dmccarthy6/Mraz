@@ -106,7 +106,7 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard annotation is MKPointAnnotation else { return nil }
         
-        if (annotation.title)! == Mraz.title {
+        if (annotation.title)! == BreweryInfo.name {
             return setMarker(image: AnnotationImages.beerMug, for: annotation, identifier: mapIdentifier)
         }
         return nil

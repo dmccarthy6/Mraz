@@ -5,6 +5,7 @@ import UIKit
 
 // MARK: - System Images
 enum SystemImages {
+    static let arrowRight = UIImage(systemName: "arrow.right")!
     static let houseImage = UIImage(systemName: "house")!
     static let linkCircleFillImage = UIImage(systemName: "link.circle.fill")!
     static let mapImage = UIImage(systemName: "map")!
@@ -24,8 +25,7 @@ enum AnnotationImages {
 }
 
 enum OnboardingImages {
-    static var firstImage = UIImage(named: "mrazBrewery")!
-    static var mrazMapImage = UIImage(named: "MrazMap")!
+    static var mrazNotification = UIImage(named: "LocalNotification")!
     static var openAppImage = UIImage(named: "MrazFlag")!
     static var bellSystemIcon = UIImage(systemName: "bell.fill")!
 }
