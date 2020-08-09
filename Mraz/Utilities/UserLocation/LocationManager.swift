@@ -12,17 +12,14 @@ protocol LocationManager: NSObject, NotificationManager {
 
 extension LocationManager {
     var mapView: MKMapView {
-        let map = MKMapView()
-        return map
+        return MKMapView()
     }
     var locationManager: CLLocationManager {
-        let manager = CLLocationManager()
-        return manager
+        return CLLocationManager()
     }
     var defaultGeofencingRadius: Double {
         return 950
     }
-    
     var mapRegionMeters: Double {
         return 1000
     }
@@ -71,7 +68,9 @@ extension LocationManager {
     // MARK: - Geofencing
     /// Method that creates the Geofencing Region and Notifies User when they enter via Local Notification.
     func createGeofencingRegionAndNotify() {
-        let region = CLCircularRegion(center: Coordinates.mraz.location, radius: defaultGeofencingRadius, identifier: GeoRegion.identifier)
+        let region = CLCircularRegion(center: Coordinates.mraz.location,
+                                      radius: defaultGeofencingRadius,
+                                      identifier: GeoRegion.identifier)
         region.notifyOnEntry = true
         locationManager.startMonitoring(for: region)
     }

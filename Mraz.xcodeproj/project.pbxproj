@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6142515C24BAC1E400258BD8 /* FavroiteBeerNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142515B24BAC1E400258BD8 /* FavroiteBeerNotification.swift */; };
 		6142515E24BB913300258BD8 /* GeofencingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142515D24BB913300258BD8 /* GeofencingManager.swift */; };
 		6142516524BBA18300258BD8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516424BBA18300258BD8 /* OnboardingView.swift */; };
 		6142516724BBC14B00258BD8 /* ViewController+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */; };
@@ -87,6 +86,9 @@
 		61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE92465E378000D4193 /* OnTapCell.swift */; };
 		61BD6BEC246612FB000D4193 /* OnTapHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */; };
 		61DBF99824DE1A4E0038F40C /* UIPageViewController+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99724DE1A4E0038F40C /* UIPageViewController+additions.swift */; };
+		61DBF99B24E095EE0038F40C /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */; };
+		61DBF99D24E095F70038F40C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99C24E095F70038F40C /* Notification.swift */; };
+		61DBF99F24E0A1290038F40C /* NotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99E24E0A1290038F40C /* NotificationCenterDelegate.swift */; };
 		61DF121E24BFCCF1003ABD84 /* UserDefaults+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */; };
 		61DF122024BFD144003ABD84 /* GlobalTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */; };
 		61DF122224BFD177003ABD84 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF122124BFD177003ABD84 /* AppFlow.swift */; };
@@ -108,7 +110,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6142515B24BAC1E400258BD8 /* FavroiteBeerNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavroiteBeerNotification.swift; sourceTree = "<group>"; };
 		6142515D24BB913300258BD8 /* GeofencingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofencingManager.swift; sourceTree = "<group>"; };
 		6142516424BBA18300258BD8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Onboarding.swift"; sourceTree = "<group>"; };
@@ -193,6 +194,9 @@
 		61BD6BE92465E378000D4193 /* OnTapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapCell.swift; sourceTree = "<group>"; };
 		61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapHeaderView.swift; sourceTree = "<group>"; };
 		61DBF99724DE1A4E0038F40C /* UIPageViewController+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+additions.swift"; sourceTree = "<group>"; };
+		61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
+		61DBF99C24E095F70038F40C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		61DBF99E24E0A1290038F40C /* NotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+additions.swift"; sourceTree = "<group>"; };
 		61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTypealiases.swift; sourceTree = "<group>"; };
 		61DF122124BFD177003ABD84 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
@@ -225,8 +229,9 @@
 		6142515A24BAC1CD00258BD8 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
+				61DBF99924E095DB0038F40C /* LocalNotifications */,
 				617F8304246DFA2B006195F0 /* NotificationManager.swift */,
-				6142515B24BAC1E400258BD8 /* FavroiteBeerNotification.swift */,
+				61DBF99E24E0A1290038F40C /* NotificationCenterDelegate.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -640,6 +645,15 @@
 			path = Sync;
 			sourceTree = "<group>";
 		};
+		61DBF99924E095DB0038F40C /* LocalNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
+				61DBF99C24E095F70038F40C /* Notification.swift */,
+			);
+			path = LocalNotifications;
+			sourceTree = "<group>";
+		};
 		61F8C7FB24C37123002EF57E /* Flow */ = {
 			isa = PBXGroup;
 			children = (
@@ -788,6 +802,7 @@
 				61518D3A24533A1200011BB4 /* EntityName.swift in Sources */,
 				6147A135246B41EA000508FE /* ContactIconsStackView.swift in Sources */,
 				617F82F0246C802A006195F0 /* JSONErrors.swift in Sources */,
+				61DBF99F24E0A1290038F40C /* NotificationCenterDelegate.swift in Sources */,
 				61E9F77024DC80460081AD29 /* ApplicationHooks.swift in Sources */,
 				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
 				61E9F77624DCFC010081AD29 /* OnboardingFloatingNextButton.swift in Sources */,
@@ -802,6 +817,7 @@
 				61805D9B24587940003EC9FE /* Section.swift in Sources */,
 				61E9F77224DC80C40081AD29 /* AppHook.swift in Sources */,
 				6186F4E1245C6990007BAB37 /* CKRecord+additions.swift in Sources */,
+				61DBF99D24E095F70038F40C /* Notification.swift in Sources */,
 				617F8303246DF144006195F0 /* Authorization.swift in Sources */,
 				6186F4F7245CF867007BAB37 /* MapViewController.swift in Sources */,
 				617F82FF246D9485006195F0 /* MapViewModelController.swift in Sources */,
@@ -821,6 +837,7 @@
 				617F8307246E0519006195F0 /* Geofencing.swift in Sources */,
 				61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */,
 				61518D06245330D300011BB4 /* ContentView.swift in Sources */,
+				61DBF99B24E095EE0038F40C /* LocalNotificationManager.swift in Sources */,
 				61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */,
 				617F82D9246B6815006195F0 /* BeerInfoView.swift in Sources */,
 				61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */,
@@ -828,7 +845,6 @@
 				616FB9EE24C109AF00ECBA95 /* OnboardingFlow.swift in Sources */,
 				61805DA024587F37003EC9FE /* Errors.swift in Sources */,
 				617F82EE246C7FBC006195F0 /* APIError.swift in Sources */,
-				6142515C24BAC1E400258BD8 /* FavroiteBeerNotification.swift in Sources */,
 				6186F4F9245D0156007BAB37 /* Images.swift in Sources */,
 				6142515E24BB913300258BD8 /* GeofencingManager.swift in Sources */,
 				61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */,

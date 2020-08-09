@@ -9,7 +9,6 @@ import NotificationCenter
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, NotificationManager {
     let cloudKitManager = CloudKitManager.shared
-    let notificationCenter = UNUserNotificationCenter.current()
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -20,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, Notification
         mrazSettings.set(false, for: .userIsOfAge)
         //
         handleNotifications()
+        
         cloudKitManager.checkUserCloudKitAccountStatusAndSubscribe()
         return true
     }
@@ -41,6 +41,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, Notification
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+    
     func application(_ application: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
