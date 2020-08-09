@@ -88,7 +88,6 @@
 		61DBF99824DE1A4E0038F40C /* UIPageViewController+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99724DE1A4E0038F40C /* UIPageViewController+additions.swift */; };
 		61DBF99B24E095EE0038F40C /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */; };
 		61DBF99D24E095F70038F40C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99C24E095F70038F40C /* Notification.swift */; };
-		61DBF99F24E0A1290038F40C /* NotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DBF99E24E0A1290038F40C /* NotificationCenterDelegate.swift */; };
 		61DF121E24BFCCF1003ABD84 /* UserDefaults+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */; };
 		61DF122024BFD144003ABD84 /* GlobalTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */; };
 		61DF122224BFD177003ABD84 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF122124BFD177003ABD84 /* AppFlow.swift */; };
@@ -196,7 +195,6 @@
 		61DBF99724DE1A4E0038F40C /* UIPageViewController+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+additions.swift"; sourceTree = "<group>"; };
 		61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		61DBF99C24E095F70038F40C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		61DBF99E24E0A1290038F40C /* NotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterDelegate.swift; sourceTree = "<group>"; };
 		61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+additions.swift"; sourceTree = "<group>"; };
 		61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTypealiases.swift; sourceTree = "<group>"; };
 		61DF122124BFD177003ABD84 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 			children = (
 				61DBF99924E095DB0038F40C /* LocalNotifications */,
 				617F8304246DFA2B006195F0 /* NotificationManager.swift */,
-				61DBF99E24E0A1290038F40C /* NotificationCenterDelegate.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -802,7 +799,6 @@
 				61518D3A24533A1200011BB4 /* EntityName.swift in Sources */,
 				6147A135246B41EA000508FE /* ContactIconsStackView.swift in Sources */,
 				617F82F0246C802A006195F0 /* JSONErrors.swift in Sources */,
-				61DBF99F24E0A1290038F40C /* NotificationCenterDelegate.swift in Sources */,
 				61E9F77024DC80460081AD29 /* ApplicationHooks.swift in Sources */,
 				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
 				61E9F77624DCFC010081AD29 /* OnboardingFloatingNextButton.swift in Sources */,
