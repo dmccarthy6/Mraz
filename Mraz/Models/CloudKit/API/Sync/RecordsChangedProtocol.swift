@@ -87,11 +87,12 @@ struct SyncCloudKitRecordChanges: ReadFromCloudKit {
     }
     
     private func scheduleLocalNotification(for beer: Beers) {
-        let localNotificationManager = LocalNotificationManger()
+        let timeTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let localNotificationManager = LocalNotificationManger(notificationTrigger: timeTrigger)
         let favoriteBeer = beer.name ?? "Your favorite beer"
         let localTitle = "\(favoriteBeer) is on tap!"
         let localSubTitle = "\(favoriteBeer)is now on tap. Come by the tasting room to get yours before it runs out!"
-        let notification = Notification(id: UUID().uuidString, title: localTitle, subTitle: localSubTitle)
+        let notification = Notification(id: UUID().uuidString, title: localTitle, subTitle: localSubTitle, body: nil)
         localNotificationManager.notifications = [notification]
         localNotificationManager.schedule()
     }

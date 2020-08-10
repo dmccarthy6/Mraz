@@ -6,8 +6,6 @@ import MapKit
 
 protocol LocationManager: NSObject, NotificationManager {
     var mapView: MKMapView { get }
-    func getUserLocationAuthStatus(_ completion: @escaping (Result<LocationAuthStatus, LocationAuthError>) -> Void)
-    func requestAuthorizationFromUser()
 }
 
 extension LocationManager {
@@ -28,26 +26,22 @@ extension LocationManager {
     }
     
     // MARK: - Authorization
-    /// Check user's CLLocationManager authorization status
-    /// - Returns: Result type with a LocationAuthStatus and LocationAuthError types.
-    func getUserLocationAuthStatus(_ completion: @escaping (Result<LocationAuthStatus, LocationAuthError>) -> Void) {
-        let currentStatus = CLLocationManager.authorizationStatus()
-        switch currentStatus {
+    /// Check the user's location authorization status. if authorized
+    /// creates geofencing region and starts tracking user on map. If not authorized
+    /// requests authorization.
+    func checkUsersLocationAuth() {
+        switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways, .authorizedWhenInUse:
-            completion(.success(.startTrackingUpdates))
+            createGeofencingRegionAndNotify()
+            startTrackingUsersLocationOnMap()
         case .notDetermined:
-            completion(.success(.requestAuthorization))
+            requestAuthorizationFromUser()
         case .denied, .restricted:
-            completion(.failure(.deniedRestricted))
-        default: ()
+            break
+        default: break
         }
     }
-    
-    func requestLocationAuthorizationAndCreateGeofencingRegion() {
-        requestAuthorizationFromUser()
-        createGeofencingRegionAndNotify()
-    }
-    
+ 
     /// Request location authorization from users - for Geofencing.
     func requestAuthorizationFromUser() {
         locationManager.requestWhenInUseAuthorization()
@@ -60,14 +54,14 @@ extension LocationManager {
     
     func updateUsersLocation(delegate: CLLocationManagerDelegate) {
         locationManager.delegate = delegate
-        //request auth
+        checkUsersLocationAuth()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
     }
     
     // MARK: - Geofencing
     /// Method that creates the Geofencing Region and Notifies User when they enter via Local Notification.
-    func createGeofencingRegionAndNotify() {
+    private func createGeofencingRegionAndNotify() {
         let region = CLCircularRegion(center: Coordinates.mraz.location,
                                       radius: defaultGeofencingRadius,
                                       identifier: GeoRegion.identifier)
@@ -75,33 +69,38 @@ extension LocationManager {
         locationManager.startMonitoring(for: region)
     }
     
-    ///
+    /// Check the user's local notification setting status and calls setLocationTrigger to
+    /// create the notification content for the Geofencing local notification.
     func scheduleEnteredRegionNotification(_ region: CLRegion) {
-        obtainUserNotificationAuthStatus { [unowned self] (result) in
-            switch result {
-            case .success(let granted):
-                if granted {
-                    self.setLocationTriggerFor(region)
+        notificationCenter.getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                self.requestUserAuthForNotifications { (result) in
+                    switch result {
+                    case .failure(let error): print("\(error.localizedDescription)")
+                    case .success(let granted):
+                        if granted {
+                            self.setLocationTriggerFor(region)
+                        }
+                    }
                 }
-            case .failure(let authError): print("Error Checking Auth Status: \(authError)")
+            case .authorized, .provisional:
+                self.setLocationTriggerFor(region)
+            case .denied: break
+            default: break
             }
         }
     }
     
     ///Set geofencing location trigger for a region.
-    func setLocationTriggerFor(_ region: CLRegion) {
-        let content = UNMutableNotificationContent()
-        content.title = GeoNotificationContent.title
-        content.body = GeoNotificationContent.body
-        content.sound = UNNotificationSound.default
-        content.badge = 1
-
-        let identifier = region.identifier
+    private func setLocationTriggerFor(_ region: CLRegion) {
+        let note = Notification(id: region.identifier,
+                                title: GeoNotificationContent.title,
+                                subTitle: "",
+                                body: GeoNotificationContent.body)
         let locationTrigger = UNLocationNotificationTrigger(region: region, repeats: false)
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: locationTrigger)
-        
-        notificationCenter.add(request) { (error) in
-            if let error = error { print(error.localizedDescription) }
-        }
+        let notificationManager = LocalNotificationManger(notificationTrigger: locationTrigger)
+        notificationManager.notifications = [note]
+        notificationManager.schedule()
     }
 }

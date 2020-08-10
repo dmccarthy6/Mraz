@@ -38,6 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, Notification
             }
         }
     }
+    
+    // Reset the badge
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        application.applicationIconBadgeNumber = 0
+    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {

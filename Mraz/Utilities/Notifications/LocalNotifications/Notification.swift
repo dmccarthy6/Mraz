@@ -7,4 +7,5 @@ struct Notification {
     let id: String
     let title: String
     let subTitle: String
+    let body: String?
 }

@@ -3,10 +3,11 @@
 
 import UIKit
 import UserNotifications
-import CloudKit
 
 protocol NotificationManager {
     var notificationCenter: UNUserNotificationCenter { get }
+    func requestUserAuthForNotifications(_ completion: @escaping (Result<Bool, Error>) -> Void)
+    func checkUserLocalNotificationStatus(_ completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 extension NotificationManager {
@@ -27,16 +28,24 @@ extension NotificationManager {
         }
     }
     
-    /// Check the users UNAuthorization status from UserNotifications
-    /// - Parameter completion: Completion hanlder with the status of the user's authorizatons.
-    func obtainUserNotificationAuthStatus(_ completion: @escaping (Result<Bool, LocationAuthError>) -> Void) {
+    func checkUserLocalNotificationStatus(_ completion: @escaping (Result<Bool, Error>) -> Void) {
         notificationCenter.getNotificationSettings { (settings) in
             switch settings.authorizationStatus {
-            case .authorized:
+            case .notDetermined:
+                self.requestUserAuthForNotifications { (result) in
+                    switch result {
+                    case .failure(let error):
+                        print("Error requesting Local Notification Status: \(error.localizedDescription)")
+                    case .success(let granted):
+                        if granted {
+                            completion(.success(true))
+                        }
+                        completion(.success(false))
+                    }
+                }
+            case .authorized, .provisional:
                 completion(.success(true))
-            case .denied, .notDetermined, .provisional:
-                completion(.failure(.deniedRestricted))
-            @unknown default: ()
+            default: completion(.success(false))
             }
         }
     }

@@ -126,7 +126,7 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
                 print("Error requesting notifications: \(error.localizedDescription)")
             }
         }
-        requestLocationAuthorizationAndCreateGeofencingRegion()
+        checkUsersLocationAuth()
     }
     
     private func handleNextPage() {

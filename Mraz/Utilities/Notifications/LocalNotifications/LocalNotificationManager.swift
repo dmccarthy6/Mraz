@@ -3,16 +3,26 @@
 
 import UserNotifications
 
-class LocalNotificationManger {
+class LocalNotificationManger: NSObject, LocationManager {
     // MARK: - Properties
     var notifications = [Notification]()
-    private var notificationCenter = UNUserNotificationCenter.current()
+    let notificationTrigger: UNNotificationTrigger
+    
+    // MARK: - Life Cycle
+    init(notificationTrigger: UNNotificationTrigger) {
+        self.notificationTrigger = notificationTrigger
+    }
     
     // MARK: - Authorization
     private func requestAuthorizationForLocalNotifications() {
-        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
-            if granted && error == nil {
-                self.scheduleNotifications()
+        requestUserAuthForNotifications { (result) in
+            switch result {
+            case .success(let granted):
+                if granted {
+                    self.scheduleLocalNotification()
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
             }
         }
     }
@@ -24,21 +34,20 @@ class LocalNotificationManger {
             case .notDetermined:
                 self.requestAuthorizationForLocalNotifications()
             case .authorized, .provisional:
-                self.scheduleNotifications()
+                self.scheduleLocalNotification()
             default: break
             }
         }
     }
     
-    private func scheduleNotifications() {
+    private func scheduleLocalNotification() {
         for notification in notifications {
             let content = UNMutableNotificationContent()
             content.title = notification.title
             content.subtitle = notification.subTitle
             content.sound = .default
-            
-            let timeTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-            let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: timeTrigger)
+            content.badge = 1
+            let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: notificationTrigger)
             
             notificationCenter.add(request) { (error) in
                 if let error = error {
