@@ -13,33 +13,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, Notification
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // For Development
-        let mrazSettings = MrazSettings()
-        mrazSettings.set(false, for: .didFinishOnboarding)
-        mrazSettings.set(false, for: .userIsOfAge)
-        //
-        handleNotifications()
-        
+        resetOnboarding()
+        notificationCenter.delegate = self
         cloudKitManager.checkUserCloudKitAccountStatusAndSubscribe()
         return true
     }
     
-    // MARK: - Notifications
-    func handleNotifications() {
-        notificationCenter.delegate = self
-        requestUserAuthForNotifications { (result) in
-            switch result {
-            case .success(true):
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            case .success(false): return
-            case .failure(let error): print("Error registering for notifications: \(error)")
-            }
-        }
+    // MARK: - FOR DEVELOPMENT
+    func resetOnboarding() {
+        let mrazSettings = MrazSettings()
+        mrazSettings.set(false, for: .didFinishOnboarding)
+        mrazSettings.set(false, for: .userIsOfAge)
     }
     
-    // Reset the badge
+    // Reset application badge
     func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = 0
     }

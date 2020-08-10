@@ -131,7 +131,7 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         print("LocationManager -- User Entered Specified Region")
-        scheduleEnteredRegionNotification(region)
+        GeofencingManager().triggerGeofencingNotification(region)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

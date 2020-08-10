@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses your location to send notifications. We do not store or release any location data.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Mraz Brewing Company does not store your location. This information is only used to send you alerts &amp; notifications.</string>
 	<key>CFBundleDevelopmentRegion</key>

@@ -32,7 +32,7 @@ extension LocationManager {
     func checkUsersLocationAuth() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedAlways, .authorizedWhenInUse:
-            createGeofencingRegionAndNotify()
+            GeofencingManager().monitorRegionAtBrewery()
             startTrackingUsersLocationOnMap()
         case .notDetermined:
             requestAuthorizationFromUser()
@@ -44,7 +44,7 @@ extension LocationManager {
  
     /// Request location authorization from users - for Geofencing.
     func requestAuthorizationFromUser() {
-        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()
     }
  
     // MARK: - User Location Tracking
@@ -59,41 +59,8 @@ extension LocationManager {
         locationManager.startUpdatingLocation()
     }
     
-    // MARK: - Geofencing
-    /// Method that creates the Geofencing Region and Notifies User when they enter via Local Notification.
-    private func createGeofencingRegionAndNotify() {
-        let region = CLCircularRegion(center: Coordinates.mraz.location,
-                                      radius: defaultGeofencingRadius,
-                                      identifier: GeoRegion.identifier)
-        region.notifyOnEntry = true
-        locationManager.startMonitoring(for: region)
-    }
-    
-    /// Check the user's local notification setting status and calls setLocationTrigger to
-    /// create the notification content for the Geofencing local notification.
-    func scheduleEnteredRegionNotification(_ region: CLRegion) {
-        notificationCenter.getNotificationSettings { (settings) in
-            switch settings.authorizationStatus {
-            case .notDetermined:
-                self.requestUserAuthForNotifications { (result) in
-                    switch result {
-                    case .failure(let error): print("\(error.localizedDescription)")
-                    case .success(let granted):
-                        if granted {
-                            self.setLocationTriggerFor(region)
-                        }
-                    }
-                }
-            case .authorized, .provisional:
-                self.setLocationTriggerFor(region)
-            case .denied: break
-            default: break
-            }
-        }
-    }
-    
     ///Set geofencing location trigger for a region.
-    private func setLocationTriggerFor(_ region: CLRegion) {
+    func setLocationTriggerFor(_ region: CLRegion) {
         let note = Notification(id: region.identifier,
                                 title: GeoNotificationContent.title,
                                 subTitle: "",
