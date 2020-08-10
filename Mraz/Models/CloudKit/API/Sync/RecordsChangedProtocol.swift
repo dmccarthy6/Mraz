@@ -81,9 +81,19 @@ struct SyncCloudKitRecordChanges: ReadFromCloudKit {
             object.section = section
         }
         if object.isFavorite && object.isOnTap == true {
-            let favoriteBeerNotification = FavoriteBeerNotifications(beer: object)
-            favoriteBeerNotification.checkStatusSendNotification()
+            scheduleLocalNotification(for: object)
         }
         save(context: mainThreadManagedObjectContext)
+    }
+    
+    private func scheduleLocalNotification(for beer: Beers) {
+        let timeTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let localNotificationManager = LocalNotificationManger(notificationTrigger: timeTrigger)
+        let favoriteBeer = beer.name ?? "Your favorite beer"
+        let localTitle = "\(favoriteBeer) is on tap!"
+        let localSubTitle = "\(favoriteBeer)is now on tap. Come by the tasting room to get yours before it runs out!"
+        let notification = Notification(id: UUID().uuidString, title: localTitle, subTitle: localSubTitle, body: nil)
+        localNotificationManager.notifications = [notification]
+        localNotificationManager.schedule()
     }
 }

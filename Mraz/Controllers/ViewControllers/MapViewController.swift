@@ -40,23 +40,7 @@ final class MapViewController: UIViewController, LocationManager {
     
     // MARK: - Authorization
     private func checkLocationAuthorization() {
-        self.getUserLocationAuthStatus { [unowned self] (result) in
-            switch result {
-            case .success(let authStatus):
-                switch authStatus {
-                case .requestAuthorization: self.requestAuthorizationFromUser()
-                case .startTrackingUpdates:
-                    DispatchQueue.main.async {
-                        self.startTrackingUsersLocationOnMap()
-                    }
-                }
-                
-            case .failure(let authError):
-                switch authError {
-                case .deniedRestricted: print("DENIED OR RESTRICTED")
-                }
-            }
-        }
+        checkUsersLocationAuth()
     }
     
     // MARK: - Network
@@ -147,13 +131,13 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         print("LocationManager -- User Entered Specified Region")
-        scheduleEnteredRegionNotification(region)
+        GeofencingManager().triggerGeofencingNotification(region)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse: startTrackingUsersLocationOnMap()
-        case .denied, .restricted: requestAuthorizationFromUser()
+        case .denied, .restricted: break
         case .notDetermined: requestAuthorizationFromUser()
         default: ()
         }

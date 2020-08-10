@@ -114,8 +114,19 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
     
     // MARK: - Helpers
     private func showNotifications() {
-        requestNotificationAuthorization()
-        requestLocationAuthorizationAndCreateGeofencingRegion()
+        requestUserAuthForNotifications { (result) in
+            switch result {
+            case .success(let granted):
+                if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+            case .failure(let error):
+                print("Error requesting notifications: \(error.localizedDescription)")
+            }
+        }
+        checkUsersLocationAuth()
     }
     
     private func handleNextPage() {
