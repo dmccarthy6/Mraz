@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6142515E24BB913300258BD8 /* GeofencingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142515D24BB913300258BD8 /* GeofencingManager.swift */; };
+		6142515E24BB913300258BD8 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142515D24BB913300258BD8 /* LocationManager.swift */; };
 		6142516524BBA18300258BD8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516424BBA18300258BD8 /* OnboardingView.swift */; };
 		6142516724BBC14B00258BD8 /* ViewController+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */; };
 		6142516B24BD29E200258BD8 /* OnboardingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516A24BD29E200258BD8 /* OnboardingModel.swift */; };
@@ -64,9 +64,7 @@
 		617F82F9246CBB27006195F0 /* LocationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F82F8246CBB27006195F0 /* LocationsService.swift */; };
 		617F82FB246D931E006195F0 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F82FA246D931E006195F0 /* Restaurant.swift */; };
 		617F82FF246D9485006195F0 /* MapViewModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F82FE246D9485006195F0 /* MapViewModelController.swift */; };
-		617F8301246DF06A006195F0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F8300246DF06A006195F0 /* LocationManager.swift */; };
 		617F8303246DF144006195F0 /* Authorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F8302246DF144006195F0 /* Authorization.swift */; };
-		617F8305246DFA2B006195F0 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F8304246DFA2B006195F0 /* NotificationManager.swift */; };
 		617F8307246E0519006195F0 /* Geofencing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617F8306246E0519006195F0 /* Geofencing.swift */; };
 		61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D922457B6F0003EC9FE /* Integer+additions.swift */; };
 		61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61805D98245875EE003EC9FE /* CloudKitManager.swift */; };
@@ -82,6 +80,10 @@
 		6186F4FB245DF623007BAB37 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4FA245DF623007BAB37 /* HomeViewController.swift */; };
 		6186F4FE2460BAE7007BAB37 /* BeerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F4FD2460BAE7007BAB37 /* BeerModel.swift */; };
 		6186F5032460E4BB007BAB37 /* RecordsChangedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186F5022460E4BB007BAB37 /* RecordsChangedProtocol.swift */; };
+		61BD613724E70F0B00C64327 /* MrazLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD613624E70F0B00C64327 /* MrazLocationManager.swift */; };
+		61BD613924E710BE00C64327 /* LocationAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD613824E710BE00C64327 /* LocationAuth.swift */; };
+		61BD613B24E719DD00C64327 /* MrazNotificationAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */; };
+		61BD613D24E71BE600C64327 /* MrazNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD613C24E71BE600C64327 /* MrazNotifications.swift */; };
 		61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE72465DC37000D4193 /* BreweryDataView.swift */; };
 		61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BE92465E378000D4193 /* OnTapCell.swift */; };
 		61BD6BEC246612FB000D4193 /* OnTapHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */; };
@@ -109,7 +111,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6142515D24BB913300258BD8 /* GeofencingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofencingManager.swift; sourceTree = "<group>"; };
+		6142515D24BB913300258BD8 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		6142516424BBA18300258BD8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Onboarding.swift"; sourceTree = "<group>"; };
 		6142516A24BD29E200258BD8 /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
@@ -171,9 +173,7 @@
 		617F82F8246CBB27006195F0 /* LocationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsService.swift; sourceTree = "<group>"; };
 		617F82FA246D931E006195F0 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		617F82FE246D9485006195F0 /* MapViewModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModelController.swift; sourceTree = "<group>"; };
-		617F8300246DF06A006195F0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		617F8302246DF144006195F0 /* Authorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authorization.swift; sourceTree = "<group>"; };
-		617F8304246DFA2B006195F0 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		617F8306246E0519006195F0 /* Geofencing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geofencing.swift; sourceTree = "<group>"; };
 		61805D922457B6F0003EC9FE /* Integer+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Integer+additions.swift"; sourceTree = "<group>"; };
 		61805D98245875EE003EC9FE /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -190,6 +190,10 @@
 		6186F4FA245DF623007BAB37 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6186F4FD2460BAE7007BAB37 /* BeerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerModel.swift; sourceTree = "<group>"; };
 		6186F5022460E4BB007BAB37 /* RecordsChangedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsChangedProtocol.swift; sourceTree = "<group>"; };
+		61BD613624E70F0B00C64327 /* MrazLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrazLocationManager.swift; sourceTree = "<group>"; };
+		61BD613824E710BE00C64327 /* LocationAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAuth.swift; sourceTree = "<group>"; };
+		61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrazNotificationAuthorization.swift; sourceTree = "<group>"; };
+		61BD613C24E71BE600C64327 /* MrazNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrazNotifications.swift; sourceTree = "<group>"; };
 		61BD6BE72465DC37000D4193 /* BreweryDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryDataView.swift; sourceTree = "<group>"; };
 		61BD6BE92465E378000D4193 /* OnTapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapCell.swift; sourceTree = "<group>"; };
 		61BD6BEB246612FB000D4193 /* OnTapHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTapHeaderView.swift; sourceTree = "<group>"; };
@@ -229,7 +233,6 @@
 			isa = PBXGroup;
 			children = (
 				61DBF99924E095DB0038F40C /* LocalNotifications */,
-				617F8304246DFA2B006195F0 /* NotificationManager.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -237,8 +240,9 @@
 		6142515F24BB961F00258BD8 /* UserLocation */ = {
 			isa = PBXGroup;
 			children = (
-				617F8300246DF06A006195F0 /* LocationManager.swift */,
-				6142515D24BB913300258BD8 /* GeofencingManager.swift */,
+				6142515D24BB913300258BD8 /* LocationManager.swift */,
+				61BD613624E70F0B00C64327 /* MrazLocationManager.swift */,
+				61BD613824E710BE00C64327 /* LocationAuth.swift */,
 			);
 			path = UserLocation;
 			sourceTree = "<group>";
@@ -647,8 +651,10 @@
 		61DBF99924E095DB0038F40C /* LocalNotifications */ = {
 			isa = PBXGroup;
 			children = (
-				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
 				61DBF99C24E095F70038F40C /* Notification.swift */,
+				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
+				61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */,
+				61BD613C24E71BE600C64327 /* MrazNotifications.swift */,
 			);
 			path = LocalNotifications;
 			sourceTree = "<group>";
@@ -792,6 +798,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61BD613B24E719DD00C64327 /* MrazNotificationAuthorization.swift in Sources */,
 				617DDA2C24648A5000BA86B9 /* Beers+CoreDataClass.swift in Sources */,
 				61518D34245338D600011BB4 /* UIFont+additions.swift in Sources */,
 				61DF121E24BFCCF1003ABD84 /* UserDefaults+additions.swift in Sources */,
@@ -813,11 +820,13 @@
 				617F82E4246C6E7B006195F0 /* NearbyRestaurantsGP.swift in Sources */,
 				61518D4324533BED00011BB4 /* AgeVerificationViewController.swift in Sources */,
 				61805D9B24587940003EC9FE /* Section.swift in Sources */,
+				61BD613D24E71BE600C64327 /* MrazNotifications.swift in Sources */,
 				61E9F77224DC80C40081AD29 /* AppHook.swift in Sources */,
 				6186F4E1245C6990007BAB37 /* CKRecord+additions.swift in Sources */,
 				61DBF99D24E095F70038F40C /* Notification.swift in Sources */,
 				617F8303246DF144006195F0 /* Authorization.swift in Sources */,
 				6186F4F7245CF867007BAB37 /* MapViewController.swift in Sources */,
+				61BD613724E70F0B00C64327 /* MrazLocationManager.swift in Sources */,
 				617F82FF246D9485006195F0 /* MapViewModelController.swift in Sources */,
 				6142516524BBA18300258BD8 /* OnboardingView.swift in Sources */,
 				61518D382453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift in Sources */,
@@ -844,7 +853,7 @@
 				61805DA024587F37003EC9FE /* Errors.swift in Sources */,
 				617F82EE246C7FBC006195F0 /* APIError.swift in Sources */,
 				6186F4F9245D0156007BAB37 /* Images.swift in Sources */,
-				6142515E24BB913300258BD8 /* GeofencingManager.swift in Sources */,
+				6142515E24BB913300258BD8 /* LocationManager.swift in Sources */,
 				61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */,
 				61518D36245338EA00011BB4 /* UICollectionView+additions.swift in Sources */,
 				617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */,
@@ -852,7 +861,6 @@
 				617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */,
 				617F82E6246C7557006195F0 /* GetNearbyRestaurants.swift in Sources */,
 				61518D2D245334EE00011BB4 /* WriteToCoreData.swift in Sources */,
-				617F8301246DF06A006195F0 /* LocationManager.swift in Sources */,
 				616FB9EC24C1070A00ECBA95 /* AppContext.swift in Sources */,
 				6186F4EC245CC09F007BAB37 /* Alerts.swift in Sources */,
 				61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */,
@@ -865,9 +873,9 @@
 				6147A133246B3D38000508FE /* SocialMediaIconsStackView.swift in Sources */,
 				617F82DE246C6C0A006195F0 /* Networking.swift in Sources */,
 				61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */,
+				61BD613924E710BE00C64327 /* LocationAuth.swift in Sources */,
 				61E9F77A24DD93B90081AD29 /* ButtonColor.swift in Sources */,
 				6147A12E2469B310000508FE /* OnTapModel.swift in Sources */,
-				617F8305246DFA2B006195F0 /* NotificationManager.swift in Sources */,
 				6142516724BBC14B00258BD8 /* ViewController+Onboarding.swift in Sources */,
 				617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */,
 			);

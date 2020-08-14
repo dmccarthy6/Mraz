@@ -2,49 +2,33 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import UserNotifications
+import CoreLocation
 
-class LocalNotificationManger: NSObject, LocationManager {
+class LocalNotificationManger: NSObject, MrazNotifications {
     // MARK: - Properties
-    var notifications = [Notification]()
-    let notificationTrigger: UNNotificationTrigger
+    var scheduledNotifications: [Notification] = [Notification]()
+    var notificationTrigger: UNNotificationTrigger
+    var notificationCenter: UNUserNotificationCenter
     
     // MARK: - Life Cycle
-    init(notificationTrigger: UNNotificationTrigger) {
+    init(notificationTrigger: UNNotificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false), notificationCenter: UNUserNotificationCenter = UNUserNotificationCenter.current()) {
         self.notificationTrigger = notificationTrigger
+        self.notificationCenter = notificationCenter
     }
-    
-    // MARK: - Authorization
-    private func requestAuthorizationForLocalNotifications() {
-        requestUserAuthForNotifications { (result) in
-            switch result {
-            case .success(let granted):
-                if granted {
-                    self.scheduleLocalNotification()
-                }
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-            }
-        }
-    }
-    
+
     // MARK: - Scheduling Notifications
     func schedule() {
-        notificationCenter.getNotificationSettings { settings in
-            switch settings.authorizationStatus {
-            case .notDetermined:
-                self.requestAuthorizationForLocalNotifications()
-            case .authorized, .provisional:
-                self.scheduleLocalNotification()
-            default: break
-            }
-        }
+        scheduleLocalNotification()
+//        requestNotificationAuthorization { [weak self] in
+//            self?.scheduleLocalNotification()
+//        }
     }
     
-    private func scheduleLocalNotification() {
-        for notification in notifications {
+    func scheduleLocalNotification() {
+        for notification in scheduledNotifications {
             let content = UNMutableNotificationContent()
             content.title = notification.title
-            content.subtitle = notification.subTitle
+            content.body = notification.body
             content.sound = .default
             content.badge = 1
             let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: notificationTrigger)
@@ -57,12 +41,19 @@ class LocalNotificationManger: NSObject, LocationManager {
         }
     }
     
-    // MARK: - Methods
-    func listScheduledNotifications() {
-        notificationCenter.getPendingNotificationRequests { (notifications) in
-            for notification in notifications {
-                print(notification)
-            }
-        }
+    // MARK: -
+    func triggerGeofencingNotification(for region: CLRegion) {
+        let note = Notification(id: region.identifier,
+                                title: GeoNotificationContent.title,
+                                body: GeoNotificationContent.body)
+        notificationTrigger = UNLocationNotificationTrigger(region: region, repeats: false)
+        scheduledNotifications.append(note)
+        schedule()
+    }
+    
+    func triggerLocalNotification(title: String, body: String) {
+        let notification = Notification(id: UUID().uuidString, title: title, body: body)
+        scheduledNotifications.append(notification)
+        schedule()
     }
 }
