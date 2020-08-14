@@ -144,6 +144,7 @@
 		61518D4B24536F9000011BB4 /* BeerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListViewController.swift; sourceTree = "<group>"; };
 		61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFromCloudKit.swift; sourceTree = "<group>"; };
 		61518D5D24577BCE00011BB4 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
+		61640D2124E440FF00D362DA /* Mraz.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Mraz.gpx; sourceTree = "<group>"; };
 		616FB9EB24C1070A00ECBA95 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTests.swift; sourceTree = "<group>"; };
@@ -293,6 +294,7 @@
 		61518CF2245330D300011BB4 = {
 			isa = PBXGroup;
 			children = (
+				61640D2124E440FF00D362DA /* Mraz.gpx */,
 				61518CFD245330D300011BB4 /* Mraz */,
 				61518D17245330D900011BB4 /* MrazTests */,
 				61518CFC245330D300011BB4 /* Products */,
@@ -1035,7 +1037,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthyios.Mraz;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthy.Mraz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1056,7 +1059,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthyios.Mraz;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthy.Mraz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -65,9 +65,9 @@ enum Alerts {
                 alertController.addAction(okButtonAction)
                 alertController.addAction(dontShowAgainAction)
                 
-                if let appDel = UIApplication.shared.delegate, let window = appDel.window!, let rootVC = window.rootViewController {
-                    rootVC.present(alertController, animated: true, completion: nil)
-                }
+//                if let appDel = UIApplication.shared.delegate, let window = appDel.window!, let rootVC = window.rootViewController {
+//                    rootVC.present(alertController, animated: true, completion: nil)
+//                }
             }
         }
     }
@@ -130,3 +130,8 @@ enum CloudKitPromptButtonType: String {
         }
     }
 }
+
+/*
+ <wpt lat="38.723438" lon="-121.084084"> </gpx>
+ <wpt lat="38.710252" lon="-121.086191"> </gpx>
+ */

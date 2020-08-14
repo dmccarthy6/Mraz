@@ -26,6 +26,7 @@ enum AnnotationImages {
 
 enum OnboardingImages {
     static var mrazNotification = UIImage(named: "LocalNotification")!
+    static var mrazGeofencing = UIImage(named: "Geofencing")!
     static var openAppImage = UIImage(named: "MrazFlag")!
     static var bellSystemIcon = UIImage(systemName: "bell.fill")!
 }
