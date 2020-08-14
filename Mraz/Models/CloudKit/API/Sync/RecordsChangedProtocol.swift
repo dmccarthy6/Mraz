@@ -36,12 +36,12 @@ struct SyncCloudKitRecordChanges: ReadFromCloudKit {
     }
     
     // if no beer exists by that name, create it
-    func createNewBeer(from record: CKRecord) {
+    private func createNewBeer(from record: CKRecord) {
         let newBeerObject = Beers(context: mainThreadManagedObjectContext)
         manage(object: newBeerObject, from: record, recordType: .newRecord)
     }
     
-    func fetchBeerBy(recordName: String) -> Beers? {
+    private func fetchBeerBy(recordName: String) -> Beers? {
         let changedBeerRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
         changedBeerRequest.predicate = NSPredicate(format: "id == %@", recordName)
         do {
@@ -54,7 +54,7 @@ struct SyncCloudKitRecordChanges: ReadFromCloudKit {
     }
     
     /// Take the CK Record passed in, update or create a beer record and 
-    func manage(object: Beers, from record: CKRecord, recordType: UpdatedRecordType) {
+    private func manage(object: Beers, from record: CKRecord, recordType: UpdatedRecordType) {
         let tapStatus = record[.isOnTap] as? Int64 ?? 0
         let recordID = record.recordID.recordName//New Only
         let changeTag = record.recordChangeTag ?? "Error - No Change Tag"
@@ -91,8 +91,8 @@ struct SyncCloudKitRecordChanges: ReadFromCloudKit {
         let localNotificationManager = LocalNotificationManger(notificationTrigger: timeTrigger)
         let favoriteBeer = beer.name ?? "Your favorite beer"
         let localTitle = "\(favoriteBeer) is on tap!"
-        let localSubTitle = "\(favoriteBeer)is now on tap. Come by the tasting room to get yours before it runs out!"
-        let notification = Notification(id: UUID().uuidString, title: localTitle, subTitle: localSubTitle, body: nil)
+        let localBody = "\(favoriteBeer) is now on tap. Come by the tasting room to get yours before it runs out!"
+        let notification = Notification(id: UUID().uuidString, title: localTitle, body: localBody)
         localNotificationManager.notifications = [notification]
         localNotificationManager.schedule()
     }
