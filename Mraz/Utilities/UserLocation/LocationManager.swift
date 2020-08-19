@@ -50,11 +50,14 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse: confirmUsersLocationAuthorizationStartTrackingLoc()
-        case .denied, .restricted: break
-        case .notDetermined: requestAlwaysAuthFromUser()
-        default: ()
-        }
+        let requestAuth = (status == .notDetermined)
+        mapView?.showsUserLocation = (status == .authorizedAlways)
+        requestAuth ? requestWhenInUseAuth() : nil
+//        switch status {
+//        case .authorizedAlways, .authorizedWhenInUse: mapView?.showsUserLocation = (status == .authorizedAlways)//confirmUsersLocationAuthorizationStartTrackingLoc()
+//        case .denied, .restricted: break
+//        case .notDetermined: requestWhenInUseAuth()
+//        default: ()
+//        }
     }
 }

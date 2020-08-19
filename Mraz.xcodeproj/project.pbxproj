@@ -602,6 +602,7 @@
 		617F82FC246D93A2006195F0 /* LocalModels */ = {
 			isa = PBXGroup;
 			children = (
+				61DBF99C24E095F70038F40C /* Notification.swift */,
 				617F82FA246D931E006195F0 /* Restaurant.swift */,
 			);
 			path = LocalModels;
@@ -651,7 +652,6 @@
 		61DBF99924E095DB0038F40C /* LocalNotifications */ = {
 			isa = PBXGroup;
 			children = (
-				61DBF99C24E095F70038F40C /* Notification.swift */,
 				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
 				61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */,
 				61BD613C24E71BE600C64327 /* MrazNotifications.swift */,

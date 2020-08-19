@@ -33,19 +33,25 @@ extension MrazNotifications {
     
     func getLocalNotificationStatus(_ completion: @escaping (Bool) -> Void) {
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+            if let error = error {
+                print("Error requesting Local Notification Auth: \(error.localizedDescription)")
+                return
+            }
             completion(granted)
         }
     }
     
-    /// Checks notifcation center authorization. If authorized completion is called.
-    func requestNotificationAuthorization(_ completion: @escaping () -> ()) {
-        notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
-            if let error = error {
-                print("Error requesting Auth: \(error.localizedDescription)")
-            }
-            if granted {
-                completion()
+    /// If user has authorized notifications completion hanlder is called.
+    /// prompts user for local notifications if status is 'not determined'
+    func getUserNotificationSettings(_ completion: @escaping () -> Void) {
+        notificationCenter.getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .authorized, .provisional: completion()
+            case .denied: break
+            case .notDetermined: self.promptUserForLocalNotifications()
+            default: ()
             }
         }
     }
+    
 }

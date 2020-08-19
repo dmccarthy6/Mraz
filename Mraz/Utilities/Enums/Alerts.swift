@@ -94,7 +94,7 @@ enum Alerts {
                                             message: nil,
                                             preferredStyle: .actionSheet)
         
-        let directionsAction = UIAlertAction(title: "Directions", style: .default) { (action) in
+        let directionsAction = UIAlertAction(title: "Directions", style: .default) { (_) in
             Contact.contact(contactType: .directions, value: title ?? "", coordinate: location)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)

@@ -5,11 +5,11 @@ import CoreLocation
 
 protocol MrazLocationAuthorization {
     /// Sent request to user for requestAlwaysAuthorization
-    func requestAlwaysAuthFromUser()
+    func requestWhenInUseAuth()
     
     /// Check user's location authorization status. If status is authorizedAlways or authorizedWhenInUse
     /// ciompletion executes.
-    func checkLocationAuthIsEnabled(_ completion: @escaping () -> ())
+    func checkLocationAuthIsEnabled(_ completion: @escaping () -> Void)
     
     /// Check that the user has enabled location tracking. If authorized
     /// shows user location on the map.

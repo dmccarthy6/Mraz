@@ -5,6 +5,6 @@ import Foundation
 
 protocol MrazNotificationAuthorization {
     func getLocalNotificationStatus(_ completion: @escaping (_ authorized: Bool) -> Void)
-    func requestNotificationAuthorization(_ completion: @escaping () -> Void)
+    func getUserNotificationSettings(_ completion: @escaping () -> Void)
     func promptUserForLocalNotifications()
 }
