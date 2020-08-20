@@ -3,7 +3,7 @@
 
 import UIKit
 
-final class MrazOnboardingViewController: UIViewController, NotificationManager {
+final class MrazOnboardingViewController: UIViewController {
     // MARK: Properties
     var onBoardingView: MrazOnboardingView = {
         let view = MrazOnboardingView()
