@@ -1,9 +1,8 @@
-//
-//  CloudKitAuthorizations.swift
-//  Mraz
-//
 //  Created by Dylan  on 8/19/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
-//
 
-import Foundation
+import CloudKit
+
+protocol CloudKitAuthorizations {
+    func getUsersCurrentAuthStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void)
+}

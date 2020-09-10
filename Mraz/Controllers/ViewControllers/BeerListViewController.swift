@@ -4,7 +4,7 @@
 import UIKit
 import CoreData
 
-class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
+class BeerListViewController: UIViewController {
     // MARK: - Properties
     typealias Element = Beers
     typealias BeersSnapshot = NSDiffableDataSourceSnapshot<Section, Element>
@@ -42,7 +42,7 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
                 cell.configureFavoritesButton(forElement: element)
                 let beerCurrentStatus = element.isFavorite
                 element.isFavorite = !beerCurrentStatus
-                self?.updateLocalFavoriteStatus(element)
+                self?.coreDataManager.updateLocalFavoriteStatus(element)
             }
             return cell
         }
@@ -57,10 +57,12 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         return diffableDatasource
     }()
     private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        let controller = configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
+        coreDataManager.frcPredicate = NSPredicate(value: true)
+        let controller = coreDataManager.configureFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
         controller.delegate = self
         return controller
     }()
+    lazy var coreDataManager = CoreDataManager.shared
     private var currentSearchText = ""
     private var activityIndicator: UIActivityIndicatorView?
     
@@ -125,12 +127,10 @@ extension BeerListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let beerItem = self.beersDiffableDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedBeerObjectID = beerItem.objectID
-        let beerInfoVC = BeerInfoViewController()
-        beerInfoVC.objectID = selectedBeerObjectID
-        let navController = UINavigationController(rootViewController: beerInfoVC)
-        present(navController, animated: true, completion: nil)
+        self.openBeerInfoVC(from: selectedBeerObjectID)
     }
 }
+
 // MARK: - Fetched Results Controller Delegate
 extension BeerListViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -138,12 +138,17 @@ extension BeerListViewController: NSFetchedResultsControllerDelegate {
         updateSnapshot(with: updatedBeers)
     }
 }
+
 // MARK: - UISearch Controller
 extension BeerListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
         currentSearchText = searchText
-        fetchedResultsController = configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: searchText, ascending: true)
+        
+        let searchTextPredicate = NSPredicate(format: "name CONTAINS[c] %@", currentSearchText)
+        let manager = CoreDataManager(predicate: searchTextPredicate)
+        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", searchText: searchText, ascending: true)
+        fetchedResultsController = controller
         guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
         updateSnapshot(with: beers)
     }

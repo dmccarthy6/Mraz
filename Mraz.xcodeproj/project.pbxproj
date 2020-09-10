@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		612EE7E7250021FD003D84F9 /* MockMrazLocationMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612EE7E6250021FD003D84F9 /* MockMrazLocationMgr.swift */; };
+		612EE7E9250025FE003D84F9 /* GeofencingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612EE7E8250025FE003D84F9 /* GeofencingTests.swift */; };
 		6142515E24BB913300258BD8 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142515D24BB913300258BD8 /* LocationManager.swift */; };
 		6142516524BBA18300258BD8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516424BBA18300258BD8 /* OnboardingView.swift */; };
 		6142516724BBC14B00258BD8 /* ViewController+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */; };
@@ -38,6 +40,8 @@
 		61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4B24536F9000011BB4 /* BeerListViewController.swift */; };
 		61518D5A24577A9100011BB4 /* ReadFromCloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */; };
 		61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D5D24577BCE00011BB4 /* CloudKit.swift */; };
+		6169D8E424EDB26800B4CAFE /* CloudKitAuthorizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6169D8E324EDB26800B4CAFE /* CloudKitAuthorizations.swift */; };
+		6169D8E624F04CD100B4CAFE /* UIViewController+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6169D8E524F04CD100B4CAFE /* UIViewController+additions.swift */; };
 		616FB9EC24C1070A00ECBA95 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FB9EB24C1070A00ECBA95 /* AppContext.swift */; };
 		616FB9EE24C109AF00ECBA95 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */; };
 		617DDA1E2461B1A500BA86B9 /* CloudKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */; };
@@ -93,6 +97,7 @@
 		61DF121E24BFCCF1003ABD84 /* UserDefaults+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */; };
 		61DF122024BFD144003ABD84 /* GlobalTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */; };
 		61DF122224BFD177003ABD84 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF122124BFD177003ABD84 /* AppFlow.swift */; };
+		61E235B525028F62002D5A2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E235B425028F62002D5A2A /* CoreDataStack.swift */; };
 		61E9F77024DC80460081AD29 /* ApplicationHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */; };
 		61E9F77224DC80C40081AD29 /* AppHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77124DC80C40081AD29 /* AppHook.swift */; };
 		61E9F77624DCFC010081AD29 /* OnboardingFloatingNextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77524DCFC010081AD29 /* OnboardingFloatingNextButton.swift */; };
@@ -111,6 +116,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		612EE7E6250021FD003D84F9 /* MockMrazLocationMgr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMrazLocationMgr.swift; sourceTree = "<group>"; };
+		612EE7E8250025FE003D84F9 /* GeofencingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofencingTests.swift; sourceTree = "<group>"; };
 		6142515D24BB913300258BD8 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		6142516424BBA18300258BD8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Onboarding.swift"; sourceTree = "<group>"; };
@@ -147,6 +154,8 @@
 		61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadFromCloudKit.swift; sourceTree = "<group>"; };
 		61518D5D24577BCE00011BB4 /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		61640D2124E440FF00D362DA /* Mraz.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Mraz.gpx; sourceTree = "<group>"; };
+		6169D8E324EDB26800B4CAFE /* CloudKitAuthorizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitAuthorizations.swift; sourceTree = "<group>"; };
+		6169D8E524F04CD100B4CAFE /* UIViewController+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+additions.swift"; sourceTree = "<group>"; };
 		616FB9EB24C1070A00ECBA95 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		616FB9ED24C109AF00ECBA95 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTests.swift; sourceTree = "<group>"; };
@@ -203,6 +212,7 @@
 		61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+additions.swift"; sourceTree = "<group>"; };
 		61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTypealiases.swift; sourceTree = "<group>"; };
 		61DF122124BFD177003ABD84 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
+		61E235B425028F62002D5A2A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationHooks.swift; sourceTree = "<group>"; };
 		61E9F77124DC80C40081AD29 /* AppHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHook.swift; sourceTree = "<group>"; };
 		61E9F77524DCFC010081AD29 /* OnboardingFloatingNextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFloatingNextButton.swift; sourceTree = "<group>"; };
@@ -349,6 +359,8 @@
 				617F82F1246CB3BB006195F0 /* NetworkTests */,
 				617DDA232461BADE00BA86B9 /* CoreDataTests */,
 				617F82FD246D93DC006195F0 /* CloudKitTests */,
+				612EE7E6250021FD003D84F9 /* MockMrazLocationMgr.swift */,
+				612EE7E8250025FE003D84F9 /* GeofencingTests.swift */,
 			);
 			path = MrazTests;
 			sourceTree = "<group>";
@@ -409,6 +421,7 @@
 		61518D282453346D00011BB4 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				61E235B425028F62002D5A2A /* CoreDataStack.swift */,
 				61518D2E2453351200011BB4 /* CoreDataManager.swift */,
 				61518D2A245334E500011BB4 /* ReadFromCoreData.swift */,
 				61518D2C245334EE00011BB4 /* WriteToCoreData.swift */,
@@ -472,6 +485,7 @@
 				6186F4E0245C6990007BAB37 /* CKRecord+additions.swift */,
 				617DDA212461B25B00BA86B9 /* CKError+additions.swift */,
 				61DBF99724DE1A4E0038F40C /* UIPageViewController+additions.swift */,
+				6169D8E524F04CD100B4CAFE /* UIViewController+additions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -521,6 +535,7 @@
 				6186F5012460E484007BAB37 /* Sync */,
 				61805D98245875EE003EC9FE /* CloudKitManager.swift */,
 				61518D5924577A9100011BB4 /* ReadFromCloudKit.swift */,
+				6169D8E324EDB26800B4CAFE /* CloudKitAuthorizations.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -798,6 +813,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6169D8E624F04CD100B4CAFE /* UIViewController+additions.swift in Sources */,
 				61BD613B24E719DD00C64327 /* MrazNotificationAuthorization.swift in Sources */,
 				617DDA2C24648A5000BA86B9 /* Beers+CoreDataClass.swift in Sources */,
 				61518D34245338D600011BB4 /* UIFont+additions.swift in Sources */,
@@ -857,6 +873,7 @@
 				61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */,
 				61518D36245338EA00011BB4 /* UICollectionView+additions.swift in Sources */,
 				617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */,
+				61E235B525028F62002D5A2A /* CoreDataStack.swift in Sources */,
 				6186F5032460E4BB007BAB37 /* RecordsChangedProtocol.swift in Sources */,
 				617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */,
 				617F82E6246C7557006195F0 /* GetNearbyRestaurants.swift in Sources */,
@@ -873,6 +890,7 @@
 				6147A133246B3D38000508FE /* SocialMediaIconsStackView.swift in Sources */,
 				617F82DE246C6C0A006195F0 /* Networking.swift in Sources */,
 				61BD6BEA2465E378000D4193 /* OnTapCell.swift in Sources */,
+				6169D8E424EDB26800B4CAFE /* CloudKitAuthorizations.swift in Sources */,
 				61BD613924E710BE00C64327 /* LocationAuth.swift in Sources */,
 				61E9F77A24DD93B90081AD29 /* ButtonColor.swift in Sources */,
 				6147A12E2469B310000508FE /* OnTapModel.swift in Sources */,
@@ -892,6 +910,8 @@
 				617F82F7246CB769006195F0 /* MockNetworking.swift in Sources */,
 				617F82F9246CBB27006195F0 /* LocationsService.swift in Sources */,
 				617DDA202461B1B100BA86B9 /* CoreDataTests.swift in Sources */,
+				612EE7E7250021FD003D84F9 /* MockMrazLocationMgr.swift in Sources */,
+				612EE7E9250025FE003D84F9 /* GeofencingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

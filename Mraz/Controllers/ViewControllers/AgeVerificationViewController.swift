@@ -44,4 +44,9 @@ class AgeVerificationViewController: UIViewController {
             self?.userNotOfAge?()
         }
     }
+    
+    // MARK: - Interface
+    func createAgeViewController() {
+        let controller = AgeVerificationViewController()
+    }
 }

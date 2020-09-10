@@ -5,7 +5,7 @@ import UIKit
 
 import CoreData
 
-final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
+final class HomeViewController: UIViewController {
     // MARK: - Types
     enum Section: CaseIterable {
         case onTap
@@ -59,10 +59,13 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         return diffDatasource
     }()
     private lazy var onTapResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        let controller = configureOnTapFetchedResultsController(for: .beers)
+        let onTapPredicate = NSPredicate(format: "isOnTap == %d", true)
+        manager.frcPredicate = onTapPredicate
+        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", searchText: "", ascending: true)
         controller.delegate = self
         return controller
     }()
+    private let manager = CoreDataManager.shared
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -102,10 +105,7 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedBeer = onTapDiffDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedID = selectedBeer.objectID
-        let beerInfoVC = BeerInfoViewController()
-        beerInfoVC.objectID = selectedID
-        let navController = UINavigationController(rootViewController: beerInfoVC)
-        present(navController, animated: true, completion: nil)
+        self.openBeerInfoVC(from: selectedID)
     }
 }
 
