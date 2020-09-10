@@ -5,7 +5,7 @@ import XCTest
 import CoreData
 @testable import Mraz
 
-class CoreDataTests: XCTestCase, CoreDataAPI {
+class CoreDataTests: XCTestCase {
     // MARK: - Properties
     let context = CoreDataUnitTestHelpers.setUpInMemoryManagedObjectContext()
     var beerModel: [BeerModel]?
@@ -81,7 +81,8 @@ class CoreDataTests: XCTestCase, CoreDataAPI {
     private func createBeerObjects() {
         for model in beerModel! {
             let beerObj = Beers(context: context)
-            createBeerObject(from: model, beer: beerObj, context: context)
+            CoreDataManager.shared.createManagedObject(from: model, beer: beerObj, in: context)
+            //createBeerObject(from: model, beer: beerObj, context: context)
         }
     }
     
