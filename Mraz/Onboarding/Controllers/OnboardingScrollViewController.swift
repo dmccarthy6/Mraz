@@ -104,7 +104,7 @@ final class MrazOnboardingPageViewController: UIViewController {
     private func setButtonActions(for page: Int, on view: MrazOnboardingView) {
         view.actionButtonTapped = { [weak self] in
             if page == 0 {
-                self?.locationPrompt()
+                self?.notificationManager.promptUserForLocalNotifications()
             } else if page == 1 {
                 self?.locationManager.promptUserForLocationAuth()
             } else if page == 2 {
@@ -114,10 +114,6 @@ final class MrazOnboardingPageViewController: UIViewController {
         view.nextButtonTapped = { [weak self] in
             self?.handleNextPage()
         }
-    }
-    
-    func locationPrompt() {
-        notificationManager.promptUserForLocalNotifications()
     }
     
     // MARK: - Helpers
@@ -135,7 +131,8 @@ final class MrazOnboardingPageViewController: UIViewController {
 
 // MARK: - PageViewController Data Source Methods
 extension MrazOnboardingPageViewController: UIPageViewControllerDataSource {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let index = pages.firstIndex(of: viewController) {
             if index > 0 {
                 return pages[index - 1]
@@ -146,7 +143,8 @@ extension MrazOnboardingPageViewController: UIPageViewControllerDataSource {
         return nil
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if let index = pages.firstIndex(of: viewController) {
             if index < pages.count - 1 {
                 return pages[index + 1]
@@ -160,11 +158,14 @@ extension MrazOnboardingPageViewController: UIPageViewControllerDataSource {
 
 // MARK: - PageViewController Delegate Methods
 extension MrazOnboardingPageViewController: UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
         pendingIndex = pages.firstIndex(of: pendingViewControllers.first!)
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             currentIndex = pendingIndex
             if let index = currentIndex {
