@@ -16,9 +16,7 @@ class LocalNotificationManger: NSObject, MrazNotifications {
          notificationCenter: UNUserNotificationCenter = UNUserNotificationCenter.current()) {
         self.notificationTrigger = notificationTrigger
         self.notificationCenter = notificationCenter
-        
         super.init()
-       // getPending()
     }
 
     // MARK: - Scheduling Notifications
@@ -31,13 +29,15 @@ class LocalNotificationManger: NSObject, MrazNotifications {
     
     func scheduleLocalNotification() {
         print("Sched Local Notifications Called")
-        let badgeCount = UIApplication.shared.applicationIconBadgeNumber + 1
+        
+            //let badgeCount = UIApplication.shared.applicationIconBadgeNumber + 1
+        
         for notification in scheduledNotifications {
             let content = UNMutableNotificationContent()
             content.title = notification.title
             content.body = notification.body
             content.sound = .default
-            content.badge = NSNumber(value: badgeCount)
+            //content.badge = NSNumber(value: badgeCount)
             let request = UNNotificationRequest(identifier: notification.id, content: content, trigger: notificationTrigger)
             
             notificationCenter.add(request) { (error) in
@@ -48,6 +48,7 @@ class LocalNotificationManger: NSObject, MrazNotifications {
         }
     }
     
+    /// Retrieve pending notifications in NotificationCenter
     func getPending() {
         notificationCenter.getPendingNotificationRequests { (notificationRequests) in
             for request in notificationRequests {
@@ -59,13 +60,13 @@ class LocalNotificationManger: NSObject, MrazNotifications {
         }
     }
     
-    // MARK: -
+    // MARK: - Trigger Notifications
     func triggerGeofencingNotification(for region: CLRegion) {
         let notification = Notification(id: region.identifier,
                                 title: GeoNotificationContent.title,
                                 body: GeoNotificationContent.body)
         notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        //notificationTrigger = UNLocationNotificationTrigger(region: region, repeats: false)
+//        notificationTrigger = UNLocationNotificationTrigger(region: region, repeats: false)
         scheduledNotifications.append(notification)
         schedule()
     }
@@ -74,5 +75,15 @@ class LocalNotificationManger: NSObject, MrazNotifications {
         let notification = Notification(id: UUID().uuidString, title: title, body: body)
         scheduledNotifications.append(notification)
         schedule()
+    }
+    
+    func sendFavoriteBeerNotification(for beer: Beers) {
+        if beer.isFavorite && beer.isOnTap {
+            print("LocalNotificationMgr -- Favorite beer notification triggered for \(beer.name).")
+            let beerName = beer.name ?? "Favorite Beer"
+            let title = "\(beerName) is on tap!"
+            let body = "Come by the tasting room to get yours before it's gone."
+            triggerLocalNotification(title: title, body: body)
+        }
     }
 }

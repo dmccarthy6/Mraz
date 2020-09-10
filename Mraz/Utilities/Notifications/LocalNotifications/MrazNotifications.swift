@@ -54,4 +54,17 @@ extension MrazNotifications {
         }
     }
     
+    func getCurrentNotificationStatus() -> Bool {
+        var currentStatus = false
+        
+        notificationCenter.getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .authorized, .provisional: currentStatus = true
+            case .denied: currentStatus = false
+            case .notDetermined: currentStatus = false
+            default: ()
+            }
+        }
+        return currentStatus
+    }
 }

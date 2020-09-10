@@ -7,14 +7,13 @@ import CloudKit
 import NotificationCenter
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     let cloudKitManager = CloudKitManager.shared
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         resetOnboarding()
-        
         configureNotificationCtr()
         cloudKitManager.checkUserCloudKitAccountStatusAndSubscribe()
         return true
@@ -57,7 +56,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         if notification?.notificationType == CKNotification.NotificationType.query {
             if let queryNotification = notification as? CKQueryNotification {
                 guard let recordID = queryNotification.recordID else { return }
-                let sync = SyncCloudKitRecordChanges(changedRecordName: recordID.recordName, changedRecordID: recordID)
+                let sync = SyncCloudKitChanges(changedRecordName: recordID.recordName, changedRecordID: recordID)
                 sync.fetchUpdatedRecord()
                 completionHandler(.newData)
             }
