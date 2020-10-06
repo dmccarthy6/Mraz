@@ -4,7 +4,7 @@
 import Foundation
 import CoreLocation
 
-///
+/// Brewery location name and coordinate.
 enum LocationTitle: String {
     case mraz = "Mraz Brewery"
 }
@@ -25,4 +25,22 @@ enum Coordinates {
 enum LocationCoordinates {
     static let mrazLat = Double(38.710252)
     static let mrazLong = Double(-121.086191)
+}
+
+// MARK: - Location Authorization
+
+enum LocationAuthStatus {
+    case startTrackingUpdates
+    case requestAuthorization
+}
+
+// MARK: - Geofencing Enums
+
+enum GeoRegion {
+   static let identifier = "MrazBrewery"
+}
+
+enum GeoNotificationContent {
+    static let title = "Mraz"
+    static let body = "You're right by the tasting room. Stop in for a beer!"
 }

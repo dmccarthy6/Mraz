@@ -11,4 +11,14 @@ extension UIViewController {
         let navController = UINavigationController(rootViewController: beerInfoVC)
         present(navController, animated: true)
     }
+    
+    ///
+    func showAlertOnMain(title: String, message: String, buttonTitle: String) {
+        DispatchQueue.main.async {
+            let alertViewController = MZAlertVC(title: title, message: message, buttonTitle: buttonTitle)
+            alertViewController.modalPresentationStyle = .overFullScreen
+            alertViewController.modalTransitionStyle = .crossDissolve
+            self.present(alertViewController, animated: true)
+        }
+    }
 }

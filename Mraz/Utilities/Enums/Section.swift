@@ -8,7 +8,7 @@ import Foundation
  */
 
 enum Section: CaseIterable {
-    case ale, amber, belgian, blonde, ipa, lager, mosaic, porter, saison, sour, stout
+    case ale, amber, belgian, blonde, ipa, lager, mosaic, porter, saison, sour, stout, filter
     
     var title: String {
         switch self {
@@ -23,6 +23,7 @@ enum Section: CaseIterable {
         case .saison:   return "Saison"
         case .sour:     return "Sour"
         case .stout:    return "Stout"
+        case .filter:   return ""
         }
     }
 }

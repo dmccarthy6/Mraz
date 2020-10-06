@@ -3,18 +3,17 @@
 
 import CoreData
 
-class CoreDataStack {
+final class CoreDataStack {
     // MARK: - Properties
     static var sharedStack = CoreDataStack()
     
     // MARK: - Persistent Container
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Mraz")
-        container.loadPersistentStores { (storeDescription, error) in
+        container.loadPersistentStores { (_, error) in
             if let error = error as NSError? {
                 fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
             }
-            print("Successfully created store: \(storeDescription.url!)")
         }
         return container
     }()

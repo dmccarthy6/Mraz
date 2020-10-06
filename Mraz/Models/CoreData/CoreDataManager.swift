@@ -5,41 +5,17 @@ import CoreData
 import CloudKit
 
 final class CoreDataManager: CoreDataAPI {
-    // MARK: - Core Data Stack
+    // MARK: - Properties
     static let shared = CoreDataManager()
     private let stack = CoreDataStack.sharedStack
-    var frcPredicate: NSPredicate?
     private lazy var persistentContainer = stack.persistentContainer
-    lazy var mainThreadContext = stack.mainThreadContext
-//    private lazy var persistentContainer: NSPersistentContainer = {
-//        let container = NSPersistentContainer(name: "Mraz")
-//        container.loadPersistentStores { (storeDescription, error) in
-//            if let error = error as NSError? {
-//                fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
-//            }
-//            print("Successfully created store: \(storeDescription.url!)")
-//        }
-//        return container
-//    }()
-//
-//    /// Managed Object Context
-//    lazy var mainThreadContext: NSManagedObjectContext = {
-//        let context = persistentContainer.viewContext
-//        context.automaticallyMergesChangesFromParent = true
-//        return context
-//    }()
-//
-//    private lazy var privateManagedObjectContext: NSManagedObjectContext = {
-//        let context = persistentContainer.newBackgroundContext()
-//        return context
-//    }()
-    
-    // MARK: - Life Cycle
+    internal lazy var mainThreadContext = stack.mainThreadContext
+    var frcPredicate: NSPredicate?
+
+    // MARK: - Lifecycle
     init(predicate: NSPredicate? = NSPredicate(value: true)) {
         self.frcPredicate = predicate
     }
-    
-    // MARK: - Write To Core Data Methods
     
     // MARK: - Saving
     /// Generic save function to save the specified ManagedObject to the context.
@@ -47,11 +23,8 @@ final class CoreDataManager: CoreDataAPI {
     /// - Parameter beerModel: 'BeerModel' object used to save a beer NSManagedObject.
     /// - Parameter modifiedDate: ModifiedDate property to set the modified date on the NSManagedObject.
     func saveObject<T: NSManagedObject>(object: T, model: BeerModel, modifiedDate: Date, in context: NSManagedObjectContext) {
-        if let beerObject = object as? Beers {
-            createManagedObject(from: model, beer: beerObject, in: context)
-        } else if let modDateObject = object as? ModifiedRecords {
-            modDateObject.modifiedDate = modifiedDate
-        }
+        guard let beerObject = object as? Beers else { return }
+        createOrUpdateBeerObject(from: model, beer: beerObject, in: context)
         save(context: mainThreadContext)
     }
     
@@ -68,21 +41,28 @@ final class CoreDataManager: CoreDataAPI {
         }
     }
     
-    /// Takes a model object and saves it to Core Data
-    func saveBeerObjectToCoreData(from modelObj: BeerModel) {
-        let beer = Beers(context: mainThreadContext)
-        saveObject(object: beer, model: modelObj, modifiedDate: Date(), in: mainThreadContext)
+    /// Takes in a 'BeerModel' object and converts that into a 'Beers' NSManagedObject.
+    func saveNewBeerToDatabase(from modelObj: BeerModel) {
+        let predicate = NSPredicate(format: "id == %@", modelObj.id)
+        let beers = fetchManagedObject(by: predicate)
+        if beers.isEmpty {
+            let beer = Beers(context: mainThreadContext)
+            saveObject(object: beer, model: modelObj, modifiedDate: Date(), in: mainThreadContext)
+        }
     }
     
+    func saveModifiedBeerToDatabase(beer: Beers, model: BeerModel, context: NSManagedObjectContext) {
+        createOrUpdateBeerObject(from: model, beer: beer, in: context)
+        save(context: context)
+    }
+    
+    // MARK: - Delete Methods
     func delete<T>(_ managedObject: T) where T: NSManagedObject {
-        if let beerObject = managedObject as? Beers {
-            mainThreadContext.delete(beerObject)
-        } else if let modDateObject = managedObject as? ModifiedRecords {
-            mainThreadContext.delete(modDateObject)
-        }
+        mainThreadContext.delete(managedObject)
         save(context: mainThreadContext)
     }
     
+    /// Delete all managedObjects from context.
     func batchDelete() {
         persistentContainer.performBackgroundTask { (privateMOC) in
             let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
@@ -102,10 +82,8 @@ final class CoreDataManager: CoreDataAPI {
         }
     }
     
-    // MARK: - Read From Core Data Methods
-    
-    // MARK: - Fetching
-    func configureFetchedResultsController(for entity: EntityName, key: String?, searchText: String, ascending: Bool) -> MrazFetchedResultsController {
+    // MARK: - FetchedResultsController
+    func configureFetchedResultsController(for entity: EntityName, key: String?, ascending: Bool) -> MrazFetchedResultsController {
         let fetchRequest = CoreDataFetchRequestFor(entityName: entity.rawValue)
         let sortDescriptors = [NSSortDescriptor(key: key, ascending: ascending)]
         fetchRequest.sortDescriptors = sortDescriptors
@@ -120,6 +98,9 @@ final class CoreDataManager: CoreDataAPI {
         return fetchedResultsController
     }
     
+    // MARK: - Core Data Fetching
+    /// Search CoreData for an object by searching for the objectID:
+    /// - Parameter objectID: NSManagedObjectID used to search context for an object
     func getObjectBy<T: NSManagedObject>(_ objectID: NSManagedObjectID) -> T? {
         guard let fetchedObject = mainThreadContext.object(with: objectID) as? T else {
             return nil
@@ -127,21 +108,53 @@ final class CoreDataManager: CoreDataAPI {
         return fetchedObject
     }
     
-    /// Fetch updated record from cloudkit by filtering Core Data fetch by recordName
-    func fetchUpdatedRecord(by recordName: String) -> Beers? {
-        let changedRecordRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
-        changedRecordRequest.predicate = NSPredicate(format: "id == %@", recordName)
+    ///Fetch the Core Data objects that match the predicate passed in.
+    /// - Parameter predicate: NSPredicate value to pass into the FetchRequest.
+    func fetchManagedObject(by predicate: NSPredicate) -> [Beers] {
+        let fetchRequest = CoreDataFetchRequestFor(entityName: EntityName.beers.rawValue)
+        fetchRequest.predicate = predicate
         do {
-            let beers = try self.mainThreadContext.fetch(changedRecordRequest) as? [Beers]
-            guard let safeBeers = beers, safeBeers.count > 0 else { return nil }
-            return safeBeers.first
+            let beers = try self.mainThreadContext.fetch(fetchRequest) as? [Beers]
+            guard let safeBeers = beers, safeBeers.count > 0 else { return [] }
+            return safeBeers
         } catch {
+            return []
+        }
+    }
+    
+    /// Fetch a single Beer object by id
+    func fetchCoreDataObject(by recordName: String) -> Beers? {
+        let fetchPredicate = NSPredicate(format: "id == %@", recordName)
+        let results = fetchManagedObject(by: fetchPredicate)
+        if results.isEmpty {
             return nil
+        }
+        return results[0]
+    }
+ 
+    // MARK: - Local Status Updates
+    /// Change the local Core Data onTap status for a beer
+    func changeLocalOnTapStatus(for objectID: NSManagedObjectID) {
+        let object = getObjectBy(objectID) as? Beers
+        guard let beerObject = object else { return }
+        beerObject.isOnTap = !beerObject.isOnTap
+        save(context: mainThreadContext)
+    }
+    
+    /// Update the 'isFavorite' value on the NSManagedObject. This is only a local change not updating CloudKit with this change.
+    /// - Parameter beer: The NSManagedObject value to update the 'isFavorite' property on.
+    func updateLocalFavoriteStatus(_ beer: Beers) {
+        persistentContainer.performBackgroundTask { (privateContext) in
+            guard let queueSafeBeer = privateContext.object(with: beer.objectID) as? Beers else { return }
+            queueSafeBeer.isFavorite = !queueSafeBeer.isFavorite
+            queueSafeBeer.ckModifiedDate = Date()
+            self.save(context: self.mainThreadContext)
         }
     }
     
     // MARK: - Helpers
-    func createManagedObject(from model: BeerModel, beer: Beers, in context: NSManagedObjectContext? = nil) {
+    /// Set 'Beers' value using a 'BeerModel' object to set data.
+    func createOrUpdateBeerObject(from model: BeerModel, beer: Beers, in context: NSManagedObjectContext) {
         beer.id =                 model.id
         beer.changeTag =           model.changeTag
         beer.name =               model.name
@@ -155,14 +168,9 @@ final class CoreDataManager: CoreDataAPI {
         beer.section =             model.section
     }
     
-    /// Update the 'isFavorite' value on the NSManagedObject. This is only a local change not updating CloudKit with this change.
-    /// - Parameter beer: The NSManagedObject value to update the 'isFavorite' property on.
-    func updateLocalFavoriteStatus(_ beer: Beers) {
-        persistentContainer.performBackgroundTask { (privateContext) in
-            guard let queueSafeBeer = privateContext.object(with: beer.objectID) as? Beers else { return }
-            queueSafeBeer.isFavorite = !queueSafeBeer.isFavorite
-            queueSafeBeer.ckModifiedDate = Date()
-            self.save(context: self.mainThreadContext)
-        }
+    func validateBeerFieldsFrom(record: CKRecord, beer: Beers) -> Bool {
+        let beerModel = CloudKitManager.shared.generateLocalModelFrom(record: record, isFav: beer.isFavorite)
+        return beer.name == beerModel.name &&
+        beer.beerDescription == beerModel.beerDescription && beer.abv == beerModel.abv
     }
 }

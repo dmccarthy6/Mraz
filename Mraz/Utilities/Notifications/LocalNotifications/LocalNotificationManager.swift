@@ -79,7 +79,7 @@ class LocalNotificationManger: NSObject, MrazNotifications {
     
     func sendFavoriteBeerNotification(for beer: Beers) {
         if beer.isFavorite && beer.isOnTap {
-            print("LocalNotificationMgr -- Favorite beer notification triggered for \(beer.name).")
+            print("LocalNotificationMgr -- Favorite beer notification triggered for \(beer.name ?? "NIL").")
             let beerName = beer.name ?? "Favorite Beer"
             let title = "\(beerName) is on tap!"
             let body = "Come by the tasting room to get yours before it's gone."

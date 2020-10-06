@@ -26,7 +26,7 @@ final class HomeViewController: UIViewController {
             let columns = isCompact ? 2 : 2
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .estimated(200), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)//.absolute(375)
+                .grid(itemHeight: .estimated(200), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)
                 .withSectionHeader(estimatedHeight: 50, kind: OnTapHeaderView.viewReuseIdentifier)
                 .withContentInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
             return section
@@ -61,7 +61,7 @@ final class HomeViewController: UIViewController {
     private lazy var onTapResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
         let onTapPredicate = NSPredicate(format: "isOnTap == %d", true)
         manager.frcPredicate = onTapPredicate
-        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", searchText: "", ascending: true)
+        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
         controller.delegate = self
         return controller
     }()
@@ -70,14 +70,23 @@ final class HomeViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         navigationItem.title = "What's On Tap"
-        setupView()
+        
+        configureView()
+        syncOnTapBeers()
         createSnapshot()
     }
     
     // MARK: -
-    private func setupView() {
+    /// Fetch beers currently on tap.
+    private func syncOnTapBeers() {
+        SyncCloudKitChanges.shared.performOnTapSyncOperation()
+    }
+    
+    // MARK: - Configure
+    private func configureView() {
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -88,6 +97,7 @@ final class HomeViewController: UIViewController {
         ])
     }
     
+    // MARK: - Snapshot
     private func createSnapshot() {
         guard let onTap = onTapResultsController.fetchedObjects as? [Beers] else { return }
         updateSnapshot(with: onTap)

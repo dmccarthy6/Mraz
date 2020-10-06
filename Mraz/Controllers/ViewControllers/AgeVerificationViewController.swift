@@ -46,7 +46,8 @@ class AgeVerificationViewController: UIViewController {
     }
     
     // MARK: - Interface
-    func createAgeViewController() {
-        let controller = AgeVerificationViewController()
-    }
+    #warning("TODO - Do I need this?")
+//    func createAgeViewController() {
+//        let controller = AgeVerificationViewController()
+//    }
 }

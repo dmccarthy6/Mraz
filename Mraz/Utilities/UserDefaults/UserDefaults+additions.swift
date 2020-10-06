@@ -47,6 +47,6 @@ extension MrazSettings {
         case suppressCloudKitError
         case isUserLoggedIntoCK
         case initialFetchSuccessful
-        case mrazCloudKitSubscriptionID
+        case publicCKSubscriptionCreated
     }
 }

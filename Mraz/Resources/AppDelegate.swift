@@ -5,21 +5,25 @@
 import UIKit
 import CloudKit
 import NotificationCenter
+import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let cloudKitManager = CloudKitManager.shared
+//    let cloudKitManager = CloudKitManager.shared
+    let sync = SyncContainer()
+    let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: AppDelegate.self))
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         resetOnboarding()
         configureNotificationCtr()
-        cloudKitManager.checkUserCloudKitAccountStatusAndSubscribe()
+//        cloudKitManager.checkUserCloudKitAccountStatusAndSubscribe()
+        application.registerForRemoteNotifications()
         return true
     }
     
-    // MARK: - FOR DEVELOPMENT
+    #warning("TODO - Remove below method.")
     func resetOnboarding() {
         let mrazSettings = MrazSettings()
         mrazSettings.set(false, for: .didFinishOnboarding)
@@ -38,11 +42,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound])
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
         completionHandler()
     }
     
@@ -50,16 +58,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         guard let dict = userInfo as? [String: NSObject] else { return }
-        print("RECEIVED REMOTE NOTIFICATION")
-        // CloudKit Remote Notifications
         let notification = CKNotification(fromRemoteNotificationDictionary: dict)
         if notification?.notificationType == CKNotification.NotificationType.query {
-            if let queryNotification = notification as? CKQueryNotification {
-                guard let recordID = queryNotification.recordID else { return }
-                let sync = SyncCloudKitChanges(changedRecordName: recordID.recordName, changedRecordID: recordID)
-                sync.fetchUpdatedRecord()
-                completionHandler(.newData)
-            }
+            os_log("Remote notifiation received from CK", log: self.mrazLog, type: .default)
+            sync.processMrazSubscriptionNotification(with: dict)
+            completionHandler(.newData)
         } else {
             completionHandler(.noData)
         }
