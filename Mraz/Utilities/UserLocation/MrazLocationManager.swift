@@ -53,7 +53,7 @@ extension MrazLocationManager {
                                              radius: defaultGeofencingRadius, identifier: GeoRegion.identifier)
         let regionsBeingMonitored = locationManager.monitoredRegions
         let isMonitoringAvail = CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self)
-        if !regionsBeingMonitored.contains(breweryRegion) && isMonitoringAvail {
+        if regionsBeingMonitored.contains(breweryRegion) && isMonitoringAvail {
             breweryRegion.notifyOnEntry = true
             breweryRegion.notifyOnExit = false
             locationManager.startMonitoring(for: breweryRegion)

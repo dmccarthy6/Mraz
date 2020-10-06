@@ -9,7 +9,6 @@ import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-//    let cloudKitManager = CloudKitManager.shared
     let sync = SyncContainer()
     let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: AppDelegate.self))
     
@@ -18,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         resetOnboarding()
         configureNotificationCtr()
-//        cloudKitManager.checkUserCloudKitAccountStatusAndSubscribe()
         application.registerForRemoteNotifications()
         return true
     }

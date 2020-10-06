@@ -3,9 +3,11 @@
 
 import CoreLocation
 import MapKit
+import os.log
 
 final class LocationManager: NSObject, MrazLocationManager {
     // MARK: - Properties
+    let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: LocationManager.self))
     var mapView: MKMapView?
     weak var locationDelegate: CLLocationManagerDelegate?
     var locationManager: CLLocationManager? = {
@@ -31,11 +33,14 @@ final class LocationManager: NSObject, MrazLocationManager {
 // MARK: - CLLocationManager Delegate Methods
 extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location Failed With Error: \(error.localizedDescription)")
+        os_log("Location failed with the following error: %@",
+               log: self.mrazLog,
+               type: .error,
+               error.localizedDescription)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("Tracking user, they updated location")
+        os_log("User moved, updating location", log: self.mrazLog, type: .debug)
         guard let usersLastLocation = locations.last, let map = mapView else { return }
         let lat = usersLastLocation.coordinate.latitude
         let lng = usersLastLocation.coordinate.longitude
@@ -45,7 +50,7 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("*!*!*!*!*!*!*! ENTERED REGION *!*!*!*!*!")
+        os_log("User entered geofencing region: %@", log: self.mrazLog, type: .default, region.identifier)
         LocalNotificationManger().triggerGeofencingNotification(for: region)
     }
 
@@ -53,11 +58,5 @@ extension LocationManager: CLLocationManagerDelegate {
         let requestAuth = (status == .notDetermined)
         mapView?.showsUserLocation = (status == .authorizedAlways)
         requestAuth ? requestWhenInUseAuth() : nil
-//        switch status {
-//        case .authorizedAlways, .authorizedWhenInUse: mapView?.showsUserLocation = (status == .authorizedAlways)//confirmUsersLocationAuthorizationStartTrackingLoc()
-//        case .denied, .restricted: break
-//        case .notDetermined: requestWhenInUseAuth()
-//        default: ()
-//        }
     }
 }
