@@ -6,6 +6,5 @@ import Foundation
 struct Notification {
     let id: String
     let title: String
-    let subTitle: String
-    let body: String?
+    let body: String
 }

@@ -4,9 +4,10 @@
 import UIKit
 import SwiftUI
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate, WriteToCoreData {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var appFlow: AppFlow!
+    private let databaseMgr = CoreDataManager.shared
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
@@ -21,6 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, WriteToCoreData {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        CoreDataManager.sharedDatabase.save(context: mainThreadManagedObjectContext)
+        databaseMgr.save(context: databaseMgr.mainThreadContext)
     }
 }

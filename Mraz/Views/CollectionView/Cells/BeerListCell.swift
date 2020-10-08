@@ -3,7 +3,7 @@
 
 import UIKit
 
-class BeerListCell: UICollectionViewCell, WriteToCoreData {
+class BeerListCell: UICollectionViewCell {
     // MARK: - Properties
     private let beerNameLabel: UILabel = {
         let label = UILabel()

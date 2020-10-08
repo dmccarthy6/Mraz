@@ -3,7 +3,7 @@
 
 import UIKit
 
-final class MrazOnboardingView: UIView, NotificationManager {
+final class MrazOnboardingView: UIView {
     // MARK: - Properties
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -46,6 +46,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
         button.addTarget(self, action: #selector(_actionButtonTapped), for: .touchUpInside)
         return button
     }()
+    private var mrazSettings = MrazSettings()
     var nextButtonTapped: EmptyClosure?
     var actionButtonTapped: EmptyClosure?
     
@@ -128,5 +129,11 @@ final class MrazOnboardingView: UIView, NotificationManager {
     func nextButton(isEnabled: Bool, isHidden: Bool) {
         self.nextButton.isHidden = isHidden
         self.nextButton.isEnabled = isEnabled
+    }
+    
+    func dismissOnboardingView(from viewController: UIViewController) {
+        #warning("Uncomment below to enable onboarding flow only once for users")
+        //mrazSettings.set(true, for: .didFinishOnboarding)
+        viewController.dismiss(animated: true)
     }
 }

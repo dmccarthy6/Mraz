@@ -8,4 +8,3 @@ enum NextButtonColor {
     static let disabled = UIColor.systemGray
     static let selected = UIColor.systemBlue
 }
-

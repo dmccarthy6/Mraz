@@ -3,7 +3,7 @@
 
 import UIKit
 
-final class MrazOnboardingPageViewController: UIViewController, NotificationManager, LocationManager {
+final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Properties
     var didFinishOnboarding: EmptyClosure?
     private lazy var pageControl: UIPageControl = {
@@ -14,11 +14,14 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         pageControl.currentPage = 0
         return pageControl
     }()
+    private var settings = MrazSettings()
     private var pageContainer: UIPageViewController!
     private var dataSource = OnboardingModel.data
     private var pages = [UIViewController]()
     private var currentIndex: Int?
     private var pendingIndex: Int?
+    private var notificationManager = LocalNotificationManger()
+    private var locationManager = LocationManager()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -48,7 +51,6 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         view.bringSubviewToFront(pageControl)
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-        
     }
     
     private func setupPages() {
@@ -66,6 +68,7 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         let ageVerifViewController = AgeVerificationViewController()
         ageVerifViewController.ageHasBeenVerified = { [weak self] in
             DispatchQueue.main.async {
+                self?.settings.set(true, for: .userIsOfAge)
                 self?.pageContainer.goToNextPage()
                 self?.incrementPageControl()
             }
@@ -79,8 +82,8 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
     private func resetPageViewController() {
         let ofAgeVC = pages[0]
         pages = [ofAgeVC]
-        pageControl.numberOfPages = 1
-        pageControl.currentPage = 1
+        pageControl.numberOfPages = 0
+        pageControl.currentPage = 0
     }
     
     /// Configure the Onboarding View controller that is bing added to the page view
@@ -92,6 +95,7 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         let onboardingVC = MrazOnboardingViewController()
         let onboardingView = onboardingVC.onBoardingView
         onboardingView.setData(title: title, buttonTitle: currentVal.actionButtonTitle, description: viewDescription.rawValue, image: viewImage)
+        onboardingView.nextButton(isEnabled: currentVal.nextBtnEnabled ?? true, isHidden: currentVal.nextBtnHidden ?? false)
         return onboardingVC
     }
     
@@ -100,35 +104,19 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
     private func setButtonActions(for page: Int, on view: MrazOnboardingView) {
         view.actionButtonTapped = { [weak self] in
             if page == 0 {
-                self?.showNotifications()
-                view.nextButton(isEnabled: true, isHidden: false)
+                self?.notificationManager.promptUserForLocalNotifications()
             } else if page == 1 {
-                self?.dismissOnboardingView()
-            } 
+                self?.locationManager.promptUserForLocationAuth()
+            } else if page == 2 {
+                view.dismissOnboardingView(from: self!)
+            }
         }
-        
         view.nextButtonTapped = { [weak self] in
             self?.handleNextPage()
         }
     }
     
     // MARK: - Helpers
-    private func showNotifications() {
-        requestUserAuthForNotifications { (result) in
-            switch result {
-            case .success(let granted):
-                if granted {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                }
-            case .failure(let error):
-                print("Error requesting notifications: \(error.localizedDescription)")
-            }
-        }
-        checkUsersLocationAuth()
-    }
-    
     private func handleNextPage() {
         pageContainer.goToNextPage()
         incrementPageControl()
@@ -139,17 +127,12 @@ final class MrazOnboardingPageViewController: UIViewController, NotificationMana
         let currentPageInt = pageControl.currentPage
         self.pageControl.currentPage = currentPageInt + 1
     }
-    
-    // MARK: - Dismiss View
-    /// Dismiss the onboarding flow
-    func dismissOnboardingView() {
-        self.dismiss(animated: true)
-    }
 }
 
 // MARK: - PageViewController Data Source Methods
 extension MrazOnboardingPageViewController: UIPageViewControllerDataSource {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let index = pages.firstIndex(of: viewController) {
             if index > 0 {
                 return pages[index - 1]
@@ -160,7 +143,8 @@ extension MrazOnboardingPageViewController: UIPageViewControllerDataSource {
         return nil
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if let index = pages.firstIndex(of: viewController) {
             if index < pages.count - 1 {
                 return pages[index + 1]
@@ -174,11 +158,14 @@ extension MrazOnboardingPageViewController: UIPageViewControllerDataSource {
 
 // MARK: - PageViewController Delegate Methods
 extension MrazOnboardingPageViewController: UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            willTransitionTo pendingViewControllers: [UIViewController]) {
         pendingIndex = pages.firstIndex(of: pendingViewControllers.first!)
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if completed {
             currentIndex = pendingIndex
             if let index = currentIndex {

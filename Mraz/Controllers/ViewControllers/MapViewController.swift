@@ -5,7 +5,7 @@ import Foundation
 import UIKit
 import MapKit
 
-final class MapViewController: UIViewController, LocationManager {
+final class MapViewController: UIViewController {
     // MARK: - Properties
     lazy var mapView: MKMapView = {
         let map = MKMapView()
@@ -15,15 +15,14 @@ final class MapViewController: UIViewController, LocationManager {
     }()
     private let modelController = MapViewModelController()
     private let mapIdentifier = "MrazMapID"
+    private let locationManager = LocationManager()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        checkLocationAuthorization()
         fetchRestaurants()
-        modelController.addBreweryAnnotation(on: mapView)
-        modelController.centerMapViewOnUsersLocation(mapView: mapView)
+        locationManager.mapView = mapView
     }
     
     // MARK: - Layout
@@ -36,11 +35,6 @@ final class MapViewController: UIViewController, LocationManager {
             mapView.topAnchor.constraint(equalTo: view.topAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-    
-    // MARK: - Authorization
-    private func checkLocationAuthorization() {
-        checkUsersLocationAuth()
     }
     
     // MARK: - Network
@@ -60,6 +54,9 @@ final class MapViewController: UIViewController, LocationManager {
     
     // MARK: - Annotations
     private func addMapAnnotations() {
+        locationManager.confirmUsersLocationAuthorizationStartTrackingLoc()
+        modelController.centerMapViewOnUsersLocation(mapView: mapView)
+        modelController.addBreweryAnnotation(on: mapView)
         modelController.addRestaurantLocations(on: mapView)
     }
 }
@@ -113,33 +110,5 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         guard let currentAnnotation = view.annotation else { return }
         Alerts.showRestaurantActionSheet(self, location: currentAnnotation.coordinate, title: currentAnnotation.title ?? "Destination", annotation: view)
-    }
-}
-// MARK: - CLLocationManager Delegate
-extension MapViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        // TO-DO: Error Handling
-        print(error.localizedDescription)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let lastLocation = locations.last else { return }
-        let mapCenter = CLLocationCoordinate2D(latitude: lastLocation.coordinate.latitude, longitude: lastLocation.coordinate.longitude)
-        let region = MKCoordinateRegion(center: mapCenter, latitudinalMeters: mapRegionMeters, longitudinalMeters: mapRegionMeters)
-        mapView.setRegion(region, animated: true)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("LocationManager -- User Entered Specified Region")
-        GeofencingManager().triggerGeofencingNotification(region)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse: startTrackingUsersLocationOnMap()
-        case .denied, .restricted: break
-        case .notDetermined: requestAuthorizationFromUser()
-        default: ()
-        }
     }
 }

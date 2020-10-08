@@ -5,7 +5,7 @@ import Foundation
 import CoreData
 @testable import Mraz
 
-class CoreDataUnitTestHelpers: CoreDataAPI {
+class CoreDataUnitTestHelpers {
     // MARK: - Types
     enum CoreDataError: Error {
         case missingContext

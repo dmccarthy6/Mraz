@@ -5,7 +5,7 @@ import UIKit
 
 import CoreData
 
-final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
+final class HomeViewController: UIViewController {
     // MARK: - Types
     enum Section: CaseIterable {
         case onTap
@@ -26,7 +26,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
             let columns = isCompact ? 2 : 2
             
             let section = NSCollectionLayoutSection
-                .grid(itemHeight: .estimated(200), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)//.absolute(375)
+                .grid(itemHeight: .estimated(200), itemSpacing: inset, groupWidthDimension: 1.0, numberOfColumns: columns)
                 .withSectionHeader(estimatedHeight: 50, kind: OnTapHeaderView.viewReuseIdentifier)
                 .withContentInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
             return section
@@ -59,22 +59,34 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         return diffDatasource
     }()
     private lazy var onTapResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        let controller = configureOnTapFetchedResultsController(for: .beers)
+        let onTapPredicate = NSPredicate(format: "isOnTap == %d", true)
+        manager.frcPredicate = onTapPredicate
+        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
         controller.delegate = self
         return controller
     }()
+    private let manager = CoreDataManager.shared
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         navigationItem.title = "What's On Tap"
-        setupView()
+        
+        configureView()
+        syncOnTapBeers()
         createSnapshot()
     }
     
     // MARK: -
-    private func setupView() {
+    /// Fetch beers currently on tap.
+    private func syncOnTapBeers() {
+        SyncCloudKitChanges.shared.performOnTapSyncOperation()
+    }
+    
+    // MARK: - Configure
+    private func configureView() {
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -85,6 +97,7 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         ])
     }
     
+    // MARK: - Snapshot
     private func createSnapshot() {
         guard let onTap = onTapResultsController.fetchedObjects as? [Beers] else { return }
         updateSnapshot(with: onTap)
@@ -102,10 +115,7 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedBeer = onTapDiffDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedID = selectedBeer.objectID
-        let beerInfoVC = BeerInfoViewController()
-        beerInfoVC.objectID = selectedID
-        let navController = UINavigationController(rootViewController: beerInfoVC)
-        present(navController, animated: true, completion: nil)
+        self.openBeerInfoVC(from: selectedID)
     }
 }
 
