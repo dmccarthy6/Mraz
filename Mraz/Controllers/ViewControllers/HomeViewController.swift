@@ -69,7 +69,12 @@ final class HomeViewController: UIViewController, CoreDataAPI, ReadFromCloudKit 
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationItem.title = "What's On Tap"
+<<<<<<< Updated upstream
         setupView()
+=======
+        configureView()
+        syncOnTapBeers()
+>>>>>>> Stashed changes
         createSnapshot()
     }
     
