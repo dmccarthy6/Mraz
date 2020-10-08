@@ -22,12 +22,6 @@ final class MrazOnboardingPageViewController: UIViewController {
         pageControl.currentPage = 0
         return pageControl
     }()
-    private lazy var pageContainer: UIPageViewController = {
-        let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageController.dataSource = self
-        pageController.delegate = self
-        return pageController
-    }()
     private var settings = MrazSettings()
     private var dataSource = OnboardingModel.data
     private var pages = [UIViewController]()
@@ -88,13 +82,6 @@ final class MrazOnboardingPageViewController: UIViewController {
  
     private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
         let onboardingVC = MrazOnboardingViewController()
-        let onboardingView = onboardingVC.onBoardingView
-        onboardingView.setData(title: title, buttonTitle: currentVal.actionButtonTitle, description: viewDescription.rawValue, image: viewImage)
-        return onboardingVC
-    }
-
-    private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
-        let onboardingVC = MrazOnboardingViewController()
         let modelObject = dataSource[index]
         onboardingVC.configureOnboardingView(title: modelObject.title,
                                              description: modelObject.description.rawValue,
@@ -108,15 +95,7 @@ final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Helpers
     private func incrementPage() {
         pageContainer.goToNextPage()
-        incrementPageControl()
-    }
-    
-    // MARK: - Helpers
-    /// Increment the page control current page value by 1 forward.
-    private func incrementPage() {
-        pageContainer.goToNextPage()
-        let currentPageInt = pageControl.currentPage
-        self.pageControl.currentPage = currentPageInt + 1
+        self.pageControl.currentPage = pageControl.currentPage + 1
     }
 }
 
