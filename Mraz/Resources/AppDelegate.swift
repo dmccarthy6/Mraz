@@ -19,7 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAPI, Notification
         return true
     }
     
+<<<<<<< Updated upstream
     // MARK: - FOR DEVELOPMENT
+=======
+    #warning("TODO - Debug - remove this method.")
+>>>>>>> Stashed changes
     func resetOnboarding() {
         let mrazSettings = MrazSettings()
         mrazSettings.set(false, for: .didFinishOnboarding)
