@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerForRemoteNotifications()
         return true
     }
-    
+
     #warning("TODO - Remove below method.")
     func resetOnboarding() {
         let mrazSettings = MrazSettings()

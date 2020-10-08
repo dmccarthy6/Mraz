@@ -2,10 +2,18 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import UIKit
+import os.log
 
 final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Properties
+    let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: MrazOnboardingViewController.self))
     var didFinishOnboarding: EmptyClosure?
+    private lazy var pageContainer: UIPageViewController = {
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageVC.dataSource = self
+        pageVC.delegate = self
+        return pageVC
+    }()
     private lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
@@ -29,12 +37,12 @@ final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         
+        view.backgroundColor = .systemBackground
         self.verifyUsersAge()
         setupPageViewControllers()
     }
-    
+
     // MARK: - Page View Controller
     private func configurePageControl() {
         view.addSubview(pageControl)
@@ -77,7 +85,14 @@ final class MrazOnboardingPageViewController: UIViewController {
             }
         }
     }
-    
+ 
+    private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
+        let onboardingVC = MrazOnboardingViewController()
+        let onboardingView = onboardingVC.onBoardingView
+        onboardingView.setData(title: title, buttonTitle: currentVal.actionButtonTitle, description: viewDescription.rawValue, image: viewImage)
+        return onboardingVC
+    }
+
     private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
         let onboardingVC = MrazOnboardingViewController()
         let modelObject = dataSource[index]
@@ -91,6 +106,13 @@ final class MrazOnboardingPageViewController: UIViewController {
     }
     
     // MARK: - Helpers
+    private func incrementPage() {
+        pageContainer.goToNextPage()
+        incrementPageControl()
+    }
+    
+    // MARK: - Helpers
+    /// Increment the page control current page value by 1 forward.
     private func incrementPage() {
         pageContainer.goToNextPage()
         let currentPageInt = pageControl.currentPage

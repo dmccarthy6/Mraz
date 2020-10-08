@@ -14,7 +14,7 @@ class MZAlertBodyLabel: UILabel {
         super.init(frame: frame)
         configureAlertView()
     }
-    
+
     convenience init(textAlignment: NSTextAlignment) {
         self.init(frame: .zero)
         self.textAlignment = textAlignment

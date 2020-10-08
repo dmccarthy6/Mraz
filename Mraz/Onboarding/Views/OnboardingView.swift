@@ -31,7 +31,7 @@ final class MrazOnboardingView: UIView {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
+
     private let actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +78,7 @@ final class MrazOnboardingView: UIView {
             actionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
             actionButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+
     }
     
     // MARK: - Interface

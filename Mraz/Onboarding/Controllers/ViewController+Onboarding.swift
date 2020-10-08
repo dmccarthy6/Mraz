@@ -30,6 +30,7 @@ final class MrazOnboardingViewController: UIViewController {
         ])
     }
     
+
     func configureOnboardingView(title: String, description: String,
                                          image: UIImage,
                                          buttonTitle: String,
