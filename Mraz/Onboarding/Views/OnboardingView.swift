@@ -3,7 +3,7 @@
 
 import UIKit
 
-final class MrazOnboardingView: UIView, NotificationManager {
+final class MrazOnboardingView: UIView {
     // MARK: - Properties
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -40,13 +40,8 @@ final class MrazOnboardingView: UIView, NotificationManager {
         button.tintColor = .label
         return button
     }()
-<<<<<<< Updated upstream
-    var nextButtonTapped: EmptyClosure?
-    var actionButtonTapped: EmptyClosure?
-=======
     private var mrazSettings = MrazSettings()
     weak var dismissDelegate: DismissViewDelegate?
->>>>>>> Stashed changes
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
@@ -58,7 +53,6 @@ final class MrazOnboardingView: UIView, NotificationManager {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: -
     private func setupView() {
         addSubview(titleLabel)
         addSubview(descriptionLabel)
@@ -84,6 +78,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
             actionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
             actionButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+
     }
     
     // MARK: - Interface
@@ -105,7 +100,7 @@ final class MrazOnboardingView: UIView, NotificationManager {
             actionButton.addTarget(self, action: #selector(launchAction), for: .touchUpInside)
         }
     }
-
+    
     // MARK: - Button Functions
     @objc
     private func localNotificationsAction() {
@@ -116,18 +111,17 @@ final class MrazOnboardingView: UIView, NotificationManager {
     private func geofencingNotificationsAction() {
         LocationManager().promptUserForLocationAuth()
     }
-<<<<<<< Updated upstream
-=======
     
     @objc
     private func launchAction() {
         dismissDelegate?.dismissOnboardingViews()
     }
->>>>>>> Stashed changes
 }
+
 protocol DismissViewDelegate: class {
     func dismissOnboardingViews()
 }
+
 enum ButtonType {
     case geofencing
     case notifications

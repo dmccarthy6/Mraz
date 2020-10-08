@@ -1,73 +1,62 @@
-//  Created by Dylan  on 5/14/20.
+//  Created by Dylan  on 7/12/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import CoreLocation
 import MapKit
+import os.log
 
-protocol LocationManager: NSObject, NotificationManager {
-    var mapView: MKMapView { get }
+final class LocationManager: NSObject, MrazLocationManager {
+    // MARK: - Properties
+    let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: LocationManager.self))
+    var mapView: MKMapView?
+    weak var locationDelegate: CLLocationManagerDelegate?
+    var locationManager: CLLocationManager? = {
+        let manager = CLLocationManager()
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.distanceFilter = kCLLocationAccuracyKilometer
+        return CLLocationManager()
+    }()
+
+    // MARK: - Life Cycle
+    override init() {
+        super.init()
+        configureLocationManager()
+    }
+    
+    // MARK: - Configuration
+    private func configureLocationManager() {
+        locationDelegate = self
+        locationManager?.delegate = locationDelegate
+    }
 }
 
-extension LocationManager {
-    var mapView: MKMapView {
-        return MKMapView()
+// MARK: - CLLocationManager Delegate Methods
+extension LocationManager: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        os_log("Location failed with the following error: %@",
+               log: self.mrazLog,
+               type: .error,
+               error.localizedDescription)
     }
-    var locationManager: CLLocationManager {
-        return CLLocationManager()
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        os_log("User moved, updating location", log: self.mrazLog, type: .debug)
+        guard let usersLastLocation = locations.last, let map = mapView else { return }
+        let lat = usersLastLocation.coordinate.latitude
+        let lng = usersLastLocation.coordinate.longitude
+        let mapCenter = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        let region = MKCoordinateRegion(center: mapCenter, latitudinalMeters: mapRegionMeters, longitudinalMeters: mapRegionMeters)
+        map.setRegion(region, animated: true)
     }
-    var defaultGeofencingRadius: Double {
-        return 950
+
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        os_log("User entered geofencing region: %@", log: self.mrazLog, type: .default, region.identifier)
+        LocalNotificationManger().triggerGeofencingNotification(for: region)
     }
-    var mapRegionMeters: Double {
-        return 1000
-    }
-    var notificationCenter: UNUserNotificationCenter {
-        return UNUserNotificationCenter.current()
-    }
-    
-    // MARK: - Authorization
-    /// Check the user's location authorization status. if authorized
-    /// creates geofencing region and starts tracking user on map. If not authorized
-    /// requests authorization.
-    func checkUsersLocationAuth() {
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways, .authorizedWhenInUse:
-            GeofencingManager().monitorRegionAtBrewery()
-            startTrackingUsersLocationOnMap()
-        case .notDetermined:
-            requestAuthorizationFromUser()
-        case .denied, .restricted:
-            break
-        default: break
-        }
-    }
- 
-    /// Request location authorization from users - for Geofencing.
-    func requestAuthorizationFromUser() {
-        locationManager.requestAlwaysAuthorization()
-    }
- 
-    // MARK: - User Location Tracking
-    func startTrackingUsersLocationOnMap() {
-        mapView.showsUserLocation = true
-    }
-    
-    func updateUsersLocation(delegate: CLLocationManagerDelegate) {
-        locationManager.delegate = delegate
-        checkUsersLocationAuth()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-    }
-    
-    ///Set geofencing location trigger for a region.
-    func setLocationTriggerFor(_ region: CLRegion) {
-        let note = Notification(id: region.identifier,
-                                title: GeoNotificationContent.title,
-                                subTitle: "",
-                                body: GeoNotificationContent.body)
-        let locationTrigger = UNLocationNotificationTrigger(region: region, repeats: false)
-        let notificationManager = LocalNotificationManger(notificationTrigger: locationTrigger)
-        notificationManager.notifications = [note]
-        notificationManager.schedule()
+
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        let requestAuth = (status == .notDetermined)
+        mapView?.showsUserLocation = (status == .authorizedAlways)
+        requestAuth ? requestWhenInUseAuth() : nil
     }
 }

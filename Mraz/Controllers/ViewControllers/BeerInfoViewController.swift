@@ -4,7 +4,7 @@
 import UIKit
 import CoreData
 
-final class BeerInfoViewController: UIViewController, CoreDataAPI {
+final class BeerInfoViewController: UIViewController {
     // MARK: - Properties
     private var beerInfoView: BeerInfoView = {
         let view = BeerInfoView()
@@ -12,6 +12,7 @@ final class BeerInfoViewController: UIViewController, CoreDataAPI {
         return view
     }()
     var objectID: NSManagedObjectID?
+    private var databaseManager = CoreDataManager.shared
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -43,7 +44,7 @@ final class BeerInfoViewController: UIViewController, CoreDataAPI {
     
     private func configureBeerInfoView() {
         guard let safeObjectID = objectID else { return }
-        guard let safeBeerObject = getObjectBy(safeObjectID) as? Beers else { return }
+        guard let safeBeerObject = databaseManager.getObjectBy(safeObjectID) as? Beers else { return }
         beerInfoView.createBeerInfoView(title: safeBeerObject.name, type: safeBeerObject.beerType, abv: safeBeerObject.abv, description: safeBeerObject.beerDescription)
         setupNavigation(with: safeBeerObject.name ?? "")
     }

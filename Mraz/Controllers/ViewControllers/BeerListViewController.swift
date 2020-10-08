@@ -4,7 +4,7 @@
 import UIKit
 import CoreData
 
-class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
+class BeerListViewController: UIViewController {
     // MARK: - Properties
     typealias Element = Beers
     typealias BeersSnapshot = NSDiffableDataSourceSnapshot<Section, Element>
@@ -42,7 +42,7 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
                 cell.configureFavoritesButton(forElement: element)
                 let beerCurrentStatus = element.isFavorite
                 element.isFavorite = !beerCurrentStatus
-                self?.updateLocalFavoriteStatus(element)
+                self?.coreDataManager.updateLocalFavoriteStatus(element)
             }
             return cell
         }
@@ -57,29 +57,50 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         return diffableDatasource
     }()
     private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        let controller = configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: currentSearchText, ascending: true)
+        coreDataManager.frcPredicate = NSPredicate(value: true)
+        let controller = coreDataManager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
         controller.delegate = self
         return controller
     }()
+    lazy var coreDataManager = CoreDataManager.shared
     private var currentSearchText = ""
     private var activityIndicator: UIActivityIndicatorView?
+    private var favoritesShowing: Bool = false
+    private var currentlySearching: Bool = false
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Our Beers"
-        setupView()
+        
+        configureView()
         createSnapshot()
         setupSearchController()
     }
     
-    // MARK: - Snapshot
-    func deleteAllItemsFromSnapshot() {
-        var snapshot = beersDiffableDatasource.snapshot()
-        snapshot.deleteAllItems()
+    // MARK: - Configure View
+    private func configureView() {
+        view.backgroundColor = .systemGroupedBackground
+        view.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        setUpNavigation()
     }
     
+    private func setUpNavigation() {
+        navigationItem.title = "Our Beers"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: SystemImages.starFilledImage,
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(showFavorites))
+    }
+    
+    // MARK: - Snapshot
     /// Create the snapshot using the FetchedResultsController as datasource.
     private func createSnapshot() {
         guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
@@ -97,20 +118,33 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         }
         beersDiffableDatasource.apply(snapshot, animatingDifferences: animate)
     }
-
-    // MARK: - Helpers
-    private func setupView() {
-        view.backgroundColor = .systemGroupedBackground
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    
+    private func updateSnapshotWithFilterData(with beers: [Beers], animate: Bool = true) {
+        var snapshot = BeersSnapshot()
+        snapshot.appendSections([Section.filter])
+        snapshot.appendItems(beers)
+        beersDiffableDatasource.apply(snapshot)
     }
-
+    
+    // MARK: - Helpers
+    
+    // MARK: - Filtering
+    func filterResultsBy(filterPredicate: NSPredicate, value: Bool) {
+        let manager = CoreDataManager(predicate: filterPredicate)
+        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
+        fetchedResultsController = controller
+        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        value ? updateSnapshotWithFilterData(with: beers) : updateSnapshot(with: beers)
+    }
+    
+    @objc private func showFavorites() {
+        favoritesShowing = !favoritesShowing
+        let showFavorites = NSPredicate(format: "isFavorite == %@", NSNumber(value: true))
+        let showAll = NSPredicate(value: true)
+        let favPredicate = favoritesShowing ?  showFavorites : showAll
+        filterResultsBy(filterPredicate: favPredicate, value: favoritesShowing)
+    }
+    
     // MARK: - Search
     private func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)
@@ -120,17 +154,15 @@ class BeerListViewController: UIViewController, CoreDataAPI, ReadFromCloudKit {
         navigationItem.searchController = searchController
     }
 }
-//
+// MARK: - UICollectionView Delegate
 extension BeerListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let beerItem = self.beersDiffableDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedBeerObjectID = beerItem.objectID
-        let beerInfoVC = BeerInfoViewController()
-        beerInfoVC.objectID = selectedBeerObjectID
-        let navController = UINavigationController(rootViewController: beerInfoVC)
-        present(navController, animated: true, completion: nil)
+        self.openBeerInfoVC(from: selectedBeerObjectID)
     }
 }
+
 // MARK: - Fetched Results Controller Delegate
 extension BeerListViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -138,13 +170,15 @@ extension BeerListViewController: NSFetchedResultsControllerDelegate {
         updateSnapshot(with: updatedBeers)
     }
 }
+
 // MARK: - UISearch Controller
 extension BeerListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
         currentSearchText = searchText
-        fetchedResultsController = configureAllBeersFetchedResultsController(for: .beers, key: "name", searchText: searchText, ascending: true)
-        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
-        updateSnapshot(with: beers)
+        
+        let searchTextCleared = searchText == ""
+        let searchPredicate = searchTextCleared ? NSPredicate(value: true) : NSPredicate(format: "name CONTAINS[c] %@", currentSearchText)
+        filterResultsBy(filterPredicate: searchPredicate, value: !searchTextCleared)
     }
 }

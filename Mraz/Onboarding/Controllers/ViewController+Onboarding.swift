@@ -3,7 +3,7 @@
 
 import UIKit
 
-final class MrazOnboardingViewController: UIViewController, NotificationManager {
+final class MrazOnboardingViewController: UIViewController {
     // MARK: Properties
     var onBoardingView: MrazOnboardingView = {
         let view = MrazOnboardingView()
@@ -30,8 +30,11 @@ final class MrazOnboardingViewController: UIViewController, NotificationManager 
         ])
     }
     
-    // MARK: - Button Actions
-    func configureOnboardingView(title: String, description: String, image: UIImage, buttonTitle: String, buttonType: ButtonType) {
+
+    func configureOnboardingView(title: String, description: String,
+                                         image: UIImage,
+                                         buttonTitle: String,
+                                         buttonType: ButtonType) {
         onBoardingView.setData(title: title, description: description, image: image, buttonTitle: buttonTitle, buttonType: buttonType)
     }
 }

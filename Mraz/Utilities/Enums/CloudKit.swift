@@ -1,7 +1,7 @@
 //  Created by Dylan  on 4/27/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
-import Foundation
+import CloudKit
 
 enum ContainerID: String {
     case beers = "iCloud.com.dylanmccarthyios.Mraz"
@@ -44,4 +44,16 @@ enum CloudKitStatusError: Error {
         case .failedConnection: return "Error reaching iCloud Service. Check your internet connection and try again."
         }
     }
+}
+
+// MARK: - CloudKit Fetch Type
+enum FetchType {
+    case initial
+    case subsequent
+}
+
+// MARK: CK Error
+enum CloudKitError: Error {
+    case mrazCKError(CKError)
+    
 }

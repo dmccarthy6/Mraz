@@ -15,7 +15,7 @@ extension Networking {
         let urlRequest = requestProvider.urlRequest
         
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let _ = error {
+            if error != nil {
                 completion(.failure(.httpRequestFailed))
             }
             guard let httpResponse = response as? HTTPURLResponse else {

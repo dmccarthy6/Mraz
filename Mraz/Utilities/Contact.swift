@@ -33,28 +33,7 @@ struct Contact {
         }
         application.open(safeURL, options: [:], completionHandler: nil)
     }
-//
-//    /// Open the phone application and call the Brewery. Using the phone number: (916) 934-0744
-//    static func placePhoneCall(to number: String) {
-//        guard let mrazPhoneURL = URL(string: "tel://\(number)"), UIApplication.shared.canOpenURL(mrazPhoneURL) else {
-//            return
-//        }
-//        application.open(mrazPhoneURL, options: [:], completionHandler: nil)
-//    }
-//
-//    /// Open the Mraz website. Current url is: www.mrazbrewingcompany.com
-//    static func open(website: String) {
-//        guard let mrazURL = URL(string: "\(website)") else { return }
-//        application.open(mrazURL, options: [:]) { (success) in
-//            if !success {
-//                //
-//                print("Error opening Mraz URL")
-//            } else {
-//                return
-//            }
-//        }
-//    }
-    
+
     /// Open Apple Maps and set pin for Mraz Brewery location
     /// at 222 Francisco Drive, EDH, CA.
     private static func getDirections(to coordinate: CLLocationCoordinate2D, title: String? = "Destination") {

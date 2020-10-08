@@ -13,12 +13,26 @@ extension UIViewController {
     }
     
     ///
-    func showAlertOnMain(title: String, message: String, buttonTitle: String) {
+    func showAlertOnMain(title: String, message: String, buttonTitle: String, _ completion: (() -> Void)?) {
         DispatchQueue.main.async {
             let alertViewController = MZAlertVC(title: title, message: message, buttonTitle: buttonTitle)
             alertViewController.modalPresentationStyle = .overFullScreen
             alertViewController.modalTransitionStyle = .crossDissolve
+            alertViewController.buttonFunc = {
+                completion?()
+            }
             self.present(alertViewController, animated: true)
+        }
+    }
+    
+    func verifyUsersAge() {
+        let settings = MrazSettings()
+        let isOFAge = settings.readBool(for: .userIsOfAge)
+        
+        if !isOFAge {
+            showAlertOnMain(title: "Age Verification", message: "Are you over 21?", buttonTitle: "Yes") {
+                settings.set(true, for: .userIsOfAge)
+            }
         }
     }
 }
