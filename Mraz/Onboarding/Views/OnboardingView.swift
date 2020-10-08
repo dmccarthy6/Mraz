@@ -53,7 +53,6 @@ final class MrazOnboardingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     private func setupView() {
         addSubview(titleLabel)
         addSubview(descriptionLabel)
