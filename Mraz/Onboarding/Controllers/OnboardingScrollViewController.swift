@@ -22,22 +22,6 @@ final class MrazOnboardingPageViewController: UIViewController {
         pageControl.currentPage = 0
         return pageControl
     }()
-<<<<<<< HEAD
-<<<<<<< HEAD
-    private var settings = MrazSettings()
-=======
-<<<<<<< Updated upstream
->>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
-    private var pageContainer: UIPageViewController!
-=======
-=======
-    private lazy var pageContainer: UIPageViewController = {
-        let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageController.dataSource = self
-        pageController.delegate = self
-        return pageController
-    }()
->>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     private var settings = MrazSettings()
     private var dataSource = OnboardingModel.data
     private var pages = [UIViewController]()
@@ -79,20 +63,6 @@ final class MrazOnboardingPageViewController: UIViewController {
         
     }
     
-<<<<<<< HEAD
-    private func resetPageViewController() {
-        let ofAgeVC = pages[0]
-        pages = [ofAgeVC]
-<<<<<<< HEAD
-        pageControl.numberOfPages = 0
-        pageControl.currentPage = 0
-=======
-        pageControl.numberOfPages = 1
-        pageControl.currentPage = 1
-=======
-
-=======
->>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     // MARK: - Create View Controllers
     private func createViewControllers() {
         let pagesCount = dataSource.count
@@ -108,20 +78,8 @@ final class MrazOnboardingPageViewController: UIViewController {
             default: ()
             }
         }
-<<<<<<< HEAD
->>>>>>> Stashed changes
->>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
-=======
->>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     }
- 
-    private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
-        let onboardingVC = MrazOnboardingViewController()
-        let onboardingView = onboardingVC.onBoardingView
-        onboardingView.setData(title: title, buttonTitle: currentVal.actionButtonTitle, description: viewDescription.rawValue, image: viewImage)
-        return onboardingVC
-    }
-
+    
     private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
         let onboardingVC = MrazOnboardingViewController()
         let modelObject = dataSource[index]
@@ -137,15 +95,7 @@ final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Helpers
     private func incrementPage() {
         pageContainer.goToNextPage()
-        incrementPageControl()
-    }
-    
-    // MARK: - Helpers
-    /// Increment the page control current page value by 1 forward.
-    private func incrementPage() {
-        pageContainer.goToNextPage()
-        let currentPageInt = pageControl.currentPage
-        self.pageControl.currentPage = currentPageInt + 1
+        self.pageControl.currentPage = self.pageControl.currentPage + 1
     }
 }
 
