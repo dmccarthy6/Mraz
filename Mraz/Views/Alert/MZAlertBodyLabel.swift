@@ -15,13 +15,9 @@ class MZAlertBodyLabel: UILabel {
         configureAlertView()
     }
     
-    convenience init(type: LabelType) {
+    convenience init(textAlignment: NSTextAlignment) {
         self.init(frame: .zero)
-        
-        switch type {
-        case .title: configureTitleLabel()
-        case .body: configureAlertView()
-        }
+        self.textAlignment = textAlignment
     }
     
     required init?(coder: NSCoder) {
@@ -32,13 +28,10 @@ class MZAlertBodyLabel: UILabel {
     func configureAlertView() {
         translatesAutoresizingMaskIntoConstraints = false
         textColor = .label
-        //font = .prefer
+        font = .preferredFont(for: .body, weight: .medium)
         adjustsFontForContentSizeCategory = true
         adjustsFontSizeToFitWidth = true
         lineBreakMode = .byWordWrapping
-    }
-    
-    func configureTitleLabel() {
-        
+        minimumScaleFactor = 0.75
     }
 }

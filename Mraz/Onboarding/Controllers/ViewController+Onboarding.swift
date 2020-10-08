@@ -29,4 +29,11 @@ final class MrazOnboardingViewController: UIViewController {
             onBoardingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
+    func configureOnboardingView(title: String, description: String,
+                                         image: UIImage,
+                                         buttonTitle: String,
+                                         buttonType: ButtonType) {
+        onBoardingView.setData(title: title, description: description, image: image, buttonTitle: buttonTitle, buttonType: buttonType)
+    }
 }
