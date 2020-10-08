@@ -95,11 +95,7 @@ final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Helpers
     private func incrementPage() {
         pageContainer.goToNextPage()
-<<<<<<< HEAD
         self.pageControl.currentPage += 1
-=======
-        self.pageControl.currentPage = pageControl.currentPage + 1
->>>>>>> 88dda4677c9034c7eb751e75967be1e8bec360d5
     }
 }
 
