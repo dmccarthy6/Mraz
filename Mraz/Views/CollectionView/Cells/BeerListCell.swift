@@ -74,7 +74,6 @@ class BeerListCell: UICollectionViewCell, WriteToCoreData {
             abvLabel.bottomAnchor.constraint(equalTo: guide.bottomAnchor),
             abvLabel.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             
-            favoriteButton.topAnchor.constraint(equalTo: guide.topAnchor, constant: 2),
             favoriteButton.widthAnchor.constraint(equalToConstant: BeerCellConstants.favIcon),
             favoriteButton.heightAnchor.constraint(equalToConstant: BeerCellConstants.favIcon),
             favoriteButton.trailingAnchor.constraint(equalTo: guide.trailingAnchor)

@@ -31,6 +31,8 @@
 		61518D382453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D372453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift */; };
 		61518D3A24533A1200011BB4 /* EntityName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D3924533A1200011BB4 /* EntityName.swift */; };
 		61518D3F24533B1C00011BB4 /* BeerListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D3E24533B1C00011BB4 /* BeerListCell.swift */; };
+		61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4024533BA600011BB4 /* AgeVerificationView.swift */; };
+		61518D4324533BED00011BB4 /* AgeVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */; };
 		61518D4524533FEB00011BB4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4424533FEB00011BB4 /* Constants.swift */; };
 		61518D49245365B100011BB4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D48245365B100011BB4 /* TabBarController.swift */; };
 		61518D4C24536F9000011BB4 /* BeerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61518D4B24536F9000011BB4 /* BeerListViewController.swift */; };
@@ -91,6 +93,7 @@
 		61DF122224BFD177003ABD84 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF122124BFD177003ABD84 /* AppFlow.swift */; };
 		61E9F77024DC80460081AD29 /* ApplicationHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */; };
 		61E9F77224DC80C40081AD29 /* AppHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77124DC80C40081AD29 /* AppHook.swift */; };
+		61E9F77624DCFC010081AD29 /* OnboardingFloatingNextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77524DCFC010081AD29 /* OnboardingFloatingNextButton.swift */; };
 		61E9F77824DD93460081AD29 /* UIButton+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77724DD93460081AD29 /* UIButton+additions.swift */; };
 		61E9F77A24DD93B90081AD29 /* ButtonColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77924DD93B90081AD29 /* ButtonColor.swift */; };
 /* End PBXBuildFile section */
@@ -134,6 +137,8 @@
 		61518D372453390800011BB4 /* NSCollectionLayoutSection+ComposedLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCollectionLayoutSection+ComposedLayouts.swift"; sourceTree = "<group>"; };
 		61518D3924533A1200011BB4 /* EntityName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityName.swift; sourceTree = "<group>"; };
 		61518D3E24533B1C00011BB4 /* BeerListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListCell.swift; sourceTree = "<group>"; };
+		61518D4024533BA600011BB4 /* AgeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeVerificationView.swift; sourceTree = "<group>"; };
+		61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AgeVerificationViewController.swift; path = ../../Controllers/ViewControllers/AgeVerificationViewController.swift; sourceTree = "<group>"; };
 		61518D4424533FEB00011BB4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		61518D48245365B100011BB4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		61518D4B24536F9000011BB4 /* BeerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListViewController.swift; sourceTree = "<group>"; };
@@ -195,6 +200,7 @@
 		61DF122124BFD177003ABD84 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationHooks.swift; sourceTree = "<group>"; };
 		61E9F77124DC80C40081AD29 /* AppHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHook.swift; sourceTree = "<group>"; };
+		61E9F77524DCFC010081AD29 /* OnboardingFloatingNextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFloatingNextButton.swift; sourceTree = "<group>"; };
 		61E9F77724DD93460081AD29 /* UIButton+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIButton+additions.swift"; path = "../Enums/UIButton+additions.swift"; sourceTree = "<group>"; };
 		61E9F77924DD93B90081AD29 /* ButtonColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonColor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,7 +264,9 @@
 		614251D524BE61DF00258BD8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				61518D4024533BA600011BB4 /* AgeVerificationView.swift */,
 				6142516424BBA18300258BD8 /* OnboardingView.swift */,
+				61E9F77524DCFC010081AD29 /* OnboardingFloatingNextButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -266,6 +274,7 @@
 		614251D624BE61E400258BD8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				61518D4224533BED00011BB4 /* AgeVerificationViewController.swift */,
 				6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */,
 				614251D224BE1EBB00258BD8 /* OnboardingScrollViewController.swift */,
 			);
@@ -792,6 +801,7 @@
 				617F82F0246C802A006195F0 /* JSONErrors.swift in Sources */,
 				61E9F77024DC80460081AD29 /* ApplicationHooks.swift in Sources */,
 				61518D04245330D300011BB4 /* Mraz.xcdatamodeld in Sources */,
+				61E9F77624DCFC010081AD29 /* OnboardingFloatingNextButton.swift in Sources */,
 				6186F4FB245DF623007BAB37 /* HomeViewController.swift in Sources */,
 				61518D5E24577BCE00011BB4 /* CloudKit.swift in Sources */,
 				617F82E2246C6C67006195F0 /* Endpoint.swift in Sources */,
@@ -799,6 +809,7 @@
 				617F82FB246D931E006195F0 /* Restaurant.swift in Sources */,
 				6142516B24BD29E200258BD8 /* OnboardingModel.swift in Sources */,
 				617F82E4246C6E7B006195F0 /* NearbyRestaurantsGP.swift in Sources */,
+				61518D4324533BED00011BB4 /* AgeVerificationViewController.swift in Sources */,
 				61805D9B24587940003EC9FE /* Section.swift in Sources */,
 				61E9F77224DC80C40081AD29 /* AppHook.swift in Sources */,
 				6186F4E1245C6990007BAB37 /* CKRecord+additions.swift in Sources */,
@@ -847,6 +858,7 @@
 				61E9F77824DD93460081AD29 /* UIButton+additions.swift in Sources */,
 				617F82D7246B67C8006195F0 /* BeerInfoViewController.swift in Sources */,
 				6186F4F5245CF44B007BAB37 /* Location.swift in Sources */,
+				61518D4124533BA600011BB4 /* AgeVerificationView.swift in Sources */,
 				617F82E8246C75B1006195F0 /* LocalRestaurants.swift in Sources */,
 				6147A133246B3D38000508FE /* SocialMediaIconsStackView.swift in Sources */,
 				617F82DE246C6C0A006195F0 /* Networking.swift in Sources */,

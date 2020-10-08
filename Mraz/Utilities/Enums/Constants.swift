@@ -15,9 +15,9 @@ enum BreweryInfo {
 }
 
 // MARK: - View Constants
-enum AgeVerification {
-    static let buttonWidth = CGFloat(200)
-    static let buttonHeight = CGFloat(40)
+enum AgeVerificationConstants {
+    static let buttonWidthAnchors = CGFloat(200)
+    static let buttonHeightAnchors = CGFloat(40)
 }
 
 enum BeerCellConstants {
