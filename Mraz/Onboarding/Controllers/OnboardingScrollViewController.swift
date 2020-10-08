@@ -79,7 +79,7 @@ final class MrazOnboardingPageViewController: UIViewController {
             }
         }
     }
-    
+
     private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
         let onboardingVC = MrazOnboardingViewController()
         let modelObject = dataSource[index]
@@ -95,7 +95,7 @@ final class MrazOnboardingPageViewController: UIViewController {
     // MARK: - Helpers
     private func incrementPage() {
         pageContainer.goToNextPage()
-        self.pageControl.currentPage = self.pageControl.currentPage + 1
+        self.pageControl.currentPage = pageControl.currentPage + 1
     }
 }
 
