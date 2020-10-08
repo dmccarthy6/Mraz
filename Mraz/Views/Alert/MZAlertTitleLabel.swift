@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 //
 //  MZAlertTitleLabel.swift
 //  Mraz
@@ -9,6 +10,8 @@
 
 import Foundation
 =======
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
 //  Created by Dylan  on 9/17/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
@@ -41,4 +44,7 @@ class MZAlertTitleLabel: UILabel {
         lineBreakMode = .byTruncatingTail
     }
 }
+<<<<<<< HEAD
 >>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c

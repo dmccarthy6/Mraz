@@ -23,20 +23,26 @@ final class MrazOnboardingPageViewController: UIViewController {
         return pageControl
     }()
 <<<<<<< HEAD
+<<<<<<< HEAD
     private var settings = MrazSettings()
 =======
 <<<<<<< Updated upstream
 >>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
     private var pageContainer: UIPageViewController!
 =======
+=======
+    private lazy var pageContainer: UIPageViewController = {
+        let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageController.dataSource = self
+        pageController.delegate = self
+        return pageController
+    }()
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     private var settings = MrazSettings()
->>>>>>> Stashed changes
     private var dataSource = OnboardingModel.data
     private var pages = [UIViewController]()
     private var currentIndex: Int?
     private var pendingIndex: Int?
-    private var notificationManager = LocalNotificationManger()
-    private var locationManager = LocationManager()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -46,8 +52,8 @@ final class MrazOnboardingPageViewController: UIViewController {
         self.verifyUsersAge()
         setupPageViewControllers()
     }
-    
-    // MARK: - Configure View
+
+    // MARK: - Page View Controller
     private func configurePageControl() {
         view.addSubview(pageControl)
         
@@ -70,35 +76,10 @@ final class MrazOnboardingPageViewController: UIViewController {
         view.bringSubviewToFront(pageControl)
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
-    }
-<<<<<<< Updated upstream
-    
-    private func setupPages() {
-        for page in 0..<dataSource.count {
-            if page == 0 {
-                createAgeVerificationVC()
-            }
-            let viewController = configureOnboardingViewController(at: page)
-            setButtonActions(for: page, on: viewController.onBoardingView)
-            pages.append(viewController)
-        }
+        
     }
     
-    private func createAgeVerificationVC() {
-        let ageVerifViewController = AgeVerificationViewController()
-        ageVerifViewController.ageHasBeenVerified = { [weak self] in
-            DispatchQueue.main.async {
-                self?.settings.set(true, for: .userIsOfAge)
-                self?.pageContainer.goToNextPage()
-                self?.incrementPageControl()
-            }
-        }
-        ageVerifViewController.userNotOfAge = { [weak self] in
-            self?.resetPageViewController()
-        }
-        pages.append(ageVerifViewController)
-    }
-    
+<<<<<<< HEAD
     private func resetPageViewController() {
         let ofAgeVC = pages[0]
         pages = [ofAgeVC]
@@ -110,6 +91,8 @@ final class MrazOnboardingPageViewController: UIViewController {
         pageControl.currentPage = 1
 =======
 
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     // MARK: - Create View Controllers
     private func createViewControllers() {
         let pagesCount = dataSource.count
@@ -125,43 +108,22 @@ final class MrazOnboardingPageViewController: UIViewController {
             default: ()
             }
         }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
 >>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     }
  
     private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
         let onboardingVC = MrazOnboardingViewController()
-<<<<<<< Updated upstream
         let onboardingView = onboardingVC.onBoardingView
         onboardingView.setData(title: title, buttonTitle: currentVal.actionButtonTitle, description: viewDescription.rawValue, image: viewImage)
-        onboardingView.nextButton(isEnabled: currentVal.nextBtnEnabled ?? true, isHidden: currentVal.nextBtnHidden ?? false)
         return onboardingVC
     }
-    
-    // MARK: - Button Functions
-    /// Set the button actions for onboarding view buttons
-    private func setButtonActions(for page: Int, on view: MrazOnboardingView) {
-        view.actionButtonTapped = { [weak self] in
-            if page == 0 {
-                self?.notificationManager.promptUserForLocalNotifications()
-            } else if page == 1 {
-                self?.locationManager.promptUserForLocationAuth()
-            } else if page == 2 {
-                view.dismissOnboardingView(from: self!)
-            }
-        }
-        view.nextButtonTapped = { [weak self] in
-            self?.handleNextPage()
-        }
-    }
-    
-    // MARK: - Helpers
-    private func handleNextPage() {
-        pageContainer.goToNextPage()
-        incrementPageControl()
-    }
-    
-=======
+
+    private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
+        let onboardingVC = MrazOnboardingViewController()
         let modelObject = dataSource[index]
         onboardingVC.configureOnboardingView(title: modelObject.title,
                                              description: modelObject.description.rawValue,
@@ -173,7 +135,12 @@ final class MrazOnboardingPageViewController: UIViewController {
     }
     
     // MARK: - Helpers
->>>>>>> Stashed changes
+    private func incrementPage() {
+        pageContainer.goToNextPage()
+        incrementPageControl()
+    }
+    
+    // MARK: - Helpers
     /// Increment the page control current page value by 1 forward.
     private func incrementPage() {
         pageContainer.goToNextPage()
@@ -231,7 +198,7 @@ extension MrazOnboardingPageViewController: UIPageViewControllerDelegate {
 // MARK: - Dismiss View Delegate Methods
 extension MrazOnboardingPageViewController: DismissViewDelegate {
     func dismissOnboardingViews() {
-        self.settings.set(true, for: .didFinishOnboarding)
+        settings.set(true, for: .didFinishOnboarding)
         self.dismiss(animated: true, completion: nil)
     }
 }

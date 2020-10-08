@@ -2,9 +2,11 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import CoreData
+import os.log
 
 final class CoreDataStack {
     // MARK: - Properties
+    let coreDataLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: SyncContainer.self))
     static var sharedStack = CoreDataStack()
     
     // MARK: - Persistent Container
@@ -12,6 +14,7 @@ final class CoreDataStack {
         let container = NSPersistentContainer(name: "Mraz")
         container.loadPersistentStores { (_, error) in
             if let error = error as NSError? {
+                os_log("Error loading persistent stores %@, %@", log: self.coreDataLog, type: .error, error, error.userInfo)
                 fatalError("CoreDataManager = Unresolved error \(error), \(error.userInfo)")
             }
         }

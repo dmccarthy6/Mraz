@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerForRemoteNotifications()
         return true
     }
+<<<<<<< HEAD
     
 <<<<<<< HEAD
     #warning("TODO - Remove below method.")
@@ -30,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     #warning("TODO - Debug - remove this method.")
 >>>>>>> Stashed changes
 >>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
+=======
+
+    #warning("TODO - Remove below method.")
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     func resetOnboarding() {
         let mrazSettings = MrazSettings()
         mrazSettings.set(false, for: .didFinishOnboarding)

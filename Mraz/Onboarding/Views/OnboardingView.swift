@@ -41,6 +41,7 @@ final class MrazOnboardingView: UIView {
         return button
     }()
 <<<<<<< HEAD
+<<<<<<< HEAD
     private var mrazSettings = MrazSettings()
 =======
 <<<<<<< Updated upstream
@@ -48,9 +49,10 @@ final class MrazOnboardingView: UIView {
     var nextButtonTapped: EmptyClosure?
     var actionButtonTapped: EmptyClosure?
 =======
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     private var mrazSettings = MrazSettings()
     weak var dismissDelegate: DismissViewDelegate?
->>>>>>> Stashed changes
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
@@ -62,7 +64,6 @@ final class MrazOnboardingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: -
     private func setupView() {
         addSubview(titleLabel)
         addSubview(descriptionLabel)
@@ -88,6 +89,7 @@ final class MrazOnboardingView: UIView {
             actionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
             actionButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+
     }
     
     // MARK: - Interface
@@ -109,7 +111,7 @@ final class MrazOnboardingView: UIView {
             actionButton.addTarget(self, action: #selector(launchAction), for: .touchUpInside)
         }
     }
-
+    
     // MARK: - Button Functions
     @objc
     private func localNotificationsAction() {
@@ -121,6 +123,7 @@ final class MrazOnboardingView: UIView {
         LocationManager().promptUserForLocationAuth()
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     func dismissOnboardingView(from viewController: UIViewController) {
         #warning("Uncomment below to enable onboarding flow only once for users")
@@ -130,19 +133,26 @@ final class MrazOnboardingView: UIView {
 =======
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     
     @objc
     private func launchAction() {
         dismissDelegate?.dismissOnboardingViews()
     }
->>>>>>> Stashed changes
 }
+
 protocol DismissViewDelegate: class {
     func dismissOnboardingViews()
 }
+
 enum ButtonType {
     case geofencing
     case notifications
     case launch
+<<<<<<< HEAD
 >>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
 }
+=======
+}
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
