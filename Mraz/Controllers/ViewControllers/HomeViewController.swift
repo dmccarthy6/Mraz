@@ -73,24 +73,9 @@ final class HomeViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         navigationItem.title = "What's On Tap"
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
+
         configureView()
         syncOnTapBeers()
-=======
-<<<<<<< Updated upstream
-        setupView()
-=======
-        configureView()
-        syncOnTapBeers()
->>>>>>> Stashed changes
->>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
-=======
-        
-        configureView()
-        syncOnTapBeers()
->>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
         createSnapshot()
     }
     
