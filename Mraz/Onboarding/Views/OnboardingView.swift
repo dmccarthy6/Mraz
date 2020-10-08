@@ -40,6 +40,17 @@ final class MrazOnboardingView: UIView {
         button.tintColor = .label
         return button
     }()
+<<<<<<< HEAD
+<<<<<<< HEAD
+    private var mrazSettings = MrazSettings()
+=======
+<<<<<<< Updated upstream
+>>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
+    var nextButtonTapped: EmptyClosure?
+    var actionButtonTapped: EmptyClosure?
+=======
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     private var mrazSettings = MrazSettings()
     weak var dismissDelegate: DismissViewDelegate?
     
@@ -111,6 +122,19 @@ final class MrazOnboardingView: UIView {
     private func geofencingNotificationsAction() {
         LocationManager().promptUserForLocationAuth()
     }
+<<<<<<< HEAD
+<<<<<<< HEAD
+    
+    func dismissOnboardingView(from viewController: UIViewController) {
+        #warning("Uncomment below to enable onboarding flow only once for users")
+        //mrazSettings.set(true, for: .didFinishOnboarding)
+        viewController.dismiss(animated: true)
+    }
+=======
+<<<<<<< Updated upstream
+=======
+=======
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c
     
     @objc
     private func launchAction() {
@@ -126,4 +150,9 @@ enum ButtonType {
     case geofencing
     case notifications
     case launch
+<<<<<<< HEAD
+>>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
 }
+=======
+}
+>>>>>>> 9ebc40cf2474a42d9adc9be1aee45bbe317d507c

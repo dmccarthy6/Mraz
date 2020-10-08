@@ -79,7 +79,7 @@ final class MrazOnboardingPageViewController: UIViewController {
             }
         }
     }
- 
+
     private func populateOnboardingVC(at index: Int, buttonTitle: String, buttonType: ButtonType) {
         let onboardingVC = MrazOnboardingViewController()
         let modelObject = dataSource[index]
