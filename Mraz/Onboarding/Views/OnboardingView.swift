@@ -31,39 +31,35 @@ final class MrazOnboardingView: UIView {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    private let nextButton: NextButton = {
-        let button = NextButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isEnabled = false
-        return button
-    }()
+
     private let actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 20
         button.backgroundColor = .systemRed
         button.tintColor = .label
-        button.addTarget(self, action: #selector(_actionButtonTapped), for: .touchUpInside)
         return button
     }()
+<<<<<<< HEAD
     private var mrazSettings = MrazSettings()
+=======
+<<<<<<< Updated upstream
+>>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
     var nextButtonTapped: EmptyClosure?
     var actionButtonTapped: EmptyClosure?
+=======
+    private var mrazSettings = MrazSettings()
+    weak var dismissDelegate: DismissViewDelegate?
+>>>>>>> Stashed changes
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        configureNextButtonAction()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        configureNextButton()
     }
     
     // MARK: -
@@ -71,7 +67,6 @@ final class MrazOnboardingView: UIView {
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(imageView)
-        addSubview(nextButton)
         addSubview(actionButton)
         
         NSLayoutConstraint.activate([
@@ -90,50 +85,64 @@ final class MrazOnboardingView: UIView {
             
             actionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 75),
             actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -75),
-            actionButton.topAnchor.constraint(equalTo: nextButton.bottomAnchor, constant: 30),
-            actionButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            nextButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            nextButton.topAnchor.constraint(equalTo: self.bottomAnchor, constant: -175),
-            nextButton.heightAnchor.constraint(equalToConstant: 50),
-            nextButton.widthAnchor.constraint(equalToConstant: 50)
+            actionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
+            actionButton.heightAnchor.constraint(equalToConstant: 40)
         ])
-        actionButton.addTarget(self, action: #selector(_actionButtonTapped), for: .touchUpInside)
-    }
-    
-    // MARK: - Button Functions
-    private func configureNextButtonAction() {
-        nextButton.nextButtonTapped = { [weak self] in
-            self?.nextButtonTapped?()
-        }
-    }
-    
-    private func configureNextButton() {
-        nextButton.layer.cornerRadius = nextButton.frame.width / 2
-        nextButton.clipsToBounds = true
-    }
-    
-    @objc
-    private func _actionButtonTapped() {
-        actionButtonTapped?()
     }
     
     // MARK: - Interface
-    func setData(title: String, buttonTitle: String, description: String, image: UIImage?) {
+    func setData(title: String, description: String, image: UIImage?, buttonTitle: String, buttonType: ButtonType) {
         titleLabel.text = title
         descriptionLabel.text = description
         imageView.image = image
         actionButton.setTitle(buttonTitle, for: .normal)
+        
+        // Set Button Actions
+        switch buttonType {
+        case .notifications:
+            actionButton.addTarget(self, action: #selector(localNotificationsAction), for: .touchUpInside)
+            
+        case .geofencing:
+            actionButton.addTarget(self, action: #selector(geofencingNotificationsAction), for: .touchUpInside)
+            
+        case .launch:
+            actionButton.addTarget(self, action: #selector(launchAction), for: .touchUpInside)
+        }
+    }
+
+    // MARK: - Button Functions
+    @objc
+    private func localNotificationsAction() {
+        LocalNotificationManger().promptUserForLocalNotifications()
     }
     
-    func nextButton(isEnabled: Bool, isHidden: Bool) {
-        self.nextButton.isHidden = isHidden
-        self.nextButton.isEnabled = isEnabled
+    @objc
+    private func geofencingNotificationsAction() {
+        LocationManager().promptUserForLocationAuth()
     }
+<<<<<<< HEAD
     
     func dismissOnboardingView(from viewController: UIViewController) {
         #warning("Uncomment below to enable onboarding flow only once for users")
         //mrazSettings.set(true, for: .didFinishOnboarding)
         viewController.dismiss(animated: true)
     }
+=======
+<<<<<<< Updated upstream
+=======
+    
+    @objc
+    private func launchAction() {
+        dismissDelegate?.dismissOnboardingViews()
+    }
+>>>>>>> Stashed changes
+}
+protocol DismissViewDelegate: class {
+    func dismissOnboardingViews()
+}
+enum ButtonType {
+    case geofencing
+    case notifications
+    case launch
+>>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
 }

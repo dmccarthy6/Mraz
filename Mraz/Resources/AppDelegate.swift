@@ -21,7 +21,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+<<<<<<< HEAD
     #warning("TODO - Remove below method.")
+=======
+<<<<<<< Updated upstream
+    // MARK: - FOR DEVELOPMENT
+=======
+    #warning("TODO - Debug - remove this method.")
+>>>>>>> Stashed changes
+>>>>>>> eb747e9dbd62572f5834cbaac5f70489824757f8
     func resetOnboarding() {
         let mrazSettings = MrazSettings()
         mrazSettings.set(false, for: .didFinishOnboarding)
