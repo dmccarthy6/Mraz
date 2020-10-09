@@ -47,7 +47,7 @@ class BreweryDataView: UIView {
     // MARK: - Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemGray3
+        backgroundColor = .systemBackground
         setupViews()
     }
     

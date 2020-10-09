@@ -69,13 +69,6 @@ class LocalNotificationManger: NSObject, MrazNotifications {
     }
     
     // MARK: - Trigger Notifications
-   
-//    func triggerLocalNotification(title: String, body: String) {
-//        let notification = Notification(id: UUID().uuidString, title: title, body: body)
-//        scheduledNotifications.append(notification)
-//        schedule()
-//    }
-//
     func triggerMrazLocalNotification(type: NotificationType, title: String, body: String, region: CLRegion?) {
         var notification: Notification?
         
@@ -96,13 +89,6 @@ class LocalNotificationManger: NSObject, MrazNotifications {
     // MARK: - Interface
     func triggerGeofencingNotification(for region: CLRegion) {
         triggerMrazLocalNotification(type: .geofencing, title: GeoNotificationContent.title, body: GeoNotificationContent.body, region: region)
-//        let notification = Notification(id: region.identifier,
-//                                title: GeoNotificationContent.title,
-//                                body: GeoNotificationContent.body)
-//        notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-////        notificationTrigger = UNLocationNotificationTrigger(region: region, repeats: false)
-//        scheduledNotifications.append(notification)
-//        schedule()
     }
     
     func sendFavoriteBeerNotification(for beer: Beers) {
@@ -113,7 +99,6 @@ class LocalNotificationManger: NSObject, MrazNotifications {
             let title = "\(beerName) is on tap!"
             let body = "Come by the tasting room to get yours before it's gone."
             triggerMrazLocalNotification(type: .local, title: title, body: body, region: nil)
-//            triggerLocalNotification(title: title, body: body)
         }
     }
 }
