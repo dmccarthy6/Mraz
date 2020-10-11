@@ -15,7 +15,9 @@ final class MapViewController: UIViewController {
     }()
     private let modelController = MapViewModelController()
     private let mapIdentifier = "MrazMapID"
-    private let locationManager = LocationManager()
+    private lazy var locationManager: LocationManager = {
+        return LocationManager()
+    }()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {

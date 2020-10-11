@@ -47,11 +47,6 @@
 		617719EB2529152B00BD7B4C /* SyncContainer+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617719EA2529152B00BD7B4C /* SyncContainer+Notifications.swift */; };
 		617719EF25291AE200BD7B4C /* Error+CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617719EE25291AE200BD7B4C /* Error+CloudKit.swift */; };
 		617719F3252A6DB500BD7B4C /* CloudKitSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617719F2252A6DB500BD7B4C /* CloudKitSync.swift */; };
-		6179CFDA252CFAEF0034EDC6 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179CFD9252CFAEF0034EDC6 /* UserNotifications.framework */; };
-		6179CFDC252CFAEF0034EDC6 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179CFDB252CFAEF0034EDC6 /* UserNotificationsUI.framework */; };
-		6179CFDF252CFAEF0034EDC6 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6179CFDE252CFAEF0034EDC6 /* NotificationViewController.swift */; };
-		6179CFE2252CFAEF0034EDC6 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6179CFE0252CFAEF0034EDC6 /* MainInterface.storyboard */; };
-		6179CFE6252CFAEF0034EDC6 /* MrazCustomNotification.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6179CFD8252CFAEF0034EDC6 /* MrazCustomNotification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		617DDA1E2461B1A500BA86B9 /* CloudKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */; };
 		617DDA202461B1B100BA86B9 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */; };
 		617DDA222461B25B00BA86B9 /* CKError+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617DDA212461B25B00BA86B9 /* CKError+additions.swift */; };
@@ -123,13 +118,6 @@
 			remoteGlobalIDString = 61518CFA245330D300011BB4;
 			remoteInfo = Mraz;
 		};
-		6179CFE4252CFAEF0034EDC6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 61518CF3245330D300011BB4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6179CFD7252CFAEF0034EDC6;
-			remoteInfo = MrazCustomNotification;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,7 +127,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				6179CFE6252CFAEF0034EDC6 /* MrazCustomNotification.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -192,12 +179,8 @@
 		617719EA2529152B00BD7B4C /* SyncContainer+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncContainer+Notifications.swift"; sourceTree = "<group>"; };
 		617719EE25291AE200BD7B4C /* Error+CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+CloudKit.swift"; sourceTree = "<group>"; };
 		617719F2252A6DB500BD7B4C /* CloudKitSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSync.swift; sourceTree = "<group>"; };
-		6179CFD8252CFAEF0034EDC6 /* MrazCustomNotification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MrazCustomNotification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6179CFD9252CFAEF0034EDC6 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		6179CFDB252CFAEF0034EDC6 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
-		6179CFDE252CFAEF0034EDC6 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
-		6179CFE1252CFAEF0034EDC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		6179CFE3252CFAEF0034EDC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		617DDA1D2461B1A500BA86B9 /* CloudKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitTests.swift; sourceTree = "<group>"; };
 		617DDA1F2461B1B100BA86B9 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		617DDA212461B25B00BA86B9 /* CKError+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKError+additions.swift"; sourceTree = "<group>"; };
@@ -278,15 +261,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6179CFD5252CFAEF0034EDC6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6179CFDC252CFAEF0034EDC6 /* UserNotificationsUI.framework in Frameworks */,
-				6179CFDA252CFAEF0034EDC6 /* UserNotifications.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -359,7 +333,6 @@
 				61640D2124E440FF00D362DA /* Mraz.gpx */,
 				61518CFD245330D300011BB4 /* Mraz */,
 				61518D17245330D900011BB4 /* MrazTests */,
-				6179CFDD252CFAEF0034EDC6 /* MrazCustomNotification */,
 				61518CFC245330D300011BB4 /* Products */,
 				61805DA22458A8B5003EC9FE /* Frameworks */,
 			);
@@ -370,7 +343,6 @@
 			children = (
 				61518CFB245330D300011BB4 /* Mraz.app */,
 				61518D14245330D900011BB4 /* MrazTests.xctest */,
-				6179CFD8252CFAEF0034EDC6 /* MrazCustomNotification.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -378,11 +350,11 @@
 		61518CFD245330D300011BB4 /* Mraz */ = {
 			isa = PBXGroup;
 			children = (
+				61518D0F245330D900011BB4 /* Info.plist */,
 				61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */,
 				61F8C7FE24C5022F002EF57E /* AppFlow */,
 				6142516324BBA15500258BD8 /* Onboarding */,
 				61805DA12458A8B0003EC9FE /* Mraz.entitlements */,
-				61518D0F245330D900011BB4 /* Info.plist */,
 				61518D252453343000011BB4 /* Resources */,
 				617F82DC246C6BC8006195F0 /* NetworkLayer */,
 				61518D232453341E00011BB4 /* Models */,
@@ -569,16 +541,6 @@
 				617F82FE246D9485006195F0 /* MapViewModelController.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		6179CFDD252CFAEF0034EDC6 /* MrazCustomNotification */ = {
-			isa = PBXGroup;
-			children = (
-				6179CFDE252CFAEF0034EDC6 /* NotificationViewController.swift */,
-				6179CFE0252CFAEF0034EDC6 /* MainInterface.storyboard */,
-				6179CFE3252CFAEF0034EDC6 /* Info.plist */,
-			);
-			path = MrazCustomNotification;
 			sourceTree = "<group>";
 		};
 		617DDA232461BADE00BA86B9 /* CoreDataTests */ = {
@@ -793,7 +755,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6179CFE5252CFAEF0034EDC6 /* PBXTargetDependency */,
 			);
 			name = Mraz;
 			productName = Mraz;
@@ -818,23 +779,6 @@
 			productReference = 61518D14245330D900011BB4 /* MrazTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		6179CFD7252CFAEF0034EDC6 /* MrazCustomNotification */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6179CFE7252CFAEF0034EDC6 /* Build configuration list for PBXNativeTarget "MrazCustomNotification" */;
-			buildPhases = (
-				6179CFD4252CFAEF0034EDC6 /* Sources */,
-				6179CFD5252CFAEF0034EDC6 /* Frameworks */,
-				6179CFD6252CFAEF0034EDC6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = MrazCustomNotification;
-			productName = MrazCustomNotification;
-			productReference = 6179CFD8252CFAEF0034EDC6 /* MrazCustomNotification.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -851,9 +795,6 @@
 					61518D13245330D900011BB4 = {
 						CreatedOnToolsVersion = 11.4.1;
 						TestTargetID = 61518CFA245330D300011BB4;
-					};
-					6179CFD7252CFAEF0034EDC6 = {
-						CreatedOnToolsVersion = 12.0.1;
 					};
 				};
 			};
@@ -872,7 +813,6 @@
 			targets = (
 				61518CFA245330D300011BB4 /* Mraz */,
 				61518D13245330D900011BB4 /* MrazTests */,
-				6179CFD7252CFAEF0034EDC6 /* MrazCustomNotification */,
 			);
 		};
 /* End PBXProject section */
@@ -892,14 +832,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6179CFD6252CFAEF0034EDC6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6179CFE2252CFAEF0034EDC6 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1037,14 +969,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6179CFD4252CFAEF0034EDC6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6179CFDF252CFAEF0034EDC6 /* NotificationViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1052,11 +976,6 @@
 			isa = PBXTargetDependency;
 			target = 61518CFA245330D300011BB4 /* Mraz */;
 			targetProxy = 61518D15245330D900011BB4 /* PBXContainerItemProxy */;
-		};
-		6179CFE5252CFAEF0034EDC6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6179CFD7252CFAEF0034EDC6 /* MrazCustomNotification */;
-			targetProxy = 6179CFE4252CFAEF0034EDC6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1067,14 +986,6 @@
 				61518D0D245330D900011BB4 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		6179CFE0252CFAEF0034EDC6 /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6179CFE1252CFAEF0034EDC6 /* Base */,
-			);
-			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1199,7 +1110,6 @@
 		61518D1E245330D900011BB4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Mraz/Mraz.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -1222,7 +1132,6 @@
 		61518D1F245330D900011BB4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Mraz/Mraz.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -1286,46 +1195,6 @@
 			};
 			name = Release;
 		};
-		6179CFE8252CFAEF0034EDC6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3K8HM9CR5K;
-				INFOPLIST_FILE = MrazCustomNotification/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthy.Mraz.MrazCustomNotification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		6179CFE9252CFAEF0034EDC6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3K8HM9CR5K;
-				INFOPLIST_FILE = MrazCustomNotification/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthy.Mraz.MrazCustomNotification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1352,15 +1221,6 @@
 			buildConfigurations = (
 				61518D21245330D900011BB4 /* Debug */,
 				61518D22245330D900011BB4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6179CFE7252CFAEF0034EDC6 /* Build configuration list for PBXNativeTarget "MrazCustomNotification" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6179CFE8252CFAEF0034EDC6 /* Debug */,
-				6179CFE9252CFAEF0034EDC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

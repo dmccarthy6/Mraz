@@ -3,38 +3,45 @@
 
 import UserNotifications
 import UIKit
+import os.log
 
 protocol MrazNotifications: MrazNotificationAuthorization {
-    // MARK: - Properties
     var notificationCenter: UNUserNotificationCenter { get set }
     var scheduledNotifications: [Notification] { get }
     
-    // MARK: - Methods
     func schedule()
     func scheduleLocalNotification()
 }
 
 extension MrazNotifications {
+    var notificationsLog: OSLog {
+        return OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: MrazNotifications.self))
+    }
+    
     // MARK: - Authorizations
     func promptUserForLocalNotifications() {
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             if let error = error {
-                print("Error requesting Local Notifications: \(error.localizedDescription)")
+                os_log("Error requesting local notification authorization from user. %@",
+                       log: notificationsLog,
+                       type: .error,
+                       error.localizedDescription)
             }
             if !granted {
+                os_log("Notification authorization granted - %@", log: notificationsLog, type: .debug, granted)
                 return
-            } else {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
             }
+            os_log("Authorizations are granted", log: notificationsLog, type: .debug)
         }
     }
     
     func getLocalNotificationStatus(_ completion: @escaping (Bool) -> Void) {
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             if let error = error {
-                print("Error requesting Local Notification Auth: \(error.localizedDescription)")
+                os_log("Error requesting notification authorization - %@",
+                       log: notificationsLog,
+                       type: .error,
+                       error.localizedDescription)
                 return
             }
             completion(granted)
