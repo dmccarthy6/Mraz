@@ -8,7 +8,7 @@ class MrazTabBarController: UITabBarController {
     // MARK: - Properties
     private var mrazTabBar = UITabBarController()
     
-    // MARK: - Life Cycle
+    // MARK: - Lifecyce
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpTabBarController()
