@@ -7,9 +7,14 @@ import UIKit
 final class AppFlow {
     // MARK: - Properties
     private lazy var onboardingFlow = OnboardingFlow(userSettings: context.userSettings)
+    
     private let context: AppContext
+    
     private let window: UIWindow
-    private var rootViewController: UIViewController { return window.rootViewController! }
+    
+    private var rootViewController: UIViewController {
+        return window.rootViewController!
+    }
     
     // MARK: - Life Cycle
     init(context: AppContext, window: UIWindow?) {

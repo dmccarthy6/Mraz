@@ -4,9 +4,8 @@
 import CoreData
 
 protocol WriteToCoreData: ReadFromCoreData {
-    var mainThreadContext: NSManagedObjectContext { get }
+    var mainContext: NSManagedObjectContext { get }
     
-    func save(context: NSManagedObjectContext)
-    func saveObject<T: NSManagedObject>(object: T, model: BeerModel, modifiedDate: Date, in context: NSManagedObjectContext)
+    func saveObject<T: NSManagedObject>(object: T, model: BeerModel, in context: NSManagedObjectContext)
     func delete<T: NSManagedObject>(_ managedObject: T)
 }

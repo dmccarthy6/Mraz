@@ -170,7 +170,9 @@ class SyncContainer: CloudKitSync {
             }
             guard let changedRecord = record else { return }
             let recordName = changedRecord.recordID.recordName
-            let beer = self.dbManager.fetchCoreDataObject(by: recordName)
+            let recordNamePredicate = NSPredicate(format: "id == %@", recordName)
+            let beer = Beers.findOrFetch(in: self.dbManager.mainContext, matching: recordNamePredicate)
+//                self.dbManager.findManagedObject(matching: recordNamePredicate)
             let beerAlreadyExists = beer != nil
             DispatchQueue.main.async {
                 beerAlreadyExists ?  self.handleModified(record: changedRecord, beer: beer!) : self.handleNew(record: changedRecord)
@@ -181,9 +183,10 @@ class SyncContainer: CloudKitSync {
     /// Creates a new ManagedObject from CKRecord.
     /// - Parameter record: The CKRecord object that was modified/created.
     func handleNew(record: CKRecord) {
-        let newBeerManagedObj = Beers(context: dbManager.mainThreadContext)
-        let newBeerModel = ckManager.generateLocalModelFrom(record: record, isFav: newBeerManagedObj.isFavorite)
-        dbManager.createOrUpdateBeerObject(from: newBeerModel, beer: newBeerManagedObj, in: dbManager.mainThreadContext)
+        let newBeerManagedObj = Beers(context: dbManager.mainContext)
+        let newBeerModel = BeerModel.createBeerModel(from: record, isFavorite: newBeerManagedObj.isFavorite)
+        Beers.updateOrCreate(newBeerManagedObj, from: newBeerModel, in: dbManager.mainContext)
+//        dbManager.createOrUpdateBeerObject(from: newBeerModel, beer: newBeerManagedObj, in: dbManager.mainThreadContext)
     }
     
     /// Method used when we receive a remote notification from an object that already
@@ -193,8 +196,8 @@ class SyncContainer: CloudKitSync {
     func handleModified(record: CKRecord, beer: Beers?) {
         os_log("%{public}@", log: mrazLog, type: .debug, #function)
         guard let updatedBeer = beer else { return }
-        let localModBeer = ckManager.generateLocalModelFrom(record: record, isFav: updatedBeer.isFavorite)
-        dbManager.saveModifiedBeerToDatabase(beer: updatedBeer, model: localModBeer, context: dbManager.mainThreadContext)
+        let localModBeer = BeerModel.createBeerModel(from: record, isFavorite: updatedBeer.isFavorite)
+        Beers.updateOrCreate(updatedBeer, from: localModBeer, in: dbManager.mainContext)
         LocalNotificationManger().sendFavoriteBeerNotification(for: updatedBeer)
     }
 }

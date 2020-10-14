@@ -7,7 +7,7 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var appFlow: AppFlow!
-    private let databaseMgr = CoreDataManager.shared
+    lazy var databaseManager = CoreDataManager()
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
@@ -22,6 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        databaseMgr.save(context: databaseMgr.mainThreadContext)
+        CoreDataStack.save(databaseManager.mainContext)
     }
 }

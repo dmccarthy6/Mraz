@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		612EE7E7250021FD003D84F9 /* MockMrazLocationMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612EE7E6250021FD003D84F9 /* MockMrazLocationMgr.swift */; };
 		612EE7E9250025FE003D84F9 /* GeofencingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612EE7E8250025FE003D84F9 /* GeofencingTests.swift */; };
+		6135933C2533A9A600629389 /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135933B2533A9A500629389 /* Managed.swift */; };
+		6135934E2536567200629389 /* MrazFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135934D2536567100629389 /* MrazFetchedResultsController.swift */; };
+		6135935425369C7000629389 /* CoreDataContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135935325369C6F00629389 /* CoreDataContext.swift */; };
 		6142515E24BB913300258BD8 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142515D24BB913300258BD8 /* LocationManager.swift */; };
 		6142516524BBA18300258BD8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516424BBA18300258BD8 /* OnboardingView.swift */; };
 		6142516724BBC14B00258BD8 /* ViewController+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */; };
@@ -103,7 +106,7 @@
 		61DF121E24BFCCF1003ABD84 /* UserDefaults+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */; };
 		61DF122024BFD144003ABD84 /* GlobalTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */; };
 		61DF122224BFD177003ABD84 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DF122124BFD177003ABD84 /* AppFlow.swift */; };
-		61E235B525028F62002D5A2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E235B425028F62002D5A2A /* CoreDataStack.swift */; };
+		61E235B525028F62002D5A2A /* CoreDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E235B425028F62002D5A2A /* CoreDataStore.swift */; };
 		61E9F77024DC80460081AD29 /* ApplicationHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */; };
 		61E9F77224DC80C40081AD29 /* AppHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77124DC80C40081AD29 /* AppHook.swift */; };
 		61E9F77824DD93460081AD29 /* UIButton+additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9F77724DD93460081AD29 /* UIButton+additions.swift */; };
@@ -136,6 +139,9 @@
 /* Begin PBXFileReference section */
 		612EE7E6250021FD003D84F9 /* MockMrazLocationMgr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMrazLocationMgr.swift; sourceTree = "<group>"; };
 		612EE7E8250025FE003D84F9 /* GeofencingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofencingTests.swift; sourceTree = "<group>"; };
+		6135933B2533A9A500629389 /* Managed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
+		6135934D2536567100629389 /* MrazFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MrazFetchedResultsController.swift; sourceTree = "<group>"; };
+		6135935325369C6F00629389 /* CoreDataContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContext.swift; sourceTree = "<group>"; };
 		6142515D24BB913300258BD8 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		6142516424BBA18300258BD8 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6142516624BBC14B00258BD8 /* ViewController+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Onboarding.swift"; sourceTree = "<group>"; };
@@ -238,7 +244,7 @@
 		61DF121D24BFCCF1003ABD84 /* UserDefaults+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+additions.swift"; sourceTree = "<group>"; };
 		61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTypealiases.swift; sourceTree = "<group>"; };
 		61DF122124BFD177003ABD84 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
-		61E235B425028F62002D5A2A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		61E235B425028F62002D5A2A /* CoreDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStore.swift; sourceTree = "<group>"; };
 		61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationHooks.swift; sourceTree = "<group>"; };
 		61E9F77124DC80C40081AD29 /* AppHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHook.swift; sourceTree = "<group>"; };
 		61E9F77724DD93460081AD29 /* UIButton+additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIButton+additions.swift"; path = "../Enums/UIButton+additions.swift"; sourceTree = "<group>"; };
@@ -401,7 +407,9 @@
 		61518D242453342500011BB4 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				61E235B425028F62002D5A2A /* CoreDataStack.swift */,
+				6135934D2536567100629389 /* MrazFetchedResultsController.swift */,
+				61E235B425028F62002D5A2A /* CoreDataStore.swift */,
+				6135935325369C6F00629389 /* CoreDataContext.swift */,
 				61518D2E2453351200011BB4 /* CoreDataManager.swift */,
 				61AC28BF2509AA42000EBB38 /* Protocols */,
 				61518D292453347600011BB4 /* NSManagedObjectSubclasses */,
@@ -689,6 +697,7 @@
 			children = (
 				61518D2A245334E500011BB4 /* ReadFromCoreData.swift */,
 				61518D2C245334EE00011BB4 /* WriteToCoreData.swift */,
+				6135933B2533A9A500629389 /* Managed.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -883,6 +892,7 @@
 				617F82E2246C6C67006195F0 /* Endpoint.swift in Sources */,
 				61DF122224BFD177003ABD84 /* AppFlow.swift in Sources */,
 				617719EB2529152B00BD7B4C /* SyncContainer+Notifications.swift in Sources */,
+				6135935425369C7000629389 /* CoreDataContext.swift in Sources */,
 				617F82FB246D931E006195F0 /* Restaurant.swift in Sources */,
 				6142516B24BD29E200258BD8 /* OnboardingModel.swift in Sources */,
 				618D16C02514329D0014C229 /* MZAlertTitleLabel.swift in Sources */,
@@ -912,6 +922,7 @@
 				61805D99245875EE003EC9FE /* CloudKitManager.swift in Sources */,
 				61518D06245330D300011BB4 /* ContentView.swift in Sources */,
 				61DBF99B24E095EE0038F40C /* LocalNotificationManager.swift in Sources */,
+				6135934E2536567200629389 /* MrazFetchedResultsController.swift in Sources */,
 				61805D932457B6F0003EC9FE /* Integer+additions.swift in Sources */,
 				617F82D9246B6815006195F0 /* BeerInfoView.swift in Sources */,
 				61BD6BE82465DC37000D4193 /* BreweryDataView.swift in Sources */,
@@ -924,7 +935,7 @@
 				61518D2F2453351200011BB4 /* CoreDataManager.swift in Sources */,
 				61518D36245338EA00011BB4 /* UICollectionView+additions.swift in Sources */,
 				617DDA2F24648A5000BA86B9 /* ModifiedRecords+CoreDataProperties.swift in Sources */,
-				61E235B525028F62002D5A2A /* CoreDataStack.swift in Sources */,
+				61E235B525028F62002D5A2A /* CoreDataStore.swift in Sources */,
 				618D16B625142FAD0014C229 /* MZAlertBodyLabel.swift in Sources */,
 				6186F5032460E4BB007BAB37 /* RecordsChangedProtocol.swift in Sources */,
 				617DDA2D24648A5000BA86B9 /* Beers+CoreDataProperties.swift in Sources */,
@@ -948,6 +959,7 @@
 				61BD613924E710BE00C64327 /* LocationAuth.swift in Sources */,
 				61E9F77A24DD93B90081AD29 /* ButtonColor.swift in Sources */,
 				6147A12E2469B310000508FE /* OnTapModel.swift in Sources */,
+				6135933C2533A9A600629389 /* Managed.swift in Sources */,
 				6142516724BBC14B00258BD8 /* ViewController+Onboarding.swift in Sources */,
 				617DDA2E24648A5000BA86B9 /* ModifiedRecords+CoreDataClass.swift in Sources */,
 			);
