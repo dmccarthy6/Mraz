@@ -4,8 +4,11 @@
 import Foundation
 import CoreData
 
-extension Beers {
-
+extension Beers: Managed {
+    static var defaultSortDescriptors: [NSSortDescriptor] {
+        return [NSSortDescriptor(key: "name", ascending: true)]
+    }
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Beers> {
         return NSFetchRequest<Beers>(entityName: "Beers")
     }

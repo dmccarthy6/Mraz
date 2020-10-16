@@ -5,8 +5,8 @@ import UIKit
 import CoreData
 
 extension UIViewController {
-    func openBeerInfoVC(from objectID: NSManagedObjectID) {
-        let beerInfoVC = BeerInfoViewController()
+    func openBeerInfoVC(from objectID: NSManagedObjectID, context: NSManagedObjectContext) {
+        let beerInfoVC = BeerInfoViewController(context: context)
         beerInfoVC.objectID = objectID
         let navController = UINavigationController(rootViewController: beerInfoVC)
         present(navController, animated: true)

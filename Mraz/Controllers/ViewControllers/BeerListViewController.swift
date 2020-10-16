@@ -8,7 +8,9 @@ class BeerListViewController: UIViewController {
     // MARK: - Properties
     typealias Element = Beers
     typealias BeersSnapshot = NSDiffableDataSourceSnapshot<Section, Element>
+    
     typealias BeersDiffableDatasource = UICollectionViewDiffableDataSource<Section, Element>
+    
     private lazy var layout: UICollectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { section, environment -> NSCollectionLayoutSection in
             let inset = CGFloat(10)
@@ -23,6 +25,7 @@ class BeerListViewController: UIViewController {
         }
         return layout
     }()
+    
     private lazy var collectionView: UICollectionView = { [unowned self] in
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,16 +36,18 @@ class BeerListViewController: UIViewController {
         collectionView.registerSupplementaryView(viewClass: BeerListHeader.self)
         return collectionView
     }()
+    
     private lazy var beersDiffableDatasource: BeersDiffableDatasource = {
         /// Set Up CollectionView Cells
         let diffableDatasource = BeersDiffableDatasource(collectionView: collectionView) { (collectionView, indexPath, element) -> UICollectionViewCell? in
             let cell: BeerListCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.configureBeerCell(beerName: element.name, type: element.beerType, abv: element.abv, isFavorite: element.isFavorite)
             cell.makeBeerFavorite = { [weak self] in
+                guard let self = self else { return }
                 cell.configureFavoritesButton(forElement: element)
                 let beerCurrentStatus = element.isFavorite
                 element.isFavorite = !beerCurrentStatus
-                self?.coreDataManager.updateLocalFavoriteStatus(element)
+                self.manager.update(beer: element)
             }
             return cell
         }
@@ -56,13 +61,17 @@ class BeerListViewController: UIViewController {
         }
         return diffableDatasource
     }()
-    private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        coreDataManager.frcPredicate = NSPredicate(value: true)
-        let controller = coreDataManager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
+    
+    private lazy var fetchedResultsController: NSFetchedResultsController<Beers> = {
+        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers,
+                                                                                    matching: NSPredicate(value: true),
+                                                                                    in: manager.mainContext)
         controller.delegate = self
         return controller
     }()
-    lazy var coreDataManager = CoreDataManager.shared
+    
+    let manager = CoreDataManager()
+    
     private var currentSearchText = ""
     private var activityIndicator: UIActivityIndicatorView?
     private var favoritesShowing: Bool = false
@@ -103,7 +112,7 @@ class BeerListViewController: UIViewController {
     // MARK: - Snapshot
     /// Create the snapshot using the FetchedResultsController as datasource.
     private func createSnapshot() {
-        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        guard let beers = fetchedResultsController.fetchedObjects else { return }
         updateSnapshot(with: beers)
     }
     
@@ -126,23 +135,22 @@ class BeerListViewController: UIViewController {
         beersDiffableDatasource.apply(snapshot)
     }
     
-    // MARK: - Helpers
     
     // MARK: - Filtering
-    func filterResultsBy(filterPredicate: NSPredicate, value: Bool) {
-        let manager = CoreDataManager(predicate: filterPredicate)
-        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
+    func filterResults(matching predicate: NSPredicate, value: Bool) {
+        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: predicate, in: self.manager.mainContext, key: "name", ascending: value)
         fetchedResultsController = controller
-        guard let beers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        guard let beers = fetchedResultsController.fetchedObjects else { return }
         value ? updateSnapshotWithFilterData(with: beers) : updateSnapshot(with: beers)
     }
     
+    /// Button function to filter Core Data by favorite beers and update snapshot.
     @objc private func showFavorites() {
         favoritesShowing = !favoritesShowing
         let showFavorites = NSPredicate(format: "isFavorite == %@", NSNumber(value: true))
         let showAll = NSPredicate(value: true)
         let favPredicate = favoritesShowing ?  showFavorites : showAll
-        filterResultsBy(filterPredicate: favPredicate, value: favoritesShowing)
+        filterResults(matching: favPredicate, value: favoritesShowing)
     }
     
     // MARK: - Search
@@ -159,14 +167,14 @@ extension BeerListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let beerItem = self.beersDiffableDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedBeerObjectID = beerItem.objectID
-        self.openBeerInfoVC(from: selectedBeerObjectID)
+        self.openBeerInfoVC(from: selectedBeerObjectID, context: self.manager.mainContext)
     }
 }
 
 // MARK: - Fetched Results Controller Delegate
 extension BeerListViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let updatedBeers = fetchedResultsController.fetchedObjects as? [Beers] else { return }
+        guard let updatedBeers = fetchedResultsController.fetchedObjects else { return }
         updateSnapshot(with: updatedBeers)
     }
 }
@@ -179,6 +187,6 @@ extension BeerListViewController: UISearchResultsUpdating {
         
         let searchTextCleared = searchText == ""
         let searchPredicate = searchTextCleared ? NSPredicate(value: true) : NSPredicate(format: "name CONTAINS[c] %@", currentSearchText)
-        filterResultsBy(filterPredicate: searchPredicate, value: !searchTextCleared)
+        filterResults(matching: searchPredicate, value: !searchTextCleared)
     }
 }

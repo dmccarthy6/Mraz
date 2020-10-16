@@ -22,10 +22,6 @@ extension MrazLocationManager {
     }
     
     // MARK: - Authorization
-    func requestWhenInUseAuth() {
-        CLLocationManager().requestWhenInUseAuthorization()
-    }
-    
     func checkLocationAuthIsEnabled(_ completion: @escaping () -> Void) {
         let locationAuthorized = currentAuthStatus == .authorizedAlways || currentAuthStatus == .authorizedWhenInUse
         locationAuthorized ? completion() : nil
@@ -42,11 +38,12 @@ extension MrazLocationManager {
         switch currentAuthStatus {
         case .authorizedAlways, .authorizedWhenInUse: monitorRegionAtBrewery()
         case .denied, .restricted: return
-        case .notDetermined: requestWhenInUseAuth()
+        case .notDetermined: requestAlwaysAuth()
         default: ()
         }
     }
     
+    // MARK: - Monitor Region
     func monitorRegionAtBrewery() {
         guard let locationManager = locationManager else { return }
         let breweryRegion = CLCircularRegion(center: Coordinates.mraz.location,

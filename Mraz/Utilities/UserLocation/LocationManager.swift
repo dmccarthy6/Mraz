@@ -10,7 +10,8 @@ final class LocationManager: NSObject, MrazLocationManager {
     let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: LocationManager.self))
     var mapView: MKMapView?
     weak var locationDelegate: CLLocationManagerDelegate?
-    var locationManager: CLLocationManager? = {
+    private var requestAlwaysAuthCallback: ((CLAuthorizationStatus) -> Void)?
+    lazy var locationManager: CLLocationManager? = {
         let manager = CLLocationManager()
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = kCLLocationAccuracyKilometer
@@ -28,6 +29,23 @@ final class LocationManager: NSObject, MrazLocationManager {
         locationDelegate = self
         locationManager?.delegate = locationDelegate
     }
+    
+    // MARK: - Auth
+    func requestAlwaysAuth() {
+        // don't ask if we've already asked
+        guard currentAuthStatus == .notDetermined else { return }
+        
+        self.requestAlwaysAuthCallback = { [weak self] status in
+            guard let self = self else { return }
+            if status == .authorizedWhenInUse {
+                self.locationManager?.requestAlwaysAuthorization()
+                self.locationManager?.allowsBackgroundLocationUpdates = true
+                self.locationManager?.pausesLocationUpdatesAutomatically = true
+            }
+        }
+        self.locationManager?.requestWhenInUseAuthorization()
+    }
+    
 }
 
 // MARK: - CLLocationManager Delegate Methods
@@ -55,8 +73,10 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        let requestAuth = (status == .notDetermined)
-        mapView?.showsUserLocation = (status == .authorizedAlways)
-        requestAuth ? requestWhenInUseAuth() : nil
+        os_log("User changed location authroization status", log: self.mrazLog, type: .debug)
+        self.requestAlwaysAuthCallback?(status)
+//        let requestAuth = (status == .notDetermined)
+//        mapView?.showsUserLocation = (status == .authorizedAlways)
+//        requestAuth ? requestAlwaysAuth() : nil
     }
 }

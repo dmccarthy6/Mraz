@@ -12,9 +12,18 @@ final class BeerInfoViewController: UIViewController {
         return view
     }()
     var objectID: NSManagedObjectID?
-    private var databaseManager = CoreDataManager.shared
+    var context: NSManagedObjectContext
     
     // MARK: - Life Cycle
+    init(context: NSManagedObjectContext) {
+        self.context = context
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -43,8 +52,10 @@ final class BeerInfoViewController: UIViewController {
     }
     
     private func configureBeerInfoView() {
+        
         guard let safeObjectID = objectID else { return }
-        guard let safeBeerObject = databaseManager.getObjectBy(safeObjectID) as? Beers else { return }
+        let managedObjectIDPredicate = NSPredicate(format: "objectID == %@", safeObjectID)
+        guard let safeBeerObject = Beers.findOrFetch(in: context, matching: managedObjectIDPredicate) else { return }
         beerInfoView.createBeerInfoView(title: safeBeerObject.name, type: safeBeerObject.beerType, abv: safeBeerObject.abv, description: safeBeerObject.beerDescription)
         setupNavigation(with: safeBeerObject.name ?? "")
     }

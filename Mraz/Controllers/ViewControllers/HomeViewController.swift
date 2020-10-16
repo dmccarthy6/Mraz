@@ -58,14 +58,13 @@ final class HomeViewController: UIViewController {
         }
         return diffDatasource
     }()
-    private lazy var onTapResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
+    private lazy var onTapResultsController: NSFetchedResultsController<Beers> = {
         let onTapPredicate = NSPredicate(format: "isOnTap == %d", true)
-        manager.frcPredicate = onTapPredicate
-        let controller = manager.configureFetchedResultsController(for: .beers, key: "name", ascending: true)
+        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: onTapPredicate, in: manager.mainContext)
         controller.delegate = self
         return controller
     }()
-    private let manager = CoreDataManager.shared
+    private var manager = CoreDataManager()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -75,15 +74,17 @@ final class HomeViewController: UIViewController {
         navigationItem.title = "What's On Tap"
 
         configureView()
-        syncOnTapBeers()
+//        syncOnTapBeers()
         createSnapshot()
     }
     
     // MARK: -
+    #warning("TODO - Fix SyncCloudKitChanges then re implement this (pull to refresh)")
     /// Fetch beers currently on tap.
-    private func syncOnTapBeers() {
-        SyncCloudKitChanges.shared.performOnTapSyncOperation()
-    }
+//    private func syncOnTapBeers() {
+//        let ckSync = SyncCloudKitChanges(databaseManager: databaseManager, cloudKitManager: CloudKitManager())
+//        ckSync.performOnTapSyncOperation()
+//    }
     
     // MARK: - Configure
     private func configureView() {
@@ -99,7 +100,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Snapshot
     private func createSnapshot() {
-        guard let onTap = onTapResultsController.fetchedObjects as? [Beers] else { return }
+        guard let onTap = onTapResultsController.fetchedObjects else { return }
         updateSnapshot(with: onTap)
     }
     
@@ -115,14 +116,14 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedBeer = onTapDiffDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedID = selectedBeer.objectID
-        self.openBeerInfoVC(from: selectedID)
+        self.openBeerInfoVC(from: selectedID, context: self.manager.mainContext)
     }
 }
 
 // MARK: - NSFetchedResultsController Delegate
 extension HomeViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let beers = onTapResultsController.fetchedObjects as? [Beers] else { return }
+        guard let beers = onTapResultsController.fetchedObjects else { return }
         updateSnapshot(with: beers)
     }
 }
