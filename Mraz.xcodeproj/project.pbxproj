@@ -305,7 +305,9 @@
 		6142515A24BAC1CD00258BD8 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				61DBF99924E095DB0038F40C /* LocalNotifications */,
+				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
+				61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */,
+				61BD613C24E71BE600C64327 /* MrazNotifications.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -314,8 +316,8 @@
 			isa = PBXGroup;
 			children = (
 				6142515D24BB913300258BD8 /* LocationManager.swift */,
-				61BD613624E70F0B00C64327 /* MrazLocationManager.swift */,
 				61BD613824E710BE00C64327 /* LocationAuth.swift */,
+				61BD613624E70F0B00C64327 /* MrazLocationManager.swift */,
 			);
 			path = UserLocation;
 			sourceTree = "<group>";
@@ -746,16 +748,6 @@
 				6169D8E324EDB26800B4CAFE /* CloudKitAuthorizations.swift */,
 			);
 			path = Protocols;
-			sourceTree = "<group>";
-		};
-		61DBF99924E095DB0038F40C /* LocalNotifications */ = {
-			isa = PBXGroup;
-			children = (
-				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
-				61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */,
-				61BD613C24E71BE600C64327 /* MrazNotifications.swift */,
-			);
-			path = LocalNotifications;
 			sourceTree = "<group>";
 		};
 		61F8C7FB24C37123002EF57E /* Flow */ = {
