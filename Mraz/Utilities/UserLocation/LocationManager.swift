@@ -75,8 +75,5 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         os_log("User changed location authroization status", log: self.mrazLog, type: .debug)
         self.requestAlwaysAuthCallback?(status)
-//        let requestAuth = (status == .notDetermined)
-//        mapView?.showsUserLocation = (status == .authorizedAlways)
-//        requestAuth ? requestAlwaysAuth() : nil
     }
 }

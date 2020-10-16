@@ -6,6 +6,15 @@ import CoreLocation
 import UIKit
 import os.log
 
+enum NotificationType {
+    case geofencing
+    case local
+}
+
+enum NotificationID: String {
+    case authorization = "Something"
+}
+
 class LocalNotificationManger: NSObject, MrazNotifications {
     // MARK: - Properties
     let notificationLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: LocalNotificationManger.self))
@@ -101,13 +110,4 @@ class LocalNotificationManger: NSObject, MrazNotifications {
             triggerMrazLocalNotification(type: .local, title: title, body: body, region: nil)
         }
     }
-}
-
-enum NotificationType {
-    case geofencing
-    case local
-}
-
-enum NotificationID: String {
-    case authorization = "Something"
 }

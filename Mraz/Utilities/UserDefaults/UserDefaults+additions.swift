@@ -48,5 +48,33 @@ extension MrazSettings {
         case isUserLoggedIntoCK
         case initialFetchSuccessful
         case publicCKSubscriptionCreated
+        case lastSyncDate
     }
+}
+
+extension MrazSettings {
+    // Initial Fetch
+    func readInitalFetchPerformed() -> Bool {
+        return readBool(for: .initialFetchSuccessful)
+    }
+    
+    /// Set User Defaults value for 'initialFetchSuccessful'
+    func setInitialFetch(_ bool: Bool) {
+        set(bool, for: .initialFetchSuccessful)
+    }
+    
+    // Sync Date
+    /// Read the last sync date
+    func readLastSyncDate() -> Date? {
+        guard let lastSyncDate = readValue(for: .lastSyncDate) as? Date else {
+            return nil
+        }
+        return lastSyncDate
+    }
+    
+    /// Set the last sync date
+    func setLastSyncDate(date: Date) {
+        set(date, for: .lastSyncDate)
+    }
+    
 }

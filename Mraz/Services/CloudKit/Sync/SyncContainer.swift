@@ -179,7 +179,7 @@ class SyncContainer {
         }
     }
     
-    // MARK: -  Helpers
+    // MARK: - Helpers
     /// Creates a new ManagedObject from CKRecord.
     /// - Parameter record: The CKRecord object that was modified/created.
     func createNewBeerFrom(record: CKRecord) {
