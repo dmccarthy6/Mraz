@@ -5,6 +5,7 @@ import UIKit
 import CoreData
 
 extension UIViewController {
+    /// Open the beer info ViewController for the objectID.
     func openBeerInfoVC(from objectID: NSManagedObjectID, context: NSManagedObjectContext) {
         let beerInfoVC = BeerInfoViewController(context: context)
         beerInfoVC.objectID = objectID
@@ -25,6 +26,7 @@ extension UIViewController {
         }
     }
     
+    ///
     func verifyUsersAge() {
         let settings = MrazSettings()
         let isOFAge = settings.readBool(for: .userIsOfAge)
