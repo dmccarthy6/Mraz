@@ -33,16 +33,10 @@ final class CloudKitManager: CloudKitAPI {
         self.predicate = predicate
     }
 
-    // MARK: - Helper Booleans
-    /// Flag to check if the initial CK fetch has been performed.
-    func hasInitialFetchBeenPerformed() -> Bool {
-        return settings.readBool(for: .initialFetchSuccessful)
-    }
-    
     // MARK: - Fetching
     /// Uset his method to perform the initial CK fetch.
     func performInitialCKFetch() {
-        let initialFetchPerformed = hasInitialFetchBeenPerformed()
+        let initialFetchPerformed = settings.readInitalFetchPerformed()
         initialFetchPerformed ? nil : fetchAllBeersFromCK()
     }
     
@@ -72,7 +66,8 @@ final class CloudKitManager: CloudKitAPI {
             switch fetch {
             case .initial:
                 self.convertCKRecordsToBeerModelObjects(from: fetchedRecords)
-                self.setFetchedValue(true)
+                self.settings.setInitialFetch(true)
+                self.settings.setLastSyncDate(date: Date())
             case .subsequent:
                 completion?(fetchedRecords)
             }
@@ -83,11 +78,7 @@ final class CloudKitManager: CloudKitAPI {
     }
     
     // MARK: - Helpers
-    /// Set User Defaults value for 'initialFetchSuccessful'
-    func setFetchedValue(_ bool: Bool) {
-        settings.set(bool, for: .initialFetchSuccessful)
-    }
-    
+   
     /// Iterates ckRecords parameter and converts the objects to local 'BeerModel' objects.
     /// - Parameter ckRecords: Array of CloudKit record objects.
     func convertCKRecordsToBeerModelObjects(from ckRecords: [CKRecord]) {

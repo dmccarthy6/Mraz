@@ -4,7 +4,7 @@
 import CloudKit
 import os.log
 
-class SyncContainer: CloudKitSync {
+class SyncContainer {
     // MARK: - Properties
     let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: SyncContainer.self))
     private let ckManager = CloudKitManager()
@@ -27,7 +27,7 @@ class SyncContainer: CloudKitSync {
         }
     }
     
-    // MARK: - Setup boilerplate
+    // MARK: - Setup
     private lazy var mrazCloudOperationQueue: OperationQueue = {
         let queue = OperationQueue()
 
@@ -172,32 +172,31 @@ class SyncContainer: CloudKitSync {
             let recordName = changedRecord.recordID.recordName
             let recordNamePredicate = NSPredicate(format: "id == %@", recordName)
             let beer = Beers.findOrFetch(in: self.dbManager.mainContext, matching: recordNamePredicate)
-//                self.dbManager.findManagedObject(matching: recordNamePredicate)
             let beerAlreadyExists = beer != nil
             DispatchQueue.main.async {
-                beerAlreadyExists ?  self.handleModified(record: changedRecord, beer: beer!) : self.handleNew(record: changedRecord)
+                beerAlreadyExists ?  self.update(beer: beer, from: changedRecord) : self.createNewBeerFrom(record: changedRecord)
             }
         }
     }
     
+    // MARK: -  Helpers
     /// Creates a new ManagedObject from CKRecord.
     /// - Parameter record: The CKRecord object that was modified/created.
-    func handleNew(record: CKRecord) {
+    func createNewBeerFrom(record: CKRecord) {
         let newBeerManagedObj = Beers(context: dbManager.mainContext)
         let newBeerModel = BeerModel.createBeerModel(from: record, isFavorite: newBeerManagedObj.isFavorite)
-        Beers.updateOrCreate(newBeerManagedObj, from: newBeerModel, in: dbManager.mainContext)
-//        dbManager.createOrUpdateBeerObject(from: newBeerModel, beer: newBeerManagedObj, in: dbManager.mainThreadContext)
+        Beers.updateOrCreate(newBeerManagedObj, from: newBeerModel)
     }
     
     /// Method used when we receive a remote notification from an object that already
     /// exists in CoreData. This means a field has been updated on an existing object.
     /// - Parameter record: The CKRecord that was modified
     /// - Parameter beer: The ManagedObject with the same ID as the record parameter
-    func handleModified(record: CKRecord, beer: Beers?) {
+    func update(beer: Beers?, from record: CKRecord) {
         os_log("%{public}@", log: mrazLog, type: .debug, #function)
         guard let updatedBeer = beer else { return }
         let localModBeer = BeerModel.createBeerModel(from: record, isFavorite: updatedBeer.isFavorite)
-        Beers.updateOrCreate(updatedBeer, from: localModBeer, in: dbManager.mainContext)
+        Beers.updateOrCreate(updatedBeer, from: localModBeer)
         LocalNotificationManger().sendFavoriteBeerNotification(for: updatedBeer)
     }
 }

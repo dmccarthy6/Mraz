@@ -31,7 +31,7 @@ final class CoreDataManager: NSObject, CoreDataAPI {
     /// - Parameter beerModel: 'BeerModel' object used to save a beer NSManagedObject.
     func saveObject<T: NSManagedObject>(object: T, model: BeerModel, in context: NSManagedObjectContext) {
         guard let beerObject = object as? Beers else { return }
-        Beers.updateOrCreate(beerObject, from: model, in: context)
+        Beers.updateOrCreate(beerObject, from: model)
         CoreDataStack.save(mainContext)
     }
 
@@ -46,7 +46,7 @@ final class CoreDataManager: NSObject, CoreDataAPI {
     }
     
     func saveModifiedBeerToDatabase(beer: Beers, model: BeerModel, context: NSManagedObjectContext) {
-        Beers.updateOrCreate(beer, from: model, in: context)
+        Beers.updateOrCreate(beer, from: model)
         CoreDataStack.save(mainContext)
     }
     
@@ -99,7 +99,7 @@ final class CoreDataManager: NSObject, CoreDataAPI {
         let predicate = NSPredicate(format: "objectID == %@", object.objectID)
         guard let beer = Beers.findOrFetch(in: mainContext, matching: predicate) else { return }
         let beerModel = BeerModel.createBeerModel(from: beer)
-        Beers.updateOrCreate(beer, from: beerModel, in: mainContext)
+        Beers.updateOrCreate(beer, from: beerModel)
         CoreDataStack.save(mainContext)
     }
 }
