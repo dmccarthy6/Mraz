@@ -2,6 +2,18 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import UIKit
+import CoreLocation
+
+protocol DismissViewDelegate: class {
+    func dismissOnboardingViews()
+}
+
+enum ButtonType {
+    case geofencing
+    case notifications
+    case launch
+}
+
 
 final class MrazOnboardingView: UIView {
     // MARK: - Properties
@@ -41,7 +53,9 @@ final class MrazOnboardingView: UIView {
         return button
     }()
     private var mrazSettings = MrazSettings()
+    private lazy var locationManager = LocationManager()
     weak var dismissDelegate: DismissViewDelegate?
+    let locMgr = CLLocationManager()
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
@@ -109,21 +123,13 @@ final class MrazOnboardingView: UIView {
     
     @objc
     private func geofencingNotificationsAction() {
-        LocationManager().promptUserForLocationAuth()
+        locationManager.promptUserForLocationAuth {
+            self.locationManager.promptUserForLocationAuth {}
+        }
     }
 
     @objc
     private func launchAction() {
         dismissDelegate?.dismissOnboardingViews()
     }
-}
-
-protocol DismissViewDelegate: class {
-    func dismissOnboardingViews()
-}
-
-enum ButtonType {
-    case geofencing
-    case notifications
-    case launch
 }

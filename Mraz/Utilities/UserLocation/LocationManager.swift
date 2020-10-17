@@ -11,11 +11,12 @@ final class LocationManager: NSObject, MrazLocationManager {
     var mapView: MKMapView?
     weak var locationDelegate: CLLocationManagerDelegate?
     private var requestAlwaysAuthCallback: ((CLAuthorizationStatus) -> Void)?
-    lazy var locationManager: CLLocationManager? = {
+    private lazy var localNotificationMgr = LocalNotificationManger()
+    var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = kCLLocationAccuracyKilometer
-        return CLLocationManager()
+        return manager
     }()
 
     // MARK: - Life Cycle
@@ -27,25 +28,28 @@ final class LocationManager: NSObject, MrazLocationManager {
     // MARK: - Configuration
     private func configureLocationManager() {
         locationDelegate = self
-        locationManager?.delegate = locationDelegate
+        locationManager.delegate = locationDelegate
     }
     
     // MARK: - Auth
-    func requestAlwaysAuth() {
+    func requestAlwaysAuth(_ completion: @escaping () -> Void) {
         // don't ask if we've already asked
         guard currentAuthStatus == .notDetermined else { return }
         
         self.requestAlwaysAuthCallback = { [weak self] status in
             guard let self = self else { return }
             if status == .authorizedWhenInUse {
-                self.locationManager?.requestAlwaysAuthorization()
-                self.locationManager?.allowsBackgroundLocationUpdates = true
-                self.locationManager?.pausesLocationUpdatesAutomatically = true
+                self.locationManager.requestAlwaysAuthorization()
+                //self.locationManager.allowsBackgroundLocationUpdates = true
+                self.locationManager.pausesLocationUpdatesAutomatically = true
+            }
+            if status == .authorizedAlways {
+                self.monitorRegionAtBrewery()
             }
         }
-        self.locationManager?.requestWhenInUseAuthorization()
+        self.locationManager.requestWhenInUseAuthorization()
+        completion()
     }
-    
 }
 
 // MARK: - CLLocationManager Delegate Methods
@@ -69,7 +73,7 @@ extension LocationManager: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         os_log("User entered geofencing region: %@", log: self.mrazLog, type: .default, region.identifier)
-        LocalNotificationManger().triggerGeofencingNotification(for: region)
+        localNotificationMgr.triggerGeofencingNotification(for: region)
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
