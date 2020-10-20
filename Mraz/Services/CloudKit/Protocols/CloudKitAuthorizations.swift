@@ -4,5 +4,6 @@
 import CloudKit
 
 protocol CloudKitAuthorizations {
-    func getUsersCurrentAuthStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void)
+    func requestCKAccountStatus()
+    func setupAccountStatusChangedNotificationHandling()
 }

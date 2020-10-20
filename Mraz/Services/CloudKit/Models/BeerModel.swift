@@ -21,7 +21,7 @@ struct BeerModel {
 extension BeerModel {
     
     static func createBeerModel(from beer: Beers) -> BeerModel {
-        return BeerModel(id: beer.id ?? "nil", section: beer.section ?? "", changeTag: beer.changeTag ?? "", name: beer.name ?? "", beerDescription: beer.description, abv: beer.abv ?? "", type: beer.beerType ?? "", createdDate: beer.ckCreatedDate ?? Date(), modifiedDate: beer.ckModifiedDate ?? Date(), isOnTap: beer.isOnTap, isFavorite: beer.isFavorite)
+        return BeerModel(id: beer.id ?? "nil", section: beer.section ?? "", changeTag: beer.changeTag ?? "", name: beer.name ?? "", beerDescription: beer.beerDescription ?? "Working on a description...", abv: beer.abv ?? "", type: beer.beerType ?? "", createdDate: beer.ckCreatedDate ?? Date(), modifiedDate: beer.ckModifiedDate ?? Date(), isOnTap: beer.isOnTap, isFavorite: beer.isFavorite)
         
     }
     
@@ -32,7 +32,7 @@ extension BeerModel {
                                 section: record[.sectionType] as? String ?? "",
                                 changeTag: record.recordChangeTag ?? "",
                                 name: record[.name] as? String ?? "",
-                                beerDescription: record[.description] as? String ?? "",
+                                beerDescription: record[.description] as? String ?? "Working on a description...",
                                 abv: record[.abv] as? String ?? "",
                                 type: record[.type] as? String ?? "",
                                 createdDate: record.creationDate ?? Date(),
