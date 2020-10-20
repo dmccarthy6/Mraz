@@ -7,95 +7,57 @@ import CoreData
 
 class CoreDataTests: XCTestCase {
     // MARK: - Properties
-    let context = CoreDataUnitTestHelpers.setUpInMemoryManagedObjectContext()
+    var manager: MockCoreDataManager!
     var beerModel: [BeerModel]?
     
     // MARK: - Set Up
     override func setUpWithError() throws {
         super.setUp()
-        setupTestData()
-    }
-
-    func setupTestData() {
-        beerModel = [BeerModel(id: UUID().uuidString,
-                               section: "Ale",
-                               changeTag: "CKChangeTag",
-                               name: "TestBeer",
-                               beerDescription: "Test beer is delicious",
-                               abv: "4.5",
-                               type: "Ale",
-                               createdDate: Date(),
-                               modifiedDate: Date(),
-                               isOnTap: true,
-                               isFavorite: false),
-            BeerModel(id: UUID().uuidString,
-                      section: "Belgian",
-                      changeTag: "CKChangeTag1",
-                      name: "TestBeer1",
-                      beerDescription: "Test beer is delicious also",
-                      abv: "4.7",
-                      type: "Belgian",
-                      createdDate: Date(),
-                      modifiedDate: Date(),
-                      isOnTap: false,
-                      isFavorite: false)
-        ]
+        
+        manager = MockCoreDataManager()
+        beerModel = manager.createModelObjects()
     }
     
     // MARK: - Core Data Tests
-    func testBeerObjectsCreated() {
-        /// Delete all objects in context to start from scratch.
-        deleteAllObjectsFromContext()
-        createBeerObjects()
-        /// Check that the managed object is being inserted into the context.
-        XCTAssert(context.insertedObjects.count == beerModel?.count)
+    func testManagedObjectsCreated() {
+        beerModel?.forEach({ (beer) in
+            let newBeer = Beers(context: manager.mainContext)
+            manager.createBeer(object: newBeer, from: beer)
+            print(manager.mainContext.insertedObjects.count)
+        })
         
-        // Create Fetch Request
-        let fetchRequest = Beers.fetchRequest() as NSFetchRequest<Beers>
+        //
+        XCTAssert(manager.mainContext.insertedObjects.count == beerModel?.count, "The context's inserted objects don't match the model objects saved")
         
+        // Create and Perform Fetch
+        let testFetchRequest = Beers.sortedFetchRequest
         do {
-            let results = try context.fetch(fetchRequest)
+            let results = try manager.mainContext.fetch(testFetchRequest)
             XCTAssertNoThrow(results)
-            //XCTAssertTrue(results.count == beerModel?.count, "The fetch count is \(results.count) & it should be: \(beerModel?.count ?? 9999)")
-            
+            XCTAssertTrue(results.count == beerModel?.count, "Fetched results count \(results.count) does not equal model objects: \(beerModel?.count ?? 9999999999)")
         } catch {
-            XCTFail("Unable to fetch managed objects")
+            XCTFail("Unable to fetch objects. \(error.localizedDescription)")
         }
     }
-    
+ 
     /// Test fetching from the context works.
     func testBeersFetch() {
-        deleteAllObjectsFromContext()
-        createBeerObjects()
-        
+        beerModel?.forEach({ (beer) in
+            let createdBeer = Beers(context: manager.mainContext)
+            manager.createBeer(object: createdBeer, from: beer)
+        })
+    
         do {
-            let fetchedObjects = try CoreDataUnitTestHelpers.fetchObjects(in: context, sortedBy: "name", ascending: true) as [Beers]
+            let fetchedObjects = try MockCoreDataManager.fetchObjects(in: manager.mainContext) as [Beers]
             XCTAssert(fetchedObjects.count == beerModel?.count)
         } catch {
             XCTFail("Failure fetching")
         }
     }
-
-    // MARK: - Helper Methods
-    /// Helper function to create a beer object
-    private func createBeerObjects() {
-        for model in beerModel! {
-            let beerObj = Beers(context: context)
-            CoreDataManager.shared.createManagedObject(from: model, beer: beerObj, in: context)
-            //createBeerObject(from: model, beer: beerObj, context: context)
-        }
-    }
-    
-    private func deleteAllObjectsFromContext() {
-        do {
-            try CoreDataUnitTestHelpers.deleteAllObjects(objectType: Beers.self, with: context)
-        } catch {
-            XCTFail("CoreDataTests -- Failed to delete all objects from context.")
-        }
-    }
-    
+  
     // MARK: - Teardown
     override func tearDownWithError() throws {
+        manager = nil
         beerModel = nil
     }
 }
