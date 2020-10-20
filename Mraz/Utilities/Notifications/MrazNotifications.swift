@@ -7,7 +7,7 @@ import os.log
 
 protocol MrazNotifications: MrazNotificationAuthorization {
     var notificationCenter: UNUserNotificationCenter { get set }
-    var scheduledNotifications: [Notification] { get }
+    var scheduledNotifications: [MrazNotification] { get }
     
     func schedule()
     func scheduleLocalNotification()
