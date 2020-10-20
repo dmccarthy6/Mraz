@@ -5,7 +5,7 @@ import CoreLocation
 import MapKit
 
 protocol MrazLocationManager: MrazLocationAuthorization {
-    var locationManager: CLLocationManager? { get set }
+    var locationManager: CLLocationManager { get set }
     var locationDelegate: CLLocationManagerDelegate? { get set }
     var mapView: MKMapView? { get }
 }
@@ -34,26 +34,29 @@ extension MrazLocationManager {
         }
     }
     
-    func promptUserForLocationAuth() {
-        switch currentAuthStatus {
-        case .authorizedAlways, .authorizedWhenInUse: monitorRegionAtBrewery()
-        case .denied, .restricted: return
-        case .notDetermined: requestAlwaysAuth()
-        default: ()
+    func promptUserForLocationAuth(_ completion: @escaping () -> Void) {
+        if currentAuthStatus == .authorizedAlways {
+            monitorRegionAtBrewery()
+        }
+        if currentAuthStatus == .notDetermined || currentAuthStatus == .authorizedWhenInUse {
+            requestAlwaysAuth {
+                completion()
+            }
         }
     }
     
     // MARK: - Monitor Region
     func monitorRegionAtBrewery() {
-        guard let locationManager = locationManager else { return }
         let breweryRegion = CLCircularRegion(center: Coordinates.mraz.location,
                                              radius: defaultGeofencingRadius, identifier: GeoRegion.identifier)
         let regionsBeingMonitored = locationManager.monitoredRegions
         let isMonitoringAvail = CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self)
-        if regionsBeingMonitored.contains(breweryRegion) && isMonitoringAvail {
+        if !regionsBeingMonitored.contains(breweryRegion) && isMonitoringAvail {
+            print("Adding Mraz to monitored regions")
             breweryRegion.notifyOnEntry = true
             breweryRegion.notifyOnExit = false
             locationManager.startMonitoring(for: breweryRegion)
         }
+        print("Region already exists not adding")
     }
 }

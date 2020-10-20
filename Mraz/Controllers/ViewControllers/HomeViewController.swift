@@ -65,6 +65,7 @@ final class HomeViewController: UIViewController {
         return controller
     }()
     private var manager = CoreDataManager()
+    private var refreshControl = UIRefreshControl()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -74,17 +75,9 @@ final class HomeViewController: UIViewController {
         navigationItem.title = "What's On Tap"
 
         configureView()
-//        syncOnTapBeers()
         createSnapshot()
+        refresh()
     }
-    
-    // MARK: -
-    #warning("TODO - Fix SyncCloudKitChanges then re implement this (pull to refresh)")
-    /// Fetch beers currently on tap.
-//    private func syncOnTapBeers() {
-//        let ckSync = SyncCloudKitChanges(databaseManager: databaseManager, cloudKitManager: CloudKitManager())
-//        ckSync.performOnTapSyncOperation()
-//    }
     
     // MARK: - Configure
     private func configureView() {
@@ -109,6 +102,21 @@ final class HomeViewController: UIViewController {
         snapshot.appendSections(Section.allCases)
         snapshot.appendItems(datasource)
         onTapDiffDatasource.apply(snapshot, animatingDifferences: animated)
+    }
+    
+    // MARK: - Refresh
+    /// Fetch beers currently on tap.
+    @objc private func syncOnTapBeers() {
+        let coreDataPred = NSPredicate(format: "isOnTap == %d", true)
+        let ckPred = NSPredicate(format: "isOnTap == %i", Int64(1))
+        let sync = SyncBeers(coreDataPredicate: coreDataPred, cloudKitPredicate: ckPred, syncType: .onTap)
+        sync.performSync()
+        refreshControl.endRefreshing()
+    }
+    
+    func refresh() {
+        collectionView.refreshControl = self.refreshControl
+        refreshControl.addTarget(self, action: #selector(syncOnTapBeers), for: .valueChanged)
     }
 }
 // MARK: - CollectionView Delegate

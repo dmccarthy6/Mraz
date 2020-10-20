@@ -71,7 +71,7 @@ class BeerListViewController: UIViewController {
     }()
     
     let manager = CoreDataManager()
-    
+    private let beersRefresh = UIRefreshControl()
     private var currentSearchText = ""
     private var activityIndicator: UIActivityIndicatorView?
     private var favoritesShowing: Bool = false
@@ -85,6 +85,7 @@ class BeerListViewController: UIViewController {
         configureView()
         createSnapshot()
         setupSearchController()
+        refresh()
     }
     
     // MARK: - Configure View
@@ -134,8 +135,7 @@ class BeerListViewController: UIViewController {
         snapshot.appendItems(beers)
         beersDiffableDatasource.apply(snapshot)
     }
-    
-    
+
     // MARK: - Filtering
     func filterResults(matching predicate: NSPredicate, value: Bool) {
         let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: predicate, in: self.manager.mainContext, key: "name", ascending: value)
@@ -161,7 +161,26 @@ class BeerListViewController: UIViewController {
         searchController.searchBar.placeholder = "Search Beers"
         navigationItem.searchController = searchController
     }
+    
+    // MARK: - Refresh
+    func refresh() {
+        collectionView.refreshControl = beersRefresh
+        beersRefresh.addTarget(self, action: #selector(refreshAllBeers), for: .valueChanged)
+    }
+    
+    @objc func refreshAllBeers() {
+        guard let lastFetch = MrazSettings().readLastSyncDate() else {
+            beersRefresh.endRefreshing()
+            return
+        }
+        let cdPred = NSPredicate(format: "ckModifiedDate > %@", lastFetch as CVarArg)
+        let ckPred = NSPredicate(format: "Modified > %@", lastFetch as CVarArg)
+        let sync = SyncBeers(coreDataPredicate: cdPred, cloudKitPredicate: ckPred, syncType: .allBeers)
+        sync.performSync()
+        beersRefresh.endRefreshing()
+    }
 }
+
 // MARK: - UICollectionView Delegate
 extension BeerListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

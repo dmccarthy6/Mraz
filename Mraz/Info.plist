@@ -8,6 +8,8 @@
 	<string></string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
 	<key>CFBundleIcons</key>
 	<dict/>
 	<key>CFBundleIcons~ipad</key>
@@ -34,11 +36,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses your location to send notifications. We do not store or release any location data.</string>
+	<string>$(PRODUCT_NAME) will only use your location to send you notifications when you are near the brewery. We will not store your location data.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses your location to send notifications. We do not store or release any location data.</string>
+	<string>$(PRODUCT_NAME) will only use your location to send you notifications when you are near the brewery. We will not store your location data.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses your location to send notifications. We do not store or release any location data.</string>
+	<string>$(PRODUCT_NAME) will only use your location to send you notifications when you are near the brewery. We will not store your location data.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

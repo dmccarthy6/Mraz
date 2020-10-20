@@ -2,6 +2,7 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import Foundation
+import NotificationCenter
 import CloudKit
 import os.log
 
@@ -9,7 +10,9 @@ final class CloudKitManager: CloudKitAPI {
     // MARK: - Properties
     private let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: CloudKitManager.self))
     
-    private var mrazSyncContainer: SyncContainer?
+    private(set) var ckAccountStatus: CKAccountStatus = .couldNotDetermine
+    
+    internal let defaultContainer = CKContainer.default()
     
     private let dbManager = CoreDataManager()
     
@@ -24,15 +27,37 @@ final class CloudKitManager: CloudKitAPI {
         return container.publicCloudDatabase
     }()
     
-    lazy var defaultContainer: CKContainer = {
-        return CKContainer.default()
-    }()
-    
     // MARK: - Lifecycle
     init(predicate: NSPredicate = NSPredicate(value: true)) {
         self.predicate = predicate
     }
 
+    // MARK: - Account Status
+    func requestCKAccountStatus() {
+        defaultContainer.accountStatus { (accountStatus, error) in
+            if let error = error { print(error) }
+            
+            self.ckAccountStatus = accountStatus
+        }
+    }
+    
+    func setupAccountStatusChangedNotificationHandling() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(handleStatusChange(_:)), name: Notification.Name.CKAccountChanged, object: nil)
+    }
+    
+    @objc private func handleStatusChange(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.requestCKAccountStatus()
+            
+            if self.ckAccountStatus == .available {
+                print("CK Status is now Available")
+                SyncContainer()
+            }
+            
+        }
+    }
+    
     // MARK: - Fetching
     /// Uset his method to perform the initial CK fetch.
     func performInitialCKFetch() {

@@ -97,6 +97,10 @@ class SyncContainer {
             guard let self = self else { return }
 
             if let error = error {
+                let currentCKStatus = CloudKitManager().ckAccountStatus
+                if currentCKStatus != .available {
+                    CloudKitManager().performInitialCKFetch()
+                }
                 os_log("Failed to create public CloudKit subscription: %{public}@",
                        log: self.mrazLog,
                        type: .error,
@@ -179,7 +183,7 @@ class SyncContainer {
         }
     }
     
-    // MARK: -  Helpers
+    // MARK: - Helpers
     /// Creates a new ManagedObject from CKRecord.
     /// - Parameter record: The CKRecord object that was modified/created.
     func createNewBeerFrom(record: CKRecord) {

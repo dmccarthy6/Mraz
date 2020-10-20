@@ -6,6 +6,8 @@ DerivedData/
 
 ## Various settings
 *.pbxuser
+*.DS_Store
+*.pbxproj
 xcuserdata/
 
 # Created by https://www.toptal.com/developers/gitignore/api/swift
@@ -35,7 +37,7 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-*.DS_Store
+
 
 ## Obj-C/Swift specific
 *.hmap

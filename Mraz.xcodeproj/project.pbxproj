@@ -305,7 +305,9 @@
 		6142515A24BAC1CD00258BD8 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				61DBF99924E095DB0038F40C /* LocalNotifications */,
+				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
+				61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */,
+				61BD613C24E71BE600C64327 /* MrazNotifications.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -314,8 +316,8 @@
 			isa = PBXGroup;
 			children = (
 				6142515D24BB913300258BD8 /* LocationManager.swift */,
-				61BD613624E70F0B00C64327 /* MrazLocationManager.swift */,
 				61BD613824E710BE00C64327 /* LocationAuth.swift */,
+				61BD613624E70F0B00C64327 /* MrazLocationManager.swift */,
 			);
 			path = UserLocation;
 			sourceTree = "<group>";
@@ -388,11 +390,11 @@
 		61518CFD245330D300011BB4 /* Mraz */ = {
 			isa = PBXGroup;
 			children = (
+				61805DA12458A8B0003EC9FE /* Mraz.entitlements */,
 				61518D0F245330D900011BB4 /* Info.plist */,
 				61DF121F24BFD144003ABD84 /* GlobalTypealiases.swift */,
 				61F8C7FE24C5022F002EF57E /* AppFlow */,
 				6142516324BBA15500258BD8 /* Onboarding */,
-				61805DA12458A8B0003EC9FE /* Mraz.entitlements */,
 				61518D252453343000011BB4 /* Resources */,
 				61518D232453341E00011BB4 /* Models */,
 				61518D262453344A00011BB4 /* Views */,
@@ -461,7 +463,6 @@
 		61518D262453344A00011BB4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				618D16A925142A220014C229 /* Alert */,
 				617F82DB246B697B006195F0 /* IconsBlock */,
 				6186F4DA245B1CA8007BAB37 /* CollectionView */,
 				61BD6BE72465DC37000D4193 /* BreweryDataView.swift */,
@@ -495,6 +496,7 @@
 			children = (
 				61E9F76F24DC80460081AD29 /* ApplicationHooks.swift */,
 				6147A136246B467D000508FE /* Contact.swift */,
+				61FCA48E253E29860039A196 /* Alerts */,
 				6142515F24BB961F00258BD8 /* UserLocation */,
 				6142515A24BAC1CD00258BD8 /* Notifications */,
 				617F82EC246C7FB2006195F0 /* Errors */,
@@ -508,7 +510,6 @@
 		61518D31245338BA00011BB4 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
-				6186F4EB245CC09F007BAB37 /* Alerts.swift */,
 				61518D3924533A1200011BB4 /* EntityName.swift */,
 				61518D4424533FEB00011BB4 /* Constants.swift */,
 				61518D5D24577BCE00011BB4 /* CloudKit.swift */,
@@ -709,7 +710,7 @@
 			path = Sync;
 			sourceTree = "<group>";
 		};
-		618D16A925142A220014C229 /* Alert */ = {
+		618D16A925142A220014C229 /* MrazCustomAlert */ = {
 			isa = PBXGroup;
 			children = (
 				618D16AC25142A330014C229 /* MrazAlertContainer.swift */,
@@ -718,7 +719,7 @@
 				618D16B525142FAD0014C229 /* MZAlertBodyLabel.swift */,
 				618D16B925142FB70014C229 /* MZAlertButton.swift */,
 			);
-			path = Alert;
+			path = MrazCustomAlert;
 			sourceTree = "<group>";
 		};
 		61AC28BF2509AA42000EBB38 /* Protocols */ = {
@@ -748,16 +749,6 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		61DBF99924E095DB0038F40C /* LocalNotifications */ = {
-			isa = PBXGroup;
-			children = (
-				61DBF99A24E095EE0038F40C /* LocalNotificationManager.swift */,
-				61BD613A24E719DD00C64327 /* MrazNotificationAuthorization.swift */,
-				61BD613C24E71BE600C64327 /* MrazNotifications.swift */,
-			);
-			path = LocalNotifications;
-			sourceTree = "<group>";
-		};
 		61F8C7FB24C37123002EF57E /* Flow */ = {
 			isa = PBXGroup;
 			children = (
@@ -773,6 +764,15 @@
 				61DF122124BFD177003ABD84 /* AppFlow.swift */,
 			);
 			path = AppFlow;
+			sourceTree = "<group>";
+		};
+		61FCA48E253E29860039A196 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				618D16A925142A220014C229 /* MrazCustomAlert */,
+				6186F4EB245CC09F007BAB37 /* Alerts.swift */,
+			);
+			path = Alerts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1161,7 +1161,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthy.Mraz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1183,7 +1183,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dylanmccarthy.Mraz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
