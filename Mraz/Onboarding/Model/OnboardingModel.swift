@@ -7,8 +7,8 @@ import UIKit
 struct OnboardingModel {
     // MARK: - Types
     enum OnboardDescriptions: String {
-        case notifications = "Stay updated when we release new beers and get notified when your favorite beers are on tap."
-        case geofencing = "Allow Mraz to access your location to display local restaurants and send notifications when you're nearby."
+        case notifications = "To get notifications when your favorite beers are tapped, tap 'Accept' then 'Allow' on the notification alert. You can always change this later in 'Settings' -> 'Notifications' -> 'Mraz' then toggle 'Allow Notifications'"
+        case geofencing = "To get notifications when you're nearby, tap 'Accept', 'Allow While Using App' then select 'Change to Always Allow' on the next alert. You can change this later in 'Settings' -> 'Privacy' -> 'Location Services' -> 'Mraz'"
         case openApp = "Click below to get started."
     }
     

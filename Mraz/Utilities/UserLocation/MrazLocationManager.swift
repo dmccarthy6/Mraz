@@ -52,11 +52,9 @@ extension MrazLocationManager {
         let regionsBeingMonitored = locationManager.monitoredRegions
         let isMonitoringAvail = CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self)
         if !regionsBeingMonitored.contains(breweryRegion) && isMonitoringAvail {
-            print("Adding Mraz to monitored regions")
             breweryRegion.notifyOnEntry = true
             breweryRegion.notifyOnExit = false
             locationManager.startMonitoring(for: breweryRegion)
         }
-        print("Region already exists not adding")
     }
 }

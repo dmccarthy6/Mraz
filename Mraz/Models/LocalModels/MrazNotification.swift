@@ -3,7 +3,7 @@
 
 import Foundation
 
-struct Notification {
+struct MrazNotification {
     let id: String
     let title: String
     let body: String

@@ -12,6 +12,8 @@ final class AppFlow {
     
     private let window: UIWindow
     
+    private let manager = CloudKitManager()
+    
     private var rootViewController: UIViewController {
         return window.rootViewController!
     }
@@ -23,9 +25,11 @@ final class AppFlow {
     }
     
     // MARK: - Launching Configurations
+    @discardableResult
     func didFinishLaunching() -> Bool {
-        window.rootViewController = MrazTabBarController()
+        window.rootViewController = MrazTabBarController(cloudKitManager: manager)
         window.makeKeyAndVisible()
+        handleCloudKitStatus()
         return didStartFlow()
     }
     
@@ -40,5 +44,10 @@ final class AppFlow {
     
     private func startOnboardingFlow() {
         onboardingFlow.start(with: rootViewController)
+    }
+    
+    private func handleCloudKitStatus() {
+        manager.requestCKAccountStatus()
+        manager.setupAccountStatusChangedNotificationHandling()
     }
 }

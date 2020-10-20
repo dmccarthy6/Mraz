@@ -5,38 +5,55 @@ import XCTest
 @testable import Mraz
 
 class CloudKitTests: XCTestCase {
-    let cloudKitManager = CloudKitManager.shared
+    var cloudKitManager: CloudKitManagerMock!
     
-    // MARK: -
+    // MARK: - Setup
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        cloudKitManager = CloudKitManagerMock()
     }
-
-    // MARK: - CloudKit Tests:
     
-//    func testFetchPerformedCorrectly() {
-//        cloudKitManager.fetchBeerListFromCloud { (result) in
-//            switch result {
-//            case .success(let beers):
-//                XCTAssert(beers.count > 0, "Error converting CloudKit to Core Data")
-//                
-//            case .failure(let error):
-//                XCTAssertNil(error, "Error is not Nil fetching beer list from cloud")
-//            }
-//        }
-//    }
-
-    // MARK: - Performance
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    // MARK: - Test User Auth
+    func testUserIsLoggedIn() {
+        let authExpectation = expectation(description: "AuthStatus Expectation")
+        var currentStatus = cloudKitManager.accountStatus
+        
+        cloudKitManager.requestCKAccountStatus {
+            XCTAssertTrue(currentStatus == .couldNotDetermine, "CK Account Status changed from '.couldNotDetermine'")
+            authExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 3) { (error) in
+            guard let error = error else { return }
+            XCTAssertNil(error, "\(error)")
+        }
+    }
+    
+    // MARK: - Test Fetching
+    func testCloudKitFetch() {
+        let fetchExpectation = expectation(description: "User Logged In Fetch")
+        
+        let predicate = NSPredicate(format: "name == %@", "Tan Lines")
+        
+        cloudKitManager.fetchRecords(matching: predicate) { (result) in
+            switch result {
+            case .success(let records):
+                XCTAssertFalse(records.count == 0, "")
+                fetchExpectation.fulfill()
+                
+            case .failure(let ckError):
+                XCTAssertNotNil(ckError, "Error is nil")
+                fetchExpectation.fulfill()
+            }
+        }
+    
+        waitForExpectations(timeout: 3) { (error) in
+            guard let error = error else { return }
+            XCTAssertNil(error, "\(error)")
         }
     }
     
     // MARK: - Teardown Code
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        cloudKitManager = nil
     }
-
 }

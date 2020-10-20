@@ -26,6 +26,13 @@ extension UIViewController {
         }
     }
     
+    func showCloudKitAlert() {
+        DispatchQueue.main.async {
+            guard let controller = Alerts.buildCloudKitAlertController(with: .iCloudError, message: .userNotLoggedIn) else { return }
+            self.present(controller, animated: true)
+        }
+    }
+    
     ///
     func verifyUsersAge() {
         let settings = MrazSettings()

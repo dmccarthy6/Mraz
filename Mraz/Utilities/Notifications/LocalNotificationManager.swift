@@ -18,7 +18,7 @@ enum NotificationID: String {
 class LocalNotificationManger: NSObject, MrazNotifications {
     // MARK: - Properties
     let notificationLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: LocalNotificationManger.self))
-    var scheduledNotifications: [Notification] = [Notification]()
+    var scheduledNotifications: [MrazNotification] = [MrazNotification]()
     var notificationTrigger: UNNotificationTrigger
     var notificationCenter: UNUserNotificationCenter
     
@@ -63,23 +63,9 @@ class LocalNotificationManger: NSObject, MrazNotifications {
         }
     }
     
-    #warning("TODO - Debug, remove this before releasing.")
-    /// Retrieve pending notifications in NotificationCenter
-    func getPending() {
-        notificationCenter.getPendingNotificationRequests { (notificationRequests) in
-            for request in notificationRequests {
-                let content = request.content
-                os_log("Pending notifications: %2, %@",
-                       log: self.notificationLog,
-                       type: .debug,
-                       String(describing: content.title), String(describing: content.body))
-            }
-        }
-    }
-    
     // MARK: - Trigger Notifications
     func triggerMrazLocalNotification(type: NotificationType, title: String, body: String, region: CLRegion?) {
-        var notification: Notification?
+        var notification: MrazNotification?
         
         switch type {
         case .geofencing:
@@ -87,9 +73,9 @@ class LocalNotificationManger: NSObject, MrazNotifications {
                 os_log("Trying to send Geofencing notification without a region", log: self.notificationLog, type: .error)
                 return
             }
-            notification = Notification(id: region.identifier, title: title, body: body)
+            notification = MrazNotification(id: region.identifier, title: title, body: body)
         case .local:
-            notification = Notification(id: UUID().uuidString, title: title, body: body)
+            notification = MrazNotification(id: UUID().uuidString, title: title, body: body)
         }
         scheduledNotifications.append(notification!)
         schedule()

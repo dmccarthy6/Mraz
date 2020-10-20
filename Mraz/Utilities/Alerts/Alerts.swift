@@ -8,68 +8,49 @@ enum Alerts {
     // MARK: - Types
     /// These are used for our Message Title's & Alerts
     enum AlertMessage: String {
-        case genericErrorMessage = "Looks like something went wrong."
-        case userDeniedNotifications = "This application works best when you allow notifications. To enable go into Settings -> Mraz -> Notifications and toggle 'Allow Notifications'"
-        
-        ///CloudKit Status Messages
-        case available = "User is logged in"
-        case noAccountOrCouldNotDetermine = "Could not find iCloud stats. Please try logging into iCloud again."
-        case restricted = "Could not connect to iCloud. Looks like your settings are restricted"
+        case userNotLoggedIn = "Log into iCloud to receive beer updates and get current on tap beers. \n \n Tap 'Settings' below -> 'Sign in to your iPhone' -> Enter your Apple ID and password."
     }
     
     enum AlertTitle: String {
-        case genericErrorTitle = "Error"
-        case iCloudError = "iCloud Error"
-        case notificationsDenied = "Notifications Denied"
+        case iCloudError = "iCloud"
     }
     
     // MARK: - Properties
-    static private var mrazSettings: MrazSettings {
+    static fileprivate var mrazSettings: MrazSettings {
         return MrazSettings()
     }
     static private var suppressCloudKitEnabledError: Bool {
         return mrazSettings.readBool(for: .suppressCloudKitError)
     }
     
-    // MARK: - Generic Alerts
-    static func showAlert(_ viewController: UIViewController,
-                          title: AlertTitle,
-                          message: AlertMessage) {
-        let alertController = UIAlertController(title: title.rawValue,
-                                                message: message.rawValue,
-                                                preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        viewController.present(alertController, animated: true, completion: nil)
-    }
-    
     // MARK: - CloudKit Alerts
-    static func cloudKitAlert(title: AlertTitle, message: AlertMessage) {
+   /// CloudKit Action Sheet called in View Controller Extension
+    static func buildCloudKitAlertController(with title: AlertTitle, message: AlertMessage) -> UIAlertController? {
         if !suppressCloudKitEnabledError {
-            DispatchQueue.main.async {
-                let alertController = UIAlertController(title: title.rawValue,
-                                                        message: message.rawValue,
-                                                        preferredStyle: .alert)
-                /// OK Button
-                let okButton = CloudKitPromptButtonType.okButton
-                let okButtonAction = UIAlertAction(title: okButton.rawValue,
-                                                   style: okButton.actionStyle()) { (_) in
-                    okButton.performAction()
+            let alertController = UIAlertController(title: title.rawValue,
+                                                    message: message.rawValue,
+                                                    preferredStyle: .actionSheet)
+            // Open settings to toggle CloudKit
+            let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                let userCanOpenSettings = UIApplication.shared.canOpenURL(settingsURL)
+                if userCanOpenSettings {
+                    UIApplication.shared.open(settingsURL, options: [:]) { (success) in
+                        if success { print("User opened settings") }
+                    }
                 }
-                /// Don't Show Again Action
-                let dontShowAgainButton = CloudKitPromptButtonType.dontShowAgain
-                let dontShowAgainAction = UIAlertAction(title: dontShowAgainButton.rawValue,
-                                                        style: dontShowAgainButton.actionStyle()) { (_) in
-                    dontShowAgainButton.performAction()
-                }
-                alertController.addAction(okButtonAction)
-                alertController.addAction(dontShowAgainAction)
-                
-//                if let appDel = UIApplication.shared.delegate, let window = appDel.window!, let rootVC = window.rootViewController {
-//                    rootVC.present(alertController, animated: true, completion: nil)
-//                }
             }
+            /// Don't Show Again Action
+            let dontShowAgainButton = CloudKitPromptButtonType.dontShowAgain
+            let dontShowAgainAction = UIAlertAction(title: dontShowAgainButton.rawValue,
+                                                    style: dontShowAgainButton.actionStyle()) { (_) in
+                dontShowAgainButton.performAction()
+            }
+            alertController.addAction(settingsAction)
+            alertController.addAction(dontShowAgainAction)
+            return alertController
         }
+        return nil
     }
     
     static func cloudKitErrorAlert(_ error: CloudKitStatusError) {
@@ -107,6 +88,7 @@ enum Alerts {
     }
     
 }
+
 //CloudKit Button Type
 enum CloudKitPromptButtonType: String {
     case okButton = "OK"
@@ -130,8 +112,3 @@ enum CloudKitPromptButtonType: String {
         }
     }
 }
-
-/*
- <wpt lat="38.723438" lon="-121.084084"> </gpx>
- <wpt lat="38.710252" lon="-121.086191"> </gpx>
- */

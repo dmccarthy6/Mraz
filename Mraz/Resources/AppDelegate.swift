@@ -15,21 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        #warning("Use this if not logged into CK with Simulator. Otherwise remove, this is called in SyncContainer")
-        //CloudKitManager().performInitialCKFetch()
-        resetOnboarding()
         configureNotificationCtr()
+        
         application.registerForRemoteNotifications()
         return true
     }
 
-    #warning("TODO - Debug - remove this method.")
-    func resetOnboarding() {
-        let mrazSettings = MrazSettings()
-        mrazSettings.set(false, for: .didFinishOnboarding)
-        mrazSettings.set(false, for: .userIsOfAge)
-    }
-    
     // Reset application badge
     func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = 0
