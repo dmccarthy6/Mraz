@@ -14,7 +14,6 @@ enum ButtonType {
     case launch
 }
 
-
 final class MrazOnboardingView: UIView {
     // MARK: - Properties
     private let titleLabel: UILabel = {
