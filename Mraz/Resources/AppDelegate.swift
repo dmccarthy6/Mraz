@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         configureNotificationCtr()
-        MrazSettings().set(false, for: .suppressCloudKitError)
+        
         checkCKAuth()
         application.registerForRemoteNotifications()
         return true
