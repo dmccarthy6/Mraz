@@ -9,7 +9,6 @@ import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let ckManager = CloudKitManager()
     let sync = SyncContainer()
     let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: AppDelegate.self))
     
@@ -18,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         configureNotificationCtr()
         
-        checkCKAuth()
         application.registerForRemoteNotifications()
         return true
     }
@@ -31,11 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func configureNotificationCtr() {
         let notificationMgr = LocalNotificationManger(notificationCenter: UNUserNotificationCenter.current())
         notificationMgr.notificationCenter.delegate = self
-    }
-    
-    func checkCKAuth() {
-        ckManager.requestCKAccountStatus()
-        ckManager.setupAccountStatusChangedNotificationHandling()
     }
 }
 

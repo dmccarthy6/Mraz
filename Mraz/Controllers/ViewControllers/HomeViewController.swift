@@ -64,11 +64,20 @@ final class HomeViewController: UIViewController {
         controller.delegate = self
         return controller
     }()
-    private lazy var ckManager = CloudKitManager()
+    var ckManager: CloudKitManager
     private lazy var manager = CoreDataManager()
     private var refreshControl = UIRefreshControl()
     
     // MARK: - Lifecycle
+    init(cloudKitManager: CloudKitManager) {
+        self.ckManager = cloudKitManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
