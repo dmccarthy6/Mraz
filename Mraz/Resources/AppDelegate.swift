@@ -9,27 +9,20 @@ import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    let ckManager = CloudKitManager()
     let sync = SyncContainer()
     let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: AppDelegate.self))
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        #warning("Use this if not logged into CK with Simulator. Otherwise remove, this is called in SyncContainer")
-        //CloudKitManager().performInitialCKFetch()
-        resetOnboarding()
         configureNotificationCtr()
+        MrazSettings().set(false, for: .suppressCloudKitError)
+        checkCKAuth()
         application.registerForRemoteNotifications()
         return true
     }
 
-    #warning("TODO - Debug - remove this method.")
-    func resetOnboarding() {
-        let mrazSettings = MrazSettings()
-        mrazSettings.set(false, for: .didFinishOnboarding)
-        mrazSettings.set(false, for: .userIsOfAge)
-    }
-    
     // Reset application badge
     func applicationDidBecomeActive(_ application: UIApplication) {
         application.applicationIconBadgeNumber = 0
@@ -38,6 +31,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func configureNotificationCtr() {
         let notificationMgr = LocalNotificationManger(notificationCenter: UNUserNotificationCenter.current())
         notificationMgr.notificationCenter.delegate = self
+    }
+    
+    func checkCKAuth() {
+        ckManager.requestCKAccountStatus()
+        ckManager.setupAccountStatusChangedNotificationHandling()
     }
 }
 

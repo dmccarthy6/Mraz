@@ -64,10 +64,11 @@ final class HomeViewController: UIViewController {
         controller.delegate = self
         return controller
     }()
-    private var manager = CoreDataManager()
+    private lazy var ckManager = CloudKitManager()
+    private lazy var manager = CoreDataManager()
     private var refreshControl = UIRefreshControl()
     
-    // MARK: - Life Cycle
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,6 +78,7 @@ final class HomeViewController: UIViewController {
         configureView()
         createSnapshot()
         refresh()
+        checkStatus()
     }
     
     // MARK: - Configure
@@ -102,6 +104,14 @@ final class HomeViewController: UIViewController {
         snapshot.appendSections(Section.allCases)
         snapshot.appendItems(datasource)
         onTapDiffDatasource.apply(snapshot, animatingDifferences: animated)
+    }
+    
+    func checkStatus() {
+        let currentStatus = ckManager.ckAccountStatus
+        guard let onboardingFinished = MrazSettings().readValue(for: .didFinishOnboarding) as? Bool else { return }
+        if currentStatus != .available && onboardingFinished {
+            self.showCloudKitAlert()
+        }
     }
     
     // MARK: - Refresh
