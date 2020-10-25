@@ -8,10 +8,12 @@ class MrazTabBarController: UITabBarController {
     // MARK: - Properties
     private var mrazTabBar = UITabBarController()
     var cloudKitManager: CloudKitManager
+    var coreDataManager: CoreDataManager
     
     // MARK: - Lifecyce
-    init(cloudKitManager: CloudKitManager) {
+    init(cloudKitManager: CloudKitManager, coreDataManager: CoreDataManager) {
         self.cloudKitManager = cloudKitManager
+        self.coreDataManager = coreDataManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,7 +30,7 @@ class MrazTabBarController: UITabBarController {
     private func setUpTabBarController() {
         self.tabBar.barTintColor = .systemRed
         
-        let homeController = HomeViewController(cloudKitManager: cloudKitManager)
+        let homeController = HomeViewController(cloudKitManager: cloudKitManager, coreDataManager: coreDataManager)
         homeController.tabBarItem = UITabBarItem(title: "On Tap", image: SystemImages.houseImage, tag: 0)
         
         let beerListViewController = BeerListViewController()

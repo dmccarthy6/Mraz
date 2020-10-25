@@ -25,7 +25,7 @@ enum Alerts {
     
     // MARK: - CloudKit Alerts
    /// CloudKit Action Sheet called in View Controller Extension
-    static func buildCloudKitAlertController(with title: AlertTitle, message: AlertMessage) -> UIAlertController? {
+    static func buildCloudKitAlertController(with title: AlertTitle, message: AlertMessage, popoverDelegate: UIPopoverPresentationControllerDelegate) -> UIAlertController? {
         if !suppressCloudKitEnabledError {
             let alertController = UIAlertController(title: title.rawValue,
                                                     message: message.rawValue,
@@ -46,8 +46,14 @@ enum Alerts {
                                                     style: dontShowAgainButton.actionStyle()) { (_) in
                 dontShowAgainButton.performAction()
             }
+            
             alertController.addAction(settingsAction)
             alertController.addAction(dontShowAgainAction)
+            
+            if let popoverController = alertController.popoverPresentationController {
+                popoverController.delegate = popoverDelegate
+                
+            }
             return alertController
         }
         return nil

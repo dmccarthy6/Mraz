@@ -8,6 +8,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var appFlow: AppFlow!
     lazy var databaseManager = CoreDataManager()
+    lazy var cloudKitManager = CloudKitManager()
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
@@ -16,7 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let context = AppContext()
-            appFlow = AppFlow(context: context, window: window)
+            appFlow = AppFlow(context: context,
+                              window: window,
+                              coreDataManager: databaseManager,
+                              cloudKitManager: cloudKitManager)
             appFlow.didFinishLaunching()
         }
     }

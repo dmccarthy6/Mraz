@@ -51,10 +51,8 @@ final class CloudKitManager: CloudKitAPI {
             self.requestCKAccountStatus()
             
             if self.ckAccountStatus == .available {
-                print("CK Status is now Available")
-                SyncContainer()
+                SyncContainer.init()
             }
-            
         }
     }
     

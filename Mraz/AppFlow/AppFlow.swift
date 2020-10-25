@@ -12,23 +12,26 @@ final class AppFlow {
     
     private let window: UIWindow
     
-    private let manager = CloudKitManager()
+    private let ckManager: CloudKitManager
+    
+    private let cdManager: CoreDataManager
     
     private var rootViewController: UIViewController {
         return window.rootViewController!
     }
     
     // MARK: - Life Cycle
-    init(context: AppContext, window: UIWindow?) {
+    init(context: AppContext, window: UIWindow?, coreDataManager: CoreDataManager, cloudKitManager: CloudKitManager) {
         self.context = context
         self.window = window ?? .init()
+        self.ckManager = cloudKitManager
+        self.cdManager = coreDataManager
     }
     
     // MARK: - Launching Configurations
     @discardableResult
     func didFinishLaunching() -> Bool {
-        window.rootViewController = MrazTabBarController(cloudKitManager: manager)
-        window.makeKeyAndVisible()
+        createRootViewController()
         handleCloudKitStatus()
         return didStartFlow()
     }
@@ -43,11 +46,34 @@ final class AppFlow {
     }
     
     private func startOnboardingFlow() {
+        MrazSettings().set(true, for: .didFinishOnboarding)
         onboardingFlow.start(with: rootViewController)
     }
     
     private func handleCloudKitStatus() {
-        manager.requestCKAccountStatus()
-        manager.setupAccountStatusChangedNotificationHandling()
+        ckManager.requestCKAccountStatus()
+        ckManager.setupAccountStatusChangedNotificationHandling()
+    }
+    
+    private func createRootViewController() {
+        let tabBar = MrazTabBarController(cloudKitManager: ckManager, coreDataManager: cdManager)
+        
+        if #available(iOS 14.0, *) {
+            let sideBarViewController = SideBarViewController(coreDataManager: cdManager, cloudKitManager: ckManager)
+            let splitVC = UISplitViewController(style: .doubleColumn)
+            
+            splitVC.preferredDisplayMode = .allVisible
+            splitVC.presentsWithGesture = true
+            splitVC.preferredSplitBehavior = .tile
+            
+            splitVC.setViewController(sideBarViewController, for: .primary)
+            splitVC.setViewController(tabBar, for: .compact)
+            
+            window.rootViewController = splitVC
+            window.makeKeyAndVisible()
+        } else {
+            window.rootViewController = tabBar
+            window.makeKeyAndVisible()
+        }
     }
 }

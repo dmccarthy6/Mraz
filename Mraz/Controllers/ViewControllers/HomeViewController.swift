@@ -19,7 +19,8 @@ final class HomeViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-     private lazy var layout: UICollectionViewLayout = {
+    
+    private lazy var layout: UICollectionViewLayout = {
         let layout = UICollectionViewCompositionalLayout { section, environment -> NSCollectionLayoutSection in
             let inset = CGFloat(10)
             let isCompact = environment.container.effectiveContentSize.width < 450
@@ -34,6 +35,7 @@ final class HomeViewController: UIViewController {
         
         return layout
     }()
+    
     private lazy var collectionView: UICollectionView = { [unowned self] in
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -60,17 +62,18 @@ final class HomeViewController: UIViewController {
     }()
     private lazy var onTapResultsController: NSFetchedResultsController<Beers> = {
         let onTapPredicate = NSPredicate(format: "isOnTap == %d", true)
-        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: onTapPredicate, in: manager.mainContext)
+        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: onTapPredicate, in: cdManager.mainContext)
         controller.delegate = self
         return controller
     }()
-    var ckManager: CloudKitManager
-    private lazy var manager = CoreDataManager()
+    private var ckManager: CloudKitManager
+    private var cdManager: CoreDataManager
     private var refreshControl = UIRefreshControl()
     
     // MARK: - Lifecycle
-    init(cloudKitManager: CloudKitManager) {
+    init(cloudKitManager: CloudKitManager, coreDataManager: CoreDataManager) {
         self.ckManager = cloudKitManager
+        self.cdManager = coreDataManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,10 +119,14 @@ final class HomeViewController: UIViewController {
     }
     
     func checkStatus() {
-        let currentStatus = ckManager.ckAccountStatus
+        let currentCKStatus = ckManager.ckAccountStatus
         guard let onboardingFinished = MrazSettings().readValue(for: .didFinishOnboarding) as? Bool else { return }
-        if currentStatus != .available && onboardingFinished {
-            self.showCloudKitAlert()
+        if currentCKStatus != .available && onboardingFinished {
+            
+            guard let alertController = Alerts.buildCloudKitAlertController(with: .iCloudError, message: .userNotLoggedIn, popoverDelegate: self) else {
+                return
+            }
+            present(alertController, animated: true)
         }
     }
     
@@ -143,7 +150,7 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedBeer = onTapDiffDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedID = selectedBeer.objectID
-        self.openBeerInfoVC(from: selectedID, context: self.manager.mainContext)
+        self.openBeerInfoVC(from: selectedID, context: self.cdManager.mainContext)
     }
 }
 
@@ -152,5 +159,11 @@ extension HomeViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let beers = onTapResultsController.fetchedObjects else { return }
         updateSnapshot(with: beers)
+    }
+}
+
+extension HomeViewController: UIPopoverPresentationControllerDelegate {
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        popoverPresentationController.sourceView = navigationController?.navigationBar
     }
 }
