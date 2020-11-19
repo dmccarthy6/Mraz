@@ -52,9 +52,8 @@ final class MrazOnboardingView: UIView {
         return button
     }()
     private var mrazSettings = MrazSettings()
-    private lazy var locationManager = LocationManager()
+    private lazy var locationProvider = CurrentLocationProvider()
     weak var dismissDelegate: DismissViewDelegate?
-    let locMgr = CLLocationManager()
     
     // MARK: - Life Cycle
     override init(frame: CGRect) {
@@ -122,9 +121,7 @@ final class MrazOnboardingView: UIView {
     
     @objc
     private func geofencingNotificationsAction() {
-        locationManager.promptUserForLocationAuth {
-            self.locationManager.promptUserForLocationAuth {}
-        }
+        locationProvider.checkLocationAuthStatus()
     }
 
     @objc

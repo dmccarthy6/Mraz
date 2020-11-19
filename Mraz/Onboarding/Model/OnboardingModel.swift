@@ -20,10 +20,17 @@ struct OnboardingModel {
 extension OnboardingModel {
     static var data: [OnboardingModel] {
         return [
-            // Page 0 -> Age Auth // Page 1 Notifications // Page 2 Geofencing /// Page 3 ///Open App
-            OnboardingModel(title: "Stay updated with push notifications", description: .notifications, image: OnboardingImages.mrazNotification),
-            OnboardingModel(title: "Get notified when you're close", description: .geofencing, image: OnboardingImages.mrazGeofencing),
-            OnboardingModel(title: "Open the app", description: .openApp, image: OnboardingImages.openAppImage)
+            OnboardingModel(title: "Stay updated with push notifications",
+                            description: .notifications,
+                            image: OnboardingImages.mrazNotification),
+            
+            OnboardingModel(title: "Get notified when you're close",
+                            description: .geofencing,
+                            image: OnboardingImages.mrazGeofencing),
+            
+            OnboardingModel(title: "Open the app",
+                            description: .openApp,
+                            image: OnboardingImages.openAppImage)
         ]
     }
 }
