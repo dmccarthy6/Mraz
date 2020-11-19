@@ -1,30 +1,54 @@
 //  Created by Dylan  on 5/1/20.
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
-import Foundation
 import UIKit
 import MapKit
+import os.log
 
-final class MapViewController: UIViewController {
+final class MapViewController: UIViewController, UserLocationUpdatedDelegate {
     // MARK: - Properties
-    lazy var mapView: MKMapView = {
-        let map = MKMapView()
+    let log = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: MapViewController.self))
+    
+    lazy var mapView: MZMapView = {
+        let map = MZMapView()
         map.translatesAutoresizingMaskIntoConstraints = false
         map.delegate = self
         return map
     }()
-    private let modelController = MapViewModelController()
+    
     private let mapIdentifier = "MrazMapID"
-    private lazy var locationManager: LocationManager = {
-        return LocationManager()
+    
+    private lazy var locationManager: CLLocationManager = {
+        return locationProvider.locationManager
     }()
     
-    // MARK: - Life Cycle
+    var locationProvider = CurrentLocationProvider()
+    
+    var mapRegionMeters: Double {
+        return 1000
+    }
+    
+    private var fetchedRestaurants: [Restaurant] = []
+    
+    /// URL Request for restaurants
+    private let restaurantsRequest = RestaurantsRequest()
+    
+    private var annotationCoordinate: MKAnnotation?
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupView()
         fetchRestaurants()
-        locationManager.mapView = mapView
+        locationProvider.locationChangedDelegate = self
+        showUsersCurrentLocationOnMap()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showUsersCurrentLocationOnMap()
+        mapView.centerMapViewOnUsersLocation(mapView: mapView)
     }
     
     // MARK: - Layout
@@ -41,25 +65,61 @@ final class MapViewController: UIViewController {
     
     // MARK: - Network
     func fetchRestaurants() {
-        modelController.fetchLocationData { [unowned self] (result) in
-            switch result {
-            case .success(true), .success(false):
-                DispatchQueue.main.async {
-                    self.addMapAnnotations()
+        let loader = APIRequestLoader(apiRequest: restaurantsRequest)
+        loader.loadAPIRequest(requestData: Coordinates.mraz.location) { (rootObject, error) in
+            guard error == nil else { return } // FIX THIS
+            
+            if let rootObject = rootObject {
+                for restaurant in rootObject.results {
+                    let location = restaurant.geometry.location
+                    let restaurant = Restaurant(lat: location.lat, lng: location.lng, name: restaurant.name ?? "Nil")
+                    self.fetchedRestaurants.append(restaurant)
                 }
-                
-            case .failure(let error): // TO-DO: Handle this error appropriately
-                print("Error fetching from API: \(error.localizedDescription)")
+            }
+            DispatchQueue.main.async {
+                self.mapView.addRestaurantLocations(self.fetchedRestaurants)
             }
         }
     }
+
+    // MARK: - Context Menu
+    func makeContextMenu() -> UIMenu {
+        let directions = UIAction(title: "Directions", image: SystemImages.mapFillImage) { _ in
+            //Show System Share Sheet
+            guard let currentAnnotation = self.annotationCoordinate else { return }
+            let restaurantTitle = currentAnnotation.title ?? ""
+            Contact.contact(contactType: .directions, value: restaurantTitle ?? "", coordinate: currentAnnotation.coordinate)
+        }
+        return UIMenu(title: "", children: [directions])
+    }
     
-    // MARK: - Annotations
-    private func addMapAnnotations() {
-        locationManager.confirmUsersLocationAuthorizationStartTrackingLoc()
-        modelController.centerMapViewOnUsersLocation(mapView: mapView)
-        modelController.addBreweryAnnotation(on: mapView)
-        modelController.addRestaurantLocations(on: mapView)
+    func addInteractionTo(_ view: UIView) {
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+        view.addInteraction(contextMenuInteraction)
+    }
+    
+    // MARK: - UserLocationUpdated Delegate Methods
+    func centerMapOnUsersLocation() {
+        locationProvider.locationChangedCallback = {[weak self] location in
+            guard let self = self else { return }
+            
+            let lat = location.coordinate.latitude
+            let long = location.coordinate.longitude
+            let mapCenter = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            let region = MKCoordinateRegion(center: mapCenter, latitudinalMeters: self.mapRegionMeters, longitudinalMeters: self.mapRegionMeters)
+            self.mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    /// Check users Location Auth status and show location on map.
+    func showUsersCurrentLocationOnMap() {
+        let currentLocationStatus = locationProvider.currentAuthStatus
+        
+        if currentLocationStatus == .authorizedAlways || currentLocationStatus == .authorizedWhenInUse {
+            self.mapView.showsUserLocation = true
+        } else {
+            self.mapView.showsUserLocation = false
+        }
     }
 }
 
@@ -67,21 +127,13 @@ final class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate {
     /// Method called when the user taps the annotation,
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        
         if view.annotation is MKUserLocation {
             return
         } else {
             guard let currentAnnotation = view.annotation else { return }
-            if view.reuseIdentifier == mapIdentifier {
-                Alerts.showRestaurantActionSheet(self,
-                                                 location: currentAnnotation.coordinate,
-                                                 title: currentAnnotation.title ?? "Destination",
-                                                 annotation: view)
-            } else {
-                Alerts.showRestaurantActionSheet(self,
-                location: currentAnnotation.coordinate,
-                title: currentAnnotation.title ?? "Destination",
-                annotation: view)
-            }
+            annotationCoordinate = currentAnnotation
+            addInteractionTo(view)
         }
     }
     
@@ -108,9 +160,13 @@ extension MapViewController: MKMapViewDelegate {
             return nil
         }
     }
-    
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        guard let currentAnnotation = view.annotation else { return }
-        Alerts.showRestaurantActionSheet(self, location: currentAnnotation.coordinate, title: currentAnnotation.title ?? "Destination", annotation: view)
+}
+
+// MARK: - Context Menu Delegate Methods
+extension MapViewController: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            return self.makeContextMenu()
+        }
     }
 }

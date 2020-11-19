@@ -90,7 +90,7 @@ final class HomeViewController: UIViewController {
         configureView()
         createSnapshot()
         refresh()
-        checkStatus()
+        checkUserLoggedIntoCloud()
     }
     
     // MARK: - Configure
@@ -118,15 +118,10 @@ final class HomeViewController: UIViewController {
         onTapDiffDatasource.apply(snapshot, animatingDifferences: animated)
     }
     
-    func checkStatus() {
-        let currentCKStatus = ckManager.ckAccountStatus
+    func checkUserLoggedIntoCloud() {
         guard let onboardingFinished = MrazSettings().readValue(for: .didFinishOnboarding) as? Bool else { return }
-        if currentCKStatus != .available && onboardingFinished {
-            
-            guard let alertController = Alerts.buildCloudKitAlertController(with: .iCloudError, message: .userNotLoggedIn, popoverDelegate: self) else {
-                return
-            }
-            present(alertController, animated: true)
+        if onboardingFinished {
+            ckManager.isUserLoggedIntoCloud(self, popoverDelegate: self)
         }
     }
     
