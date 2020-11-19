@@ -2,26 +2,28 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import CoreData
-import CloudKit
 import os.log
 
 final class CoreDataManager: NSObject, CoreDataAPI {
     // MARK: - Properties
     let coreDataLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: SyncContainer.self))
 
-    private lazy var persistentContainer = CoreDataStack.coreDataStore.persistentContainer
+    private lazy var persistentContainer = coreDataStore.persistentContainer
     
-    internal lazy var mainContext = CoreDataStack.mainContext
+    internal lazy var mainContext = coreDataStore.mainThreadContext
     
     var frcPredicate: NSPredicate?
+    
+    var coreDataStore: CoreDataStore
     
     static var entityName: String {
         return EntityName.beers.rawValue
     }
 
     // MARK: - Lifecycle
-    init(predicate: NSPredicate? = NSPredicate(value: true)) {
+    init(predicate: NSPredicate? = NSPredicate(value: true), coreDataStore: CoreDataStore = CoreDataStore(.persistent)) {
         self.frcPredicate = predicate
+        self.coreDataStore = coreDataStore
         super.init()
     }
     
@@ -32,7 +34,7 @@ final class CoreDataManager: NSObject, CoreDataAPI {
     func saveObject<T: NSManagedObject>(object: T, model: BeerModel, in context: NSManagedObjectContext) {
         guard let beerObject = object as? Beers else { return }
         Beers.updateOrCreate(beerObject, from: model)
-        CoreDataStack.save(mainContext)
+        coreDataStore.save(context)
     }
 
     /// Takes in a 'BeerModel' object and converts that into a 'Beers' NSManagedObject.
@@ -47,13 +49,13 @@ final class CoreDataManager: NSObject, CoreDataAPI {
     
     func saveModifiedBeerToDatabase(beer: Beers, model: BeerModel, context: NSManagedObjectContext) {
         Beers.updateOrCreate(beer, from: model)
-        CoreDataStack.save(mainContext)
+        coreDataStore.save(mainContext)
     }
     
     // MARK: - Delete Methods
     func delete<T>(_ managedObject: T) where T: NSManagedObject {
         mainContext.delete(managedObject)
-        CoreDataStack.save(mainContext)
+        coreDataStore.save(mainContext)
     }
     
     /// Delete all managedObjects from context.
@@ -100,6 +102,6 @@ final class CoreDataManager: NSObject, CoreDataAPI {
         guard let beer = Beers.findOrFetch(in: mainContext, matching: predicate) else { return }
         let beerModel = BeerModel.createBeerModel(from: beer)
         Beers.updateOrCreate(beer, from: beerModel)
-        CoreDataStack.save(mainContext)
+        coreDataStore.save(mainContext)
     }
 }

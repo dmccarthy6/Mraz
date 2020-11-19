@@ -30,17 +30,34 @@ final class CoreDataStore {
             }
         }
     }
-
+    
     // MARK: - Managed Object Contexts
-    lazy var mainThreadContext: NSManagedObjectContext = {
+    public lazy var mainThreadContext: NSManagedObjectContext = {
         let context = persistentContainer.viewContext
         context.automaticallyMergesChangesFromParent = true
         return context
     }()
     
-    lazy var privateManagedObjectContext: NSManagedObjectContext = {
-        let context = persistentContainer.newBackgroundContext()
-        context.parent = mainThreadContext
+    public lazy var privateContext: NSManagedObjectContext = {
+        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        context.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
         return context
     }()
+    
+    /// Create and return a new background context
+    public func newDerivedContext() -> NSManagedObjectContext {
+        return persistentContainer.newBackgroundContext()
+    }
+    
+    // MARK: - Saving Contexts
+    public func save(_ context: NSManagedObjectContext) {
+        do {
+            
+            try mainThreadContext.save()
+            
+        } catch {
+            os_log("Err %@", log: coreDataLog, type: .debug, error.localizedDescription)
+            fatalError("CoreDataStack -- Error saving to main context")
+        }
+    }
 }
