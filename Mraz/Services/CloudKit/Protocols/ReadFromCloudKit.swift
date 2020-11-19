@@ -5,7 +5,7 @@ import CloudKit
 
 protocol ReadFromCloudKit: CloudKitAuthorizations {
     var publicCloudKitDatabase: CKDatabase { get }
-    var defaultContainer: CKContainer { get }
+    var ckContainer: CKContainer { get }
     
     func fetchRecords(_ predicate: NSPredicate, qos: QualityOfService, fetch: FetchType, _ completion: (([CKRecord]) -> Void)?)
 }
@@ -20,7 +20,7 @@ extension ReadFromCloudKit {
     /// Handle any iCloud status changes the user may perform.
     /// - Returns: Result type with a CloudKit Status enum value and a CloudKitError enum value.
     func getUsersCurrentAuthStatus(completion: @escaping (Result<CloudKitStatus, CloudKitStatusError>) -> Void) {
-        defaultContainer.accountStatus { (status, error) in
+        ckContainer.accountStatus { (status, error) in
             if error != nil {
                 completion(.failure(.failedConnection))
                 return

@@ -10,31 +10,43 @@ final class CloudKitManager: CloudKitAPI {
     // MARK: - Properties
     private let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: CloudKitManager.self))
     
-    private(set) var ckAccountStatus: CKAccountStatus = .couldNotDetermine
-    
-    internal let defaultContainer = CKContainer.default()
-    
     private let dbManager = CoreDataManager()
     
     private let settings: MrazSettings = MrazSettings()
     
     var predicate: NSPredicate
+
+    var ckContainer: CKContainer
+    
+    lazy var publicCloudKitDatabase: CKDatabase = {
+        return ckContainer.publicCloudDatabase
+    }()
     
     private var beerModelObjects: [BeerModel] = []
     
-    lazy var publicCloudKitDatabase: CKDatabase = {
-        let container = CKContainer(identifier: MrazSyncConstants.containerIdentifier)
-        return container.publicCloudDatabase
-    }()
+    private(set) var ckAccountStatus: CKAccountStatus = .couldNotDetermine
     
     // MARK: - Lifecycle
-    init(predicate: NSPredicate = NSPredicate(value: true)) {
+    init(predicate: NSPredicate = NSPredicate(value: true), container: CKContainer = CKContainer(identifier: MrazSyncConstants.containerIdentifier)) {
         self.predicate = predicate
+        self.ckContainer = container
     }
 
     // MARK: - Account Status
+    /// Syncronous method uses ubiquityIdentityToken
+    /// .
+    func isUserLoggedIntoCloud(_ viewController: UIViewController, popoverDelegate: UIPopoverPresentationControllerDelegate) {
+        if FileManager.default.ubiquityIdentityToken == nil {
+           guard let ckAlertController = Alerts.buildCloudKitAlertController(with: .iCloudError,
+                                                                       message: .userNotLoggedIn,
+                                                                       popoverDelegate: popoverDelegate) else { return }
+            viewController.present(ckAlertController, animated: true)
+        }
+    }
+    
+    /// Asyncronous CloudKit Account Status
     func requestCKAccountStatus() {
-        defaultContainer.accountStatus { (accountStatus, error) in
+        ckContainer.accountStatus { (accountStatus, error) in
             if let error = error { print(error) }
             
             self.ckAccountStatus = accountStatus
