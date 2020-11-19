@@ -3,7 +3,7 @@
 
 import Foundation
 
-protocol Endpoint: RequestProviding {
+protocol Endpoint {
     var scheme: String { get }
     var host: String { get }
     var path: String { get }

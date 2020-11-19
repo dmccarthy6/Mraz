@@ -4,24 +4,21 @@
 import Foundation
 
 struct RootLocal: Codable {
-    let htmlAttributions: [String]?
-    let nextPageToken: String
+    let nextPageToken: String?
     let results: [SearchResult]
-    let status: String
+    let status: String?
 }
 
 struct SearchResult: Codable {
-    let businessStatus: String
     let geometry: Geometry
-    let icon: String
-    let id: String?
-    let name: String
-    let photos: [Photos]
-    let placeId: String
-    let rating: Double
-    let reference: String
-    let types: [String]
-    let vicinity: String
+    let icon: String?
+    let name: String?
+    let photos: [Photos]?
+    let placeId: String?
+    let rating: Double?
+    let reference: String?
+    let types: [String]?
+    let vicinity: String?
 }
 
 struct Geometry: Codable {
@@ -34,8 +31,7 @@ struct Location: Codable {
 }
 
 struct Photos: Codable {
-    let height: Double
-    let htmlAttributions: [String]
-    let photoReference: String
-    let width: Double
+    let height: Int?
+    let photoReference: String?
+    let width: Int?
 }

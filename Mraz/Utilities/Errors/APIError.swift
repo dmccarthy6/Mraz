@@ -15,3 +15,12 @@ enum APIError: Error {
         }
     }
 }
+
+enum NetworkingError: String, Error {
+    case requestFailed = "Http request failed"
+    case responseUnsuccessful = "Http respnse unsuccessful"
+}
+
+extension NetworkingError: LocalizedError {
+    var errorDescription: String? { return NSLocalizedString(rawValue, comment: "") }
+}
