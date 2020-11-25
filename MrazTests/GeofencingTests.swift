@@ -12,7 +12,6 @@ class GeofencingTests: XCTestCase {
     override func setUpWithError() throws {
         manager = LocationManager()
         localNotificationManager = LocalNotificationManger()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     // MARK: - Location Manager Tests
@@ -26,8 +25,16 @@ class GeofencingTests: XCTestCase {
     
     // MARK: - Authorizaton Tests
     func testNoficationsAuth() {
-        let usersStatus = localNotificationManager.getCurrentNotificationStatus()
-        XCTAssertTrue(usersStatus, "GeofencingTests -- User has not authorized Notifications")
+        let authExpectation = expectation(description: "Notification Status")
+        
+        localNotificationManager.getLocalNotificationStatus { granted in
+            XCTAssertTrue(granted)
+            authExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 2.0) { error in
+            XCTAssertNil(error, "Notification status could not be determined")
+        }
     }
     
     func testWhenInUseAuthStatus() {
@@ -40,13 +47,6 @@ class GeofencingTests: XCTestCase {
     override func tearDownWithError() throws {
         manager = nil
         localNotificationManager = nil
-    }
-    
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
     }
 
 }

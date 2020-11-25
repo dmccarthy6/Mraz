@@ -2,27 +2,36 @@
 //  Copyright © 2020 DylanMcCarthy. All rights reserved.
 
 import XCTest
+import CloudKit
 @testable import Mraz
 
 class CloudKitTests: XCTestCase {
-    var cloudKitManager: CloudKitManagerMock!
+    var cloudKitManager: CloudKitManager!
     
     // MARK: - Setup
     override func setUpWithError() throws {
-        cloudKitManager = CloudKitManagerMock()
+        cloudKitManager = CloudKitManager(container: CKContainer(identifier: MrazSyncConstants.containerIdentifier))
     }
     
     // MARK: - Test User Auth
     func testUserIsLoggedIn() {
         let authExpectation = expectation(description: "AuthStatus Expectation")
-        var currentStatus = cloudKitManager.accountStatus
+        let container = cloudKitManager.ckContainer
+        var currentStauts: CKAccountStatus = .couldNotDetermine
         
-        cloudKitManager.requestCKAccountStatus {
-            XCTAssertTrue(currentStatus == .couldNotDetermine, "CK Account Status changed from '.couldNotDetermine'")
+        container.accountStatus { (ckStatus, error) in
+            XCTAssertNil(error, "")
+            
+            XCTAssertNotEqual(currentStauts, ckStatus)
+            
+            currentStauts = ckStatus
+            
+            XCTAssertEqual(ckStatus, currentStauts)
+            
             authExpectation.fulfill()
         }
-        
-        waitForExpectations(timeout: 3) { (error) in
+ 
+        waitForExpectations(timeout: 2.0) { (error) in
             guard let error = error else { return }
             XCTAssertNil(error, "\(error)")
         }
@@ -34,19 +43,20 @@ class CloudKitTests: XCTestCase {
         
         let predicate = NSPredicate(format: "name == %@", "Tan Lines")
         
-        cloudKitManager.fetchRecords(matching: predicate) { (result) in
-            switch result {
-            case .success(let records):
-                XCTAssertFalse(records.count == 0, "")
-                fetchExpectation.fulfill()
+        cloudKitManager.fetchRecords(predicate, qos: .background, fetch: .subsequent) { records in
+            XCTAssertNotNil(records, "Fetch Records Nil")
+            
+            records.forEach { (record) in
+                let name = record[.name] as! String
+                let sec = record[.sectionType] as! String
                 
-            case .failure(let ckError):
-                XCTAssertNotNil(ckError, "Error is nil")
+                XCTAssertEqual(name, "Tan Lines")
+                XCTAssertEqual(sec, "Ale")
                 fetchExpectation.fulfill()
             }
         }
-    
-        waitForExpectations(timeout: 3) { (error) in
+        
+        waitForExpectations(timeout: 2.0) { (error) in
             guard let error = error else { return }
             XCTAssertNil(error, "\(error)")
         }
