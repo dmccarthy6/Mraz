@@ -9,8 +9,8 @@ import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let sync = SyncContainer()
     let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: AppDelegate.self))
+    let syncContainer = SyncContainer()
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -48,11 +48,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        
         guard let dict = userInfo as? [String: NSObject] else { return }
         let notification = CKNotification(fromRemoteNotificationDictionary: dict)
         if notification?.notificationType == CKNotification.NotificationType.query {
             os_log("Remote notifiation received from CK", log: self.mrazLog, type: .default)
-            sync.processMrazSubscriptionNotification(with: dict)
+            syncContainer.processMrazSubscriptionNotification(with: dict)
             completionHandler(.newData)
         } else {
             completionHandler(.noData)
