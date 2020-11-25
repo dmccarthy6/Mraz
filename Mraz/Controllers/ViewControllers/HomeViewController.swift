@@ -46,6 +46,7 @@ final class HomeViewController: UIViewController {
         collectionView.alwaysBounceVertical = true
         return collectionView
     }()
+    
     private lazy var onTapDiffDatasource: OnTapDatasource = {
         /// Cell
         let diffDatasource = OnTapDatasource(collectionView: collectionView) { (collectionView, indexPath, element) -> UICollectionViewCell? in
@@ -60,14 +61,18 @@ final class HomeViewController: UIViewController {
         }
         return diffDatasource
     }()
+    
     private lazy var onTapResultsController: NSFetchedResultsController<Beers> = {
         let onTapPredicate = NSPredicate(format: "isOnTap == %d", true)
-        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: onTapPredicate, in: cdManager.mainContext)
+        let controller = MrazFetchResultsController.configureOnTapFRC(for: .beers, in: cdManager.context)
         controller.delegate = self
         return controller
     }()
+    
     private var ckManager: CloudKitManager
+    
     private var cdManager: CoreDataManager
+    
     private var refreshControl = UIRefreshControl()
     
     // MARK: - Lifecycle
@@ -90,7 +95,7 @@ final class HomeViewController: UIViewController {
         configureView()
         createSnapshot()
         refresh()
-        checkUserLoggedIntoCloud()
+//        checkUserLoggedIntoCloud()
     }
     
     // MARK: - Configure
@@ -130,7 +135,7 @@ final class HomeViewController: UIViewController {
     @objc private func syncOnTapBeers() {
         let coreDataPred = NSPredicate(format: "isOnTap == %d", true)
         let ckPred = NSPredicate(format: "isOnTap == %i", Int64(1))
-        let sync = SyncBeers(coreDataPredicate: coreDataPred, cloudKitPredicate: ckPred, syncType: .onTap)
+        let sync = SyncBeers(coreDataPredicate: coreDataPred, cloudKitPredicate: ckPred, syncType: .onTap, coreDataManager: cdManager, ckManager: ckManager)
         sync.performSync()
         refreshControl.endRefreshing()
     }
@@ -145,7 +150,7 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectedBeer = onTapDiffDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedID = selectedBeer.objectID
-        self.openBeerInfoVC(from: selectedID, context: self.cdManager.mainContext)
+        self.openBeerInfoVC(from: selectedID, context: self.cdManager.context)
     }
 }
 

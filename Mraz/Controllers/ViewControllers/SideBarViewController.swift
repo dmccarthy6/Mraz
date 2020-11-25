@@ -50,7 +50,7 @@ final class SideBarViewController: UIViewController {
     
     private lazy var secondaryVCs = [
         UINavigationController(rootViewController: HomeViewController(cloudKitManager: cloudKitManager, coreDataManager: coreDataManager)),
-        UINavigationController(rootViewController: BeerListViewController()),
+        UINavigationController(rootViewController: BeerListViewController(coreDataManager: self.coreDataManager, cloudKitManager: cloudKitManager)),
         UINavigationController(rootViewController: MapViewController())
     ]
     var coreDataManager: CoreDataManager

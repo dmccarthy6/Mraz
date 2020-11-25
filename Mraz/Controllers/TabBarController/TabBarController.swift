@@ -33,7 +33,7 @@ class MrazTabBarController: UITabBarController {
         let homeController = HomeViewController(cloudKitManager: cloudKitManager, coreDataManager: coreDataManager)
         homeController.tabBarItem = UITabBarItem(title: "On Tap", image: SystemImages.houseImage, tag: 0)
         
-        let beerListViewController = BeerListViewController()
+        let beerListViewController = BeerListViewController(coreDataManager: coreDataManager, cloudKitManager: cloudKitManager)
         beerListViewController.tabBarItem = UITabBarItem(title: "Beers", image: TabBarImages.beerMug, tag: 1)
         
         let mapController = MapViewController()

@@ -7,7 +7,8 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var appFlow: AppFlow!
-    lazy var databaseManager = CoreDataManager()
+    let store = CoreDataStore(.persistent)
+    lazy var databaseManager = CoreDataManager(context: store.context)
     lazy var cloudKitManager = CloudKitManager()
     
     func scene(_ scene: UIScene,
@@ -17,6 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let context = AppContext()
+            
             appFlow = AppFlow(context: context,
                               window: window,
                               coreDataManager: databaseManager,
@@ -26,6 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        CoreDataStack.save(databaseManager.mainContext)
+        databaseManager.saveContext()
     }
 }

@@ -47,7 +47,7 @@ class BeerListViewController: UIViewController {
                 cell.configureFavoritesButton(forElement: element)
                 let beerCurrentStatus = element.isFavorite
                 element.isFavorite = !beerCurrentStatus
-                self.manager.update(beer: element)
+                self.coreDataManager.updateFavoriteStatusOf(beer: element)
             }
             return cell
         }
@@ -63,21 +63,39 @@ class BeerListViewController: UIViewController {
     }()
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Beers> = {
-        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers,
+        let controller = MrazFetchResultsController.configureAllBeersFRC(for: .beers,
                                                                                     matching: NSPredicate(value: true),
-                                                                                    in: manager.mainContext)
+                                                                                    in: coreDataManager.context)
         controller.delegate = self
         return controller
     }()
     
-    let manager = CoreDataManager()
-    private let beersRefresh = UIRefreshControl()
-    private var currentSearchText = ""
-    private var activityIndicator: UIActivityIndicatorView?
     private var favoritesShowing: Bool = false
+    
     private var currentlySearching: Bool = false
     
+    let coreDataManager: CoreDataManager
+    
+    let cloudKitManager: CloudKitManager
+    
+    private let beersRefresh = UIRefreshControl()
+    
+    private var currentSearchText = ""
+    
+    private var activityIndicator: UIActivityIndicatorView?
+    
+    
     // MARK: - View Life Cycle
+    init(coreDataManager: CoreDataManager, cloudKitManager: CloudKitManager) {
+        self.coreDataManager = coreDataManager
+        self.cloudKitManager = cloudKitManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -138,7 +156,7 @@ class BeerListViewController: UIViewController {
 
     // MARK: - Filtering
     func filterResults(matching predicate: NSPredicate, value: Bool) {
-        let controller = MrazFetchResultsController.configureMrazFetchedResultsController(for: .beers, matching: predicate, in: self.manager.mainContext, key: "name", ascending: value)
+        let controller = MrazFetchResultsController.configureAllBeersFRC(for: .beers, matching: predicate, in: self.coreDataManager.context, key: "name", ascending: value)
         fetchedResultsController = controller
         guard let beers = fetchedResultsController.fetchedObjects else { return }
         value ? updateSnapshotWithFilterData(with: beers) : updateSnapshot(with: beers)
@@ -175,7 +193,7 @@ class BeerListViewController: UIViewController {
         }
         let cdPred = NSPredicate(format: "ckModifiedDate > %@", lastFetch as CVarArg)
         let ckPred = NSPredicate(format: "Modified > %@", lastFetch as CVarArg)
-        let sync = SyncBeers(coreDataPredicate: cdPred, cloudKitPredicate: ckPred, syncType: .allBeers)
+        let sync = SyncBeers(coreDataPredicate: cdPred, cloudKitPredicate: ckPred, syncType: .allBeers, coreDataManager: coreDataManager, ckManager: cloudKitManager)
         sync.performSync()
         beersRefresh.endRefreshing()
     }
@@ -186,7 +204,7 @@ extension BeerListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let beerItem = self.beersDiffableDatasource.itemIdentifier(for: indexPath) else { return }
         let selectedBeerObjectID = beerItem.objectID
-        self.openBeerInfoVC(from: selectedBeerObjectID, context: self.manager.mainContext)
+        self.openBeerInfoVC(from: selectedBeerObjectID, context: self.coreDataManager.context)
     }
 }
 
