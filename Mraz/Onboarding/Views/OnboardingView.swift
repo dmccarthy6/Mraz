@@ -127,5 +127,6 @@ final class MrazOnboardingView: UIView {
     @objc
     private func launchAction() {
         dismissDelegate?.dismissOnboardingViews()
+        mrazSettings.set(true, for: .didFinishOnboarding)
     }
 }

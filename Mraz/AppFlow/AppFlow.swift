@@ -46,7 +46,6 @@ final class AppFlow {
     }
     
     private func startOnboardingFlow() {
-        MrazSettings().set(true, for: .didFinishOnboarding)
         onboardingFlow.start(with: rootViewController)
     }
     
