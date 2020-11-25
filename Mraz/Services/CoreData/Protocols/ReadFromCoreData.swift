@@ -4,7 +4,5 @@
 import CoreData
 
 protocol ReadFromCoreData: Managed {
-    var frcPredicate: NSPredicate? { get set }
-    
     func findOrFetchObject(matching predicate: NSPredicate) -> Beers?
 }
