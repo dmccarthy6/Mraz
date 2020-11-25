@@ -11,15 +11,16 @@ enum SyncType {
 
 final class SyncBeers {
     // MARK: - Properties
-    private lazy var coreDataManager = CoreDataManager()
+    private let coreDataManager: CoreDataManager
     
-    private lazy var cloudKitManager = CloudKitManager()
+    private let cloudKitManager: CloudKitManager
     
     private let coreDataPredicate: NSPredicate
     
     private let cloudKitPredicate: NSPredicate
     
     lazy var cloudKitOperation = FetchCKRecodsOperation(cloudKitManager: cloudKitManager, predicate: cloudKitPredicate, syncType: syncType, managedObjectIDs: coreDataOperation.managedObjectIDs)
+    
     lazy var coreDataOperation = FetchCoreDataOperation(predicate: coreDataPredicate, coreDataManager: coreDataManager)
     
     lazy var operationQueue: OperationQueue = {
@@ -32,9 +33,11 @@ final class SyncBeers {
     let syncType: SyncType
     
     // MARK: - Lifecycle
-    init(coreDataPredicate: NSPredicate, cloudKitPredicate: NSPredicate, syncType: SyncType) {
+    init(coreDataPredicate: NSPredicate, cloudKitPredicate: NSPredicate, syncType: SyncType, coreDataManager: CoreDataManager, ckManager: CloudKitManager) {
         self.coreDataPredicate = coreDataPredicate
         self.cloudKitPredicate = cloudKitPredicate
+        self.coreDataManager = coreDataManager
+        self.cloudKitManager = ckManager
         self.syncType = syncType
         
         addOperationsToQueue()
@@ -54,45 +57,27 @@ final class SyncBeers {
         let fetchedRecords = cloudKitOperation.fetchedRecords
         var coreDataIDs = coreDataOperation.managedObjectIDs
         
-        fetchedRecords.forEach { (recoord) in
-            let currentRecordID = recoord.recordID.recordName
+        fetchedRecords.forEach { (beerModel) in
+            let currentRecordID = beerModel.id
             
             switch syncType {
             case .allBeers:
-                updateOrCreateBeerFrom(record: recoord)
+                
+                coreDataManager.createBeerObjects(from: fetchedRecords)
                 
             case .onTap:
                 if coreDataIDs.contains(currentRecordID) {
                     coreDataIDs.remove(currentRecordID)
                 }
-                updateOrCreateBeerFrom(record: recoord)
+                coreDataManager.updateOrCreateBeer(from: beerModel)
                 
                 coreDataIDs.forEach { (beerID) in
-                    updateLocal(beer: beerID)
+                    let predicate = NSPredicate(format: "id == %@", beerID)
+                    guard let beer = Beers.findOrFetch(in: coreDataManager.context, matching: predicate) else { return }
+                    let beerModel = BeerModel.createBeerModel(from: beer)
+                    coreDataManager.update(beer, from: beerModel)
                 }
             }
         }
-    }
-    
-    // MARK: - Helpers
-    /// Updates managed ojbect if it exists locally, if not creates it.
-    private func updateOrCreateBeerFrom(record: CKRecord) {
-        guard let beerExistsLocally = Beers.findOrFetch(in: coreDataManager.mainContext, matching: coreDataPredicate) else {
-            let newBeer = Beers(context: coreDataManager.mainContext)
-            let newBeerModel = BeerModel.createBeerModel(from: record, isFavorite: newBeer.isFavorite)
-            Beers.updateOrCreate(newBeer, from: newBeerModel)
-            return
-        }
-        
-        let beerModel = BeerModel.createBeerModel(from: beerExistsLocally)
-        Beers.updateOrCreate(beerExistsLocally, from: beerModel)
-    }
-    
-    /// Update local beer object
-    private func updateLocal(beer withID: String) {
-        let predicate = NSPredicate(format: "id == %@", withID)
-        guard let beer = Beers.findOrFetch(in: coreDataManager.mainContext, matching: predicate) else { return }
-        let beerModel = BeerModel.createBeerModel(from: beer)
-        Beers.updateOrCreate(beer, from: beerModel)
     }
 }

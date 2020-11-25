@@ -27,4 +27,33 @@ extension SyncContainer {
         fetchRemoteChangedRecords(by: changedRecordID)
         return true
     }
+    
+    // MARK: - Handle CK Remote Notifications
+    
+    /// Method called when a remote notification is received from CloudKit.
+    /// - Parameter modifiedRecordID: A CKRecord.ID to fetch from the CloudKit database
+    func fetchRemoteChangedRecords(by modifiedRecordID: CKRecord.ID) {
+        os_log("%{public}@", log: mrazLog, type: .debug, #function)
+        
+        self.publicDB.fetch(withRecordID: modifiedRecordID) { [weak self] (record, error) in
+            guard let self = self else { return }
+            
+            if let error = error {
+                os_log("Failed to ", log: self.mrazLog, type: .error, String(describing: error))
+                return
+            }
+            guard let updatedOrNewRecord = record else { return }
+            self.syncDelegate?.saveRemoteChange(using: updatedOrNewRecord)
+           
+            //
+           // self.ckManager.buildBeerModel(from: <#T##[CKRecord]#>)
+//            let recordName = changedRecord.recordID.recordName
+//            let recordNamePredicate = NSPredicate(format: "id == %@", recordName)
+//            let beer = Beers.findOrFetch(in: self.dbManager.context, matching: recordNamePredicate)
+//            let beerAlreadyExists = beer != nil
+//            DispatchQueue.main.async {
+//                beerAlreadyExists ?  self.update(beer: beer, from: changedRecord) : self.createNewBeerFrom(record: changedRecord)
+//            }
+        }
+}
 }

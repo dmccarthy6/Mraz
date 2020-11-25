@@ -7,7 +7,7 @@ protocol ReadFromCloudKit: CloudKitAuthorizations {
     var publicCloudKitDatabase: CKDatabase { get }
     var ckContainer: CKContainer { get }
     
-    func fetchRecords(_ predicate: NSPredicate, qos: QualityOfService, fetch: FetchType, _ completion: (([CKRecord]) -> Void)?)
+    func fetchRecords(matching predicate: NSPredicate, qualityOfService: QualityOfService, completion: @escaping ([BeerModel]) -> Void)
 }
 
 extension ReadFromCloudKit {

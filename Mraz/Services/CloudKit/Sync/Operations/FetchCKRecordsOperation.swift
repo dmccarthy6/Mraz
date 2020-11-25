@@ -12,7 +12,7 @@ final class FetchCKRecodsOperation: Operation {
     
     private let predicate: NSPredicate
     
-    var fetchedRecords: [CKRecord]
+    var fetchedRecords: [BeerModel]
     
     var recordIDSet = Set<String>()
     
@@ -85,18 +85,14 @@ final class FetchCKRecodsOperation: Operation {
     }
     
     func fetchCloudKitRecords(_ completion: @escaping () -> Void) {
-        cloudKitManager.fetchRecords(predicate, qos: .userInitiated, fetch: .subsequent) { (records) in
-            records.forEach { (record) in
-                let currentRecordID = record.recordID.recordName
-                self.recordIDSet.insert(currentRecordID)
-                let exists = self.managedObjectIDs.contains(currentRecordID)
+        cloudKitManager.fetchRecords(matching: predicate, qualityOfService: .userInitiated) { (records) in
+            records.forEach { [weak self] record in
+                guard let self = self else { return }
                 
-                switch self.syncType {
-                case .onTap:
-                    if !exists {
-                        self.fetchedRecords.append(record)
-                    }
-                case .allBeers:
+                let recordID = record.id
+                self.recordIDSet.insert(recordID)
+                
+                if !self.recordIDSet.contains(recordID) {
                     self.fetchedRecords.append(record)
                 }
             }

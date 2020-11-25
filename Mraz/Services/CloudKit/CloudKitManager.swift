@@ -10,8 +10,6 @@ final class CloudKitManager: CloudKitAPI {
     // MARK: - Properties
     private let mrazLog = OSLog(subsystem: MrazSyncConstants.subsystemName, category: String(describing: CloudKitManager.self))
     
-    private let dbManager = CoreDataManager()
-    
     private let settings: MrazSettings = MrazSettings()
     
     var predicate: NSPredicate
@@ -69,60 +67,55 @@ final class CloudKitManager: CloudKitAPI {
     }
     
     // MARK: - Fetching
-    /// Uset his method to perform the initial CK fetch.
-    func performInitialCKFetch() {
-        let initialFetchPerformed = settings.readInitalFetchPerformed()
-        initialFetchPerformed ? nil : fetchAllBeersFromCK()
-    }
-    
-    /// Perform initial CK Fetch. This method fetches all beers from CK.
-    private func fetchAllBeersFromCK() {
-        let truePred = NSPredicate(value: true)
-        fetchRecords(truePred, qos: .userInitiated, fetch: .initial, nil)
-    }
-    
-    /// This method performs the initial CloudKit fetch when the app is first loaded. This method will only be called if
-    /// the initial fetch performed user defaults key is set to false. All updates from CK are handle separately.
-    /// - Parameter withPredicate: The NSPredicate value to use in the CKQuery. Use this to narrow down the query search.
-    /// - Parameter qualityOfService: The quality of service to use for the CloudKit fetch.
-    func fetchRecords(_ predicate: NSPredicate, qos: QualityOfService, fetch: FetchType, _ completion: (([CKRecord]) -> Void)?) {
-        var fetchedRecords: [CKRecord] = []
+    /// Performs a CloudKit Fetch matching the predicate provided.
+    /// - Parameter predicate: Predicate value to search CloudKit records.
+    /// - Parameter qualityOfService: The CK Quality of service value to use
+    /// - Parameter completion: Completion Handler that returns array of BeerModel objects upon completion.
+    func fetchRecords(matching predicate: NSPredicate = NSPredicate(value: true), qualityOfService: QualityOfService, completion: @escaping ([BeerModel]) -> Void) {
+        var fetchedBeerRecords: [CKRecord] = []
         let sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        let query = mrazCloudKitQuery(predicate: predicate, sortDescriptors: sortDescriptors)
-        let fetchAllRecordsOperation = CKQueryOperation(query: query)
+        let ckQuery = mrazCloudKitQuery(predicate: predicate, sortDescriptors: sortDescriptors)
         
-        fetchAllRecordsOperation.recordFetchedBlock = { record in
-            fetchedRecords.append(record)
+        let fetchOperation = CKQueryOperation(query: ckQuery)
+        
+        fetchOperation.recordFetchedBlock = { record in
+            fetchedBeerRecords.append(record)
         }
-        fetchAllRecordsOperation.queryCompletionBlock = {  (cursor, error) in //[weak self]
+        
+        fetchOperation.queryCompletionBlock = { [weak self] cursor, error in
+            guard let self = self else { return }
+            
             if let error = error {
-                os_log("Error fetching CloudKit Records: %@", log: self.mrazLog, type: .error, error.localizedDescription)
+                os_log("Error fetching Records from CK %@", log: self.mrazLog, type: .error, error.localizedDescription)
             }
-            switch fetch {
-            case .initial:
-                self.convertCKRecordsToBeerModelObjects(from: fetchedRecords)
+            
+            let alreadyFetched = self.settings.readInitalFetchPerformed()
+            
+            if !alreadyFetched {
                 self.settings.setInitialFetch(true)
-                self.settings.setLastSyncDate(date: Date())
-            case .subsequent:
-                completion?(fetchedRecords)
             }
+
+            self.settings.setLastSyncDate(date: Date())
+            let beerModelObjects = self.buildBeerModel(from: fetchedBeerRecords)
+            completion(beerModelObjects)
         }
-        fetchAllRecordsOperation.resultsLimit = 250
-        fetchAllRecordsOperation.qualityOfService = qos
-        publicCloudKitDatabase.add(fetchAllRecordsOperation)
+        
+        fetchOperation.resultsLimit = 250
+        fetchOperation.qualityOfService = qualityOfService
+        publicCloudKitDatabase.add(fetchOperation)
     }
     
     // MARK: - Helpers
-   
-    /// Iterates ckRecords parameter and converts the objects to local 'BeerModel' objects.
-    /// - Parameter ckRecords: Array of CloudKit record objects.
-    func convertCKRecordsToBeerModelObjects(from ckRecords: [CKRecord]) {
-        for record in ckRecords {
+    /// Take initia array of CK records from fetch and create
+    /// - Parameter records: Array of CKRecord objects
+    /// - Returns: Array of Beer Model objects
+    func buildBeerModel(from records: [CKRecord]) -> [BeerModel] {
+        var modelBeers: [BeerModel] = []
+        
+        records.forEach { record in
             let beerModel = BeerModel.createBeerModel(from: record, isFavorite: false)
-            beerModelObjects.append(beerModel)
+            modelBeers.append(beerModel)
         }
-        beerModelObjects.forEach { (beer) in
-            dbManager.saveNewBeerToDatabase(from: beer)
-        }
+        return modelBeers
     }
 }
